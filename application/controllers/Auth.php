@@ -2,44 +2,45 @@
 
 class Auth extends CI_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('form_validation');
+        $this->load->library('encrypt');
+        $this->load->model('tb_user');
+    }
+
+    public function register()
+    {
+        $input = $this->input->post();
+        // if(isset($_POST['register'])){
+        if(!empty($input)){
+            if($this->form_validation->run('auth/register')){
+                // $verification_key = md5(rand()); // Email verification
+                $encrypted_password = $this->encrypt->encode($this->input->post('password'));
+                $value = array(
+                    'email' => $this->input->post('email'),
+                    'password' => $encrypted_password,
+                    'mobile' => $this->input->post('mobile')
+                );
+
+                $result = $this->tb_user->create_user($value);
+                if($result > 0){   
+                    $this->session->set_flashdata('success','สมัครสมาชิกสำเร็จ');
+                }else{
+                    $this->session->set_flashdata('error','สมัครสมาชิกไม่สำเร็จ');
+                }
+            } 
+        }
+        $this->template->setTemplate('สมัครสมาชิก', 'auth/register');
+        $this->template->loadTemplate();
+    }
     public function login()
     {
-        if(isset($_POST['login'])){
-            var_dump($_POST['input']);
-            exit();
-
-            $this->form_validation->set_rules('email','email','required|valid_email');
-            $this->form_validation->set_rules('password','password','required');
-            // if form checked and return true
-            if($this->form_validation->run()){
-                //echo 'form validated';
-                $email = $_POST['email'];
-                $password = md5($_POST['password']);
-                $this->db->select('*');
-                $this->db->from('user');
-                $this->db->where(array(
-                    'email' => $email,
-                    'password' => $password
-                ));
-                $query = $this->db->get();
-                $user = $query->row();
-
-                // $num = $query->num_rows();
-                // here you can do something with $query
-                // if ($num > 0) {﻿
-
-                if(!empty($user)){
-                    // temporary message
-                    $this->session->set_flashdata("success","เข้าสู่ระบบสำเร็จ");
-                    $_SESSION['user_logged'] = true;
-                    $_SESSION['user_id'] = $user->id;
-                    $_SESSION['user_email'] = $user->email;
-                    redirect('user/profile','refresh');
-
-                }else{
-                    $this->session->set_flashdata("error","ไม่พบัญชีผู้ใช้นี้อยู่ในระบบ");
-                    //redirect('auth/login','refresh');
-                }
+        $input = $this->input->post();
+        if(!empty($input)){
+            if($this->form_validation->run('auth/login')){
+            
             }
         }
 

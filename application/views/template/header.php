@@ -38,11 +38,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             background-color: #343a40;
         }
 
-        .container {
-            width: auto;
-            max-width: 70%;*/
-            padding: 0 15px;
-        }
     </style>
 </head>
 <body>
