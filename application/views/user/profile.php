@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-md-10">
                         <div class="table-responsive">
-                            <table class="table table-hover table-sm table-striped table-bordered">
+                            <table class="table table-hover table-sm table-bordered">
                                 <tbody>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">อีเมล</td>
@@ -25,7 +25,7 @@
                                         <td class="col-8"><?= (!empty($user->facebook_id))? $user->facebook_id.'<br><a href="'.base_url('/user/unsetFacebook').'">ยกเลิกการเชื่อมต่อกับ Facebook</a>':'ยังไม่ได้เชื่อมต่อกับ Facebook<br><a href="'.base_url('/auth/facebook').'">เชื่อมต่อกับ Facebook</a>' ?></td>
                                     </tr>
                                     <tr class="d-flex">
-                                        <td class="col-4" align="right">เป็นสมาชิกตั้งแต่</td>
+                                        <td class="col-4" align="right">วันที่เป็นสมาชิก</td>
                                         <td class="col-8"><?= $this->template->normalDatetime($user->created) ?></td>
                                     </tr>
                                     <tr class="d-flex">

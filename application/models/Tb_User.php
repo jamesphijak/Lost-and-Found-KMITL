@@ -39,12 +39,13 @@ class Tb_User extends CI_Model
     }
 
     // ใช้ set session
-    public function user_session_set($id,$email,$type){
+    public function user_session_set($id,$email,$type,$mobile){
         $data = array(
             'user_logged' => true,
             'user_id' => $id,
             'user_email' => $email,
-            'user_type' => $type
+            'user_type' => $type,
+            'mobile' => $mobile
         );
         $this->session->set_userdata($data);
     }
@@ -53,7 +54,7 @@ class Tb_User extends CI_Model
     public function user_session_update($id){
         $user = $this->get_user_by_id($id);
         if($user){
-            $this->user_session_set($id,$user->email,$user->user_type); // เมื่อพบ user อัพเดทข้อมูลใหม่
+            $this->user_session_set($id,$user->email,$user->user_type,$user->mobile); // เมื่อพบ user อัพเดทข้อมูลใหม่
         }else{
             $this->user_session_destroy(); // กรณีไม่พบ user นี้แล้ว ถูกลบออกจากระบบ
         }

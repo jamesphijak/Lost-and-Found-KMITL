@@ -1,7 +1,7 @@
 <?php
 
 class Template extends CI_Model {
-    private $app_name = 'Lost & Found';
+    private $app_name = 'Lost & Found KMITL';
     private $title = 'หน้าแรก';
     private $font = 'Sukhumvit';
     private $view = 'main';
@@ -39,6 +39,7 @@ class Template extends CI_Model {
         if(isset($_SESSION['user_id'])){
             $this->tb_user->user_session_update($_SESSION['user_id']);
         }
+
         $this->load->view('template/header',$header);
     }
 

@@ -19,8 +19,7 @@ class User extends CI_Controller{
                 // 2 = admin
                 exit('Admin');
             }else{
-                // 0 = member
-                exit('Member');
+                redirect(base_url('user/profile'));
             }
         }
     }
@@ -43,19 +42,23 @@ class User extends CI_Controller{
         $input = $this->input->post();
         // if(isset($_POST['register'])){
         if(!empty($input)){
-            if($this->form_validation->run('user/edit_profile')){
-                $id = $_SESSION['user_id'];
-                $value = array(
-                    'mobile' => $this->input->post('mobile')
-                );
-                $result = $this->tb_user->update_user($id,$value);
+            if($this->input->post('mobile') != $_SESSION['mobile']){
+                if($this->form_validation->run('user/edit_profile')){
+                    $id = $_SESSION['user_id'];
+                    $value = array(
+                        'mobile' => $this->input->post('mobile')
+                    );
+                    $result = $this->tb_user->update_user($id,$value);
 
-                if($result){   
-                    $this->session->set_flashdata('success','แก้ไขข้อมูลสำเร็จ');
-                    redirect(base_url('user/editProfile'),'refresh');
-                }else{
-                    $this->session->set_flashdata('error','แก้ไขข้อมูลไม่สำเร็จ');
+                    if($result){   
+                        $this->session->set_flashdata('success','แก้ไขข้อมูลสำเร็จ');
+                        redirect(base_url('user/editProfile'),'refresh');
+                    }else{
+                        $this->session->set_flashdata('error','แก้ไขข้อมูลไม่สำเร็จ');
+                    }
                 }
+            }else{
+                $this->session->set_flashdata('error','ข้อมูลไม่มีการเปลี่ยนแปลง');
             }
         }
 

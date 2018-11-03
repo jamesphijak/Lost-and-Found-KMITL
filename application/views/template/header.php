@@ -33,7 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 60px; /* Set the fixed height of the footer here */
+            height: auto; /* Set the fixed height of the footer here */
             line-height: 60px; /* Vertically center the text there */
             background-color: #343a40;
         }
@@ -68,14 +68,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a href="<?= base_url('auth/login')?>" class="btn btn-outline-light"><i class="fas fa-key"></i> เข้าสู่ระบบ / สมัครสมาชิก</a>&nbsp;
                         <?php }else{ ?>
                         <!-- ปุ่มหลัง Login -->
-                            <a href="?page=createLost" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศของหาย</a>&nbsp;
-                            <a href="?page=createFound" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศพบของหาย</a>
+                            <a href="<?= base_url('post/createLost')?>" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศของหาย</a>&nbsp;
+                            <a href="<?= base_url('post/createFound')?>" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศพบของหาย</a>
                         
                         &nbsp;
                         <ul class="navbar-nav mr-right">
                             <!-- เมนูส่วนตัว -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" style="font-size:18px;" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle"></i> <?= $_SESSION['user_email'].' ('.$_SESSION['user_type'].')' ?></a>
+                                <a class="nav-link dropdown-toggle active" style="font-size:18px;" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle"></i> <?= $_SESSION['user_email'] ?></a>
                                 <div class="dropdown-menu" aria-labelledby="dropdown-user">
                                     <a class="dropdown-item" href="<?= base_url('user/profile')?>">จัดการข้อมูลส่วนตัว</a>
                                     <a class="dropdown-item" href="<?= base_url('auth/logout') ?>">ออกจากระบบ</a>

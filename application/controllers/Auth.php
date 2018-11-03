@@ -64,7 +64,7 @@ class Auth extends CI_Controller
                     // echo $_SESSION['user_id'].'<br>';
                     // echo $_SESSION['user_type'].'<br>';
                     // exit();
-                    redirect(base_url('/'),'refresh');
+                    redirect(base_url('user/profile'),'refresh');
                     
                 }else{
                     $this->session->set_flashdata('error','เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
