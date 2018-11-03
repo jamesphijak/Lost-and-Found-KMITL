@@ -61,7 +61,8 @@ $autoload['packages'] = array();
 $autoload['libraries'] = array(
     'database',
     'session',
-    'form_validation'
+    'form_validation',
+    'encrypt'
 );
 
 /*
@@ -140,5 +141,6 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = array(
-    'template'
+    'template',
+    'tb_user'
 );

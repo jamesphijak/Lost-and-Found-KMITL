@@ -58,28 +58,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <ul class="navbar-nav mr-auto">
                         <!-- รายการประกาศ menu -->
                         <li class="nav-item active">
-                            <a class="nav-link" style="font-size:18px;" href="<?= base_url('post/all') ?>">
+                            <a class="nav-link" style="font-size:18px;" href="<?= base_url('/') ?>">
                                 <i class="far fa-list-alt"></i> รายการประกาศ
                             </a>
                         </li>
                     </ul>
                         <!-- ปุ่มก่อน Login -->
-                        <a href="<?= base_url('auth/login')?>" class="btn btn-outline-light"><i class="fas fa-key"></i> เข้าสู่ระบบ / สมัครสมาชิก</a>&nbsp;
-
+                        <?php if(!isset($_SESSION['user_logged'])){ ?>
+                            <a href="<?= base_url('auth/login')?>" class="btn btn-outline-light"><i class="fas fa-key"></i> เข้าสู่ระบบ / สมัครสมาชิก</a>&nbsp;
+                        <?php }else{ ?>
                         <!-- ปุ่มหลัง Login -->
-<!--                        <a href="?page=createLost" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ลงประกาศของหาย</a>&nbsp;-->
-<!--                        <a href="?page=createFound" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ลงประกาศพบของหาย</a>-->
+                            <a href="?page=createLost" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศของหาย</a>&nbsp;
+                            <a href="?page=createFound" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศพบของหาย</a>
+                        
                         &nbsp;
                         <ul class="navbar-nav mr-right">
                             <!-- เมนูส่วนตัว -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" style="font-size:18px;" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle"></i> jamesphijak@hotmail.com</a>
+                                <a class="nav-link dropdown-toggle active" style="font-size:18px;" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle"></i> <?= $_SESSION['user_email'].' ('.$_SESSION['user_type'].')' ?></a>
                                 <div class="dropdown-menu" aria-labelledby="dropdown-user">
                                     <a class="dropdown-item" href="<?= base_url('user/profile')?>">จัดการข้อมูลส่วนตัว</a>
                                     <a class="dropdown-item" href="<?= base_url('auth/logout') ?>">ออกจากระบบ</a>
                                 </div>
                             </li>
                         </ul>
+                        <?php } ?>
                 </div>
             </nav>
         </div>

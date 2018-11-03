@@ -5,13 +5,16 @@
         <div class="card">
             <h5 class="card-header text-left bg-primary text-white text-center"><?= $title ?></h5>
             <div class="card-body">
+                <!-- Message -->
                 <?php if(isset($_SESSION['success'])){ ?>
                     <div class="alert alert-success" role="alert"><?= $_SESSION['success'] ?></div>
                 <?php } ?>
                 <?php if(isset($_SESSION['error'])){ ?>
                     <div class="alert alert-danger" role="alert"><?= $_SESSION['error'] ?></div>
                 <?php } ?>
+
                 <form method="post" class="form-group row justify-content-center">
+                <!-- Form input -->
                     <div class='form-group col-md-6'>
                         <!-- <?= validation_errors('<div class="alert alert-danger" role="alert">','  </div>')?> -->
                         <div class='form-group col-md-12'>

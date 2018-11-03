@@ -24,6 +24,10 @@ class Template extends CI_Model {
             'title' => $this->title,
         );
 
+        // Update session when refresh page
+        if(isset($_SESSION['user_id'])){
+            $this->tb_user->user_session_update($_SESSION['user_id']);
+        }
         $this->load->view('template/header',$header);
         $this->load->view($this->view,$body);
         $this->load->view('template/footer');
