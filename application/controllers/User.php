@@ -23,11 +23,91 @@ class User extends CI_Controller{
                 exit('Member');
             }
         }
-
     }
 
     public function profile(){
-        $this->template->setTemplate('จัดการข้อมูลส่วนตัว', 'user/index');
-        $this->template->loadTemplate();
+        $title = 'จัดการข้อมูลส่วนตัว';
+        $this->template->setHeader($title);
+        $this->template->loadHeader();
+        // pass parameter to profile
+        $body = array(
+            'title' => $title,
+            'user' => $this->tb_user->get_user_by_id($_SESSION['user_id'])
+        );
+
+        $this->load->view('user/profile',$body);
+        $this->template->loadFooter();
+    }
+
+    public function editProfile(){
+        $input = $this->input->post();
+        // if(isset($_POST['register'])){
+        if(!empty($input)){
+            if($this->form_validation->run('user/edit_profile')){
+                $id = $_SESSION['user_id'];
+                $value = array(
+                    'mobile' => $this->input->post('mobile')
+                );
+                $result = $this->tb_user->update_user($id,$value);
+
+                if($result){   
+                    $this->session->set_flashdata('success','แก้ไขข้อมูลสำเร็จ');
+                    redirect(base_url('user/editProfile'),'refresh');
+                }else{
+                    $this->session->set_flashdata('error','แก้ไขข้อมูลไม่สำเร็จ');
+                }
+            }
+        }
+
+        // load view
+        $title = 'แก้ไขข้อมูลส่วนตัว';
+        $this->template->setHeader($title);
+        $this->template->loadHeader();
+        // pass parameter to edit
+        $body = array(
+            'title' => $title,
+            'user' => $this->tb_user->get_user_by_id($_SESSION['user_id'])
+        );
+
+        $this->load->view('user/edit_profile',$body);
+        $this->template->loadFooter();
+    }
+
+    // แก้ไขรหัสผ่าน
+    public function editPassword(){
+        $input = $this->input->post();
+        // if(isset($_POST['register'])){
+        if(!empty($input)){
+            if($this->form_validation->run('user/edit_password')){
+                $id = $_SESSION['user_id'];
+                $encrypted_password = $this->tb_user->hash($this->input->post('password'));
+                // echo($encrypted_password);
+                // exit();
+                $value = array(
+                    'password' => $encrypted_password
+                );
+                $result = $this->tb_user->update_user($id,$value);
+
+                if($result){   
+                    $this->session->set_flashdata('success','แก้ไขรหัสผ่านสำเร็จ');
+                    redirect(base_url('user/editProfile'),'refresh');
+                }else{
+                    $this->session->set_flashdata('error','แก้ไขรหัสผ่านสำเร็จ');
+                }
+            }
+        }
+
+        // load view
+        $title = 'แก้ไขรหัสผ่าน';
+        $this->template->setHeader($title);
+        $this->template->loadHeader();
+        // pass parameter to edit
+        $body = array(
+            'title' => $title,
+            'user' => $this->tb_user->get_user_by_id($_SESSION['user_id'])
+        );
+
+        $this->load->view('user/edit_password',$body);
+        $this->template->loadFooter();
     }
 }

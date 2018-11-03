@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-md-12">
             <div class="card">
-                <h5 class="card-header text-left bg-primary text-white text-center"><?=$title?></h5>
+                <h5 class="card-header text-left bg-primary text-white text-center"><i class="fas fa-key"></i> <?=$title?></h5>
                 <div class="card-body">
 
                 <!-- Message -->
@@ -28,7 +28,7 @@
                             <input type='password' name='password' value="<?=set_value('password')?>" class='form-control' placeholder='โปรดกรอกรหัสผ่าน' />
                             <small class="text-danger"><b><?=form_error('password')?></b></small>
                         </div>
-
+                        
                         <button class="btn btn-success btn-block" type="submit" name="login"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</button>
                         <a href="<?=base_url('auth/facebook')?>" class="btn btn-warning btn-block text-white"><i class="fab fa-facebook"></i> เข้าสู่ระบบผ่าน Facebook</a>
                         <a href="<?=base_url('auth/register')?>" class="btn btn-primary btn-block text-white"><i class="fas fa-user-plus"></i> สมัครสมาชิก</a>

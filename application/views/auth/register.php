@@ -1,9 +1,7 @@
-
-
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <h5 class="card-header text-left bg-primary text-white text-center"><?= $title ?></h5>
+            <h5 class="card-header text-left bg-primary text-white text-center"><i class="fas fa-user-plus"></i> <?= $title ?></h5>
             <div class="card-body">
                 <!-- Message -->
                 <?php if(isset($_SESSION['success'])){ ?>

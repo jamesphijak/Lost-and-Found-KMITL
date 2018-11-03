@@ -14,14 +14,25 @@ class Template extends CI_Model {
     }
 
     public function loadTemplate(){
+        $this->loadHeader();
+
+        $body = array(
+            'title' => $this->title,
+        );
+
+        $this->load->view($this->view,$body);
+        $this->loadFooter();
+    }
+
+    public function setHeader($title){
+        $this->title = $title;
+    }
+
+    public function loadHeader(){
         $header = array(
             'app_name' => $this->app_name,
             'title' => $this->title,
             'font' => $this->font
-        );
-
-        $body = array(
-            'title' => $this->title,
         );
 
         // Update session when refresh page
@@ -29,9 +40,21 @@ class Template extends CI_Model {
             $this->tb_user->user_session_update($_SESSION['user_id']);
         }
         $this->load->view('template/header',$header);
-        $this->load->view($this->view,$body);
+    }
+
+    public function loadFooter(){
         $this->load->view('template/footer');
     }
+
+    public function normalDate($date) {
+		return date('d-M-Y', strtotime($date));
+	}
+
+	public function normalDatetime($date) {
+		return date('d-M-Y H:i:s', strtotime($date));
+	}
+
+
 }
 
 ?>

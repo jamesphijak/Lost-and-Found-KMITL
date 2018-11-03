@@ -11,6 +11,12 @@ class Tb_User extends CI_Model
         return $this->db->insert($this->table, $value); // insert into
     }
 
+    // แก้ไขข้อมูลสมาชิก
+    public function update_user($id, $value){
+        $this->db->set('updated','now()', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
+        return $this->db->update($this->table, $value, ['id' => $id]); // update
+    }
+
     // ใช้ดึงข้อมูลเข้าสู่ระบบ by user & pass
     public function user_login($value){
         return $this->db->get_where($this->table, $value)->row(); // select * from table where username password
