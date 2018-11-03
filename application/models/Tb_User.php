@@ -8,7 +8,13 @@ class Tb_User extends CI_Model
     // ใช้สมัครสมาชิก
     public function user_register($value){
         // return $this->db->insert_id(); // return last id
-        return $this->db->insert($this->table, $value); // insert into
+        return $this->db->insert($this->table, $value); // return result
+    }
+
+    // ใช้สมัครสมาชิก และ return id ที่พึ่งเพิ่มไป
+    public function user_register_id($value){
+        $this->db->insert($this->table, $value); // insert into
+        return $this->db->insert_id(); // return last insert record id
     }
 
     // แก้ไขข้อมูลสมาชิก
@@ -25,6 +31,11 @@ class Tb_User extends CI_Model
     // ใช้ดึงข้อมูล by id
     public function get_user_by_id($id){
         return $this->db->get_where($this->table, ['id' => $id])->row(); // select * from table where id = id
+    }
+
+    // ใช้ดึงข้อมูล by email
+    public function get_user_by_email($email){
+        return $this->db->get_where($this->table, ['email' => $email])->row(); // select * from table where id = id
     }
 
     // ใช้ set session
@@ -52,6 +63,8 @@ class Tb_User extends CI_Model
         // unset($_SESSION['user_logged']);
         // unset($_SESSION['user_id']);
         // unset($_SESSION['user_email']);
+        // $this->session->unset_userdata('userData');
+        // $this->facebook->destroy_session();
         unset($_SESSION);
         session_destroy();
     }

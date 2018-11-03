@@ -73,6 +73,17 @@ class User extends CI_Controller{
         $this->template->loadFooter();
     }
 
+    // ยกเลิกเชื่อมต่อกับ Facebook
+    public function unsetFacebook(){
+        $id = $_SESSION['user_id'];
+        $value = array('facebook_id' => null);
+        $result = $this->tb_user->update_user($id,$value);
+        if($result){   
+            $this->session->set_flashdata('success','แก้ไขข้อมูลสำเร็จ');
+            redirect(base_url('user/profile'),'refresh');
+        }
+    }
+
     // แก้ไขรหัสผ่าน
     public function editPassword(){
         $input = $this->input->post();

@@ -30,8 +30,8 @@
                         </div>
                         
                         <button class="btn btn-success btn-block" type="submit" name="login"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</button>
-                        <a href="<?=base_url('auth/facebook')?>" class="btn btn-warning btn-block text-white"><i class="fab fa-facebook"></i> เข้าสู่ระบบผ่าน Facebook</a>
-                        <a href="<?=base_url('auth/register')?>" class="btn btn-primary btn-block text-white"><i class="fas fa-user-plus"></i> สมัครสมาชิก</a>
+                        <a href="<?=base_url('auth/facebook')?>" class="btn btn-primary btn-block text-white"><i class="fab fa-facebook"></i> เข้าสู่ระบบผ่าน Facebook</a>
+                        <a href="<?=base_url('auth/register')?>" class="btn btn-warning btn-block text-white"><i class="fas fa-user-plus"></i> สมัครสมาชิก</a>
                 </form>
             </div>
         </div>
