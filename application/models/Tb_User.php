@@ -1,6 +1,6 @@
 <?php
 
-class Tb_User extends CI_Model
+class Tb_user extends CI_Model
 {
     private $table = 'tb_user';
     const SALT = 'PNp04n5pEkuyhRHj5a3RTAIy9M6zGs06'; // https://randomkeygen.com/
@@ -26,6 +26,12 @@ class Tb_User extends CI_Model
     // ใช้ดึงข้อมูลเข้าสู่ระบบ by user & pass
     public function user_login($value){
         return $this->db->get_where($this->table, $value)->row(); // select * from table where username password
+    }
+
+    // ดุงผู้ใช้ทั้งหมด
+    public function get_users(){
+        $this->db->order_by('created','desc'); // เรียงลำดับ
+        return $this->db->get($this->table)->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
     }
 
     // ใช้ดึงข้อมูล by id

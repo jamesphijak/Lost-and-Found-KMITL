@@ -110,7 +110,27 @@ $config = array(
                     'matches' => $matches
                 )
         )
-    )  
+    ),
+    'admin/category' => array(
+        array(
+                'field' => 'name',
+                'label' => 'ชื่อหมวดหมู่',
+                'rules' => 'required|trim',
+                'errors' => array(
+                    'required' => $required
+                )
+        )
+    ),
+    'admin/color' => array(
+        array(
+                'field' => 'name',
+                'label' => 'ชื่อสี',
+                'rules' => 'required|trim',
+                'errors' => array(
+                    'required' => $required
+                )
+        )
+    )        
 
 );
 

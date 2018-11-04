@@ -143,5 +143,7 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array(
     'template',
-    'tb_user'
+    'tb_user',
+    'tb_category',
+    'tb_color'
 );

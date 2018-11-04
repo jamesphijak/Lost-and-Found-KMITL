@@ -26,7 +26,11 @@
                 <label for="country">หมวดหมู่</label>
                 <select class="custom-select d-block w-100" id="country" required="">
                   <option value="">เลือกหมวดหมู่...</option>
-                  <option>United States</option>
+                   <?php foreach($categories as $row) : ?>
+                   <option value="<?= $row->id ?>"><?= $row->name ?></option>
+                   <?php endforeach; ?>
+                   
+
                 </select>
                 <div class="invalid-feedback">
                   Please select a valid country.
@@ -36,7 +40,9 @@
                 <label for="state">สี</label>
                 <select class="custom-select d-block w-100" id="state" required="">
                   <option value="">เลือกสี...</option>
-                  <option>California</option>
+                  <?php foreach($colors as $row) : ?>
+                   <option value="<?= $row->id ?>"><?= $row->name ?></option>
+                   <?php endforeach; ?>
                 </select>
                 <div class="invalid-feedback">
                   Please provide a valid state.

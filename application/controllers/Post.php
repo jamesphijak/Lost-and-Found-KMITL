@@ -8,8 +8,18 @@ class Post extends CI_Controller{
     }
 
     public function createLost(){
-        $this->template->setTemplate('ลงประกาศของหาย', 'create_post');
-        $this->template->loadTemplate();
+        $title = 'ลงประกาศของหาย';
+        $this->template->setHeader($title);
+        $this->template->loadHeader();
+        //pass parameter to profile
+        $body = array(
+            'title' => $title,
+            'categories' => $this->tb_category->get_categories(),
+            'colors' => $this->tb_color->get_colors()
+        );
+        $this->load->view('post/create_lost',$body);
+        // $this->load->view('user/profile',$body);
+        $this->template->loadFooter();
     }
 
     public function createFound(){

@@ -17,6 +17,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?= base_url('assets/js/jquery-3.3.1.js')?>"></script>
     <script src="<?= base_url('assets/js/bootstrap.js')?>"></script>
     <script src="<?= base_url('assets/js/jquery.min.js')?>"></script>
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     <style type="text/css">
         html, body{
@@ -77,6 +81,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle active" style="font-size:18px;" href="#" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle"></i> <?= $_SESSION['user_email'] ?></a>
                                 <div class="dropdown-menu" aria-labelledby="dropdown-user">
+                                    <!-- Admin -->
+                                    <?php if($_SESSION['user_type'] == 'Admin'){?>
+                                    <a class="dropdown-item" href="<?= base_url('admin')?>">
+                                    หน้าจัดการของ Admin</a>
+                                    <div class="dropdown-divider"></div>
+                                    <?php } ?>
+
                                     <a class="dropdown-item" href="<?= base_url('user/profile')?>">จัดการข้อมูลส่วนตัว</a>
                                     <a class="dropdown-item" href="<?= base_url('auth/logout') ?>">ออกจากระบบ</a>
                                 </div>
