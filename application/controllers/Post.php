@@ -27,55 +27,57 @@ class Post extends CI_Controller{
     }
 
     public function loadLost(){
-        // $servername = "localhost";
-        // $username = "lostfoun_kmitl";
-        // $password = "James0879723879";
-        // $dbname = "lostfoun_lostfound";
+        $search = $_GET['search'];
+        $decode = json_decode($search, true);
 
-        // $con = new mysqli($servername, $username, $password, $dbname);
-        // if ($con->connect_error) {
-        //     die("Connection failed: " . $con->connect_error);
-        // }
+        $like = array('type' => 'found','category_id' => $decode['category'], 'color_id' => $decode['color']);
+        $post_result = $this->tb_post->get_post_like($like);
 
-        $q = $_GET['q'];
+        if($decode['color']=="" && $decode['category']==""){
+            // echo "ไม่พบรายการที่คล้ายกัน";
+            echo "<h5 class='d-flex border-bottom border-gray pb-2 mb-0'>ไม่พบประกาศของที่ถูกพบ</h5>";
+            return;
+        }
 
-        $deq = json_decode($q, true);
+        // echo "<table class='table table-hover'>";
+        // foreach($post_result as $row) :
+        //     echo "<tr class='clickable-row' data-href='viewLost.php?id=".$row->id."'>";
+        //     echo "<td>" . $row->name . "</td>";
+        //     echo "<td>" . $row->type . "</td>";
+        //     echo "<td>" . $row->category_id. "</td>";
+        //     echo "<td>" . $row->color_id . "</td>";
+        //     //echo "<td><img style='width:50px;height:50px' src='picture/".$entry['row']."'>"."</td>";
+        //     echo "</tr>";
+        //     endforeach;
+        // echo "</table>";
+        
+        // echo "<h4 class='d-flex justify-content-between align-items-center mb-3'>";
+        // echo "<span>ของที่ถูกพบ</span>";
+        // echo "<span class='badge badge-primary badge-pill'>".count($post_result)."</span></h4>";
+        // echo "<ul class='list-group mb-3'>";
+        // foreach($post_result as $row) :
+        // echo "<li class='list-group-item d-flex justify-content-between'><a href=''>";
+        // echo "<span class='pull-left'>";
+        // //echo "<img src='". base_url("assets/upload_images/test.png") ."' width='80px' style='margin-top:10px;' class='img-reponsive img-rounded />";
+        // echo "</span>";
+        // echo "<div class='text-left' style='margin-right:90px;'> $row->name ($row->type) หมวดหมู่ : $row->category_id <br>สี : $row->color_id</div>";
+        // echo "</a></li>";
+        // endforeach;
+        // echo "</ul>";
 
-            // $sql="SELECT * FROM tb_post WHERE category_id LIKE '%".$deq['type']."%' AND color_id LIKE '%".$deq['color']."%'" ;
-            
-            $like = array('category_id' => $deq['type'], 'color_id' => $deq['color']);
-            $post_result = $this->tb_post->get_post_like($like);
-            
-            if($deq['text']==""&&$deq['color']==""&&$deq['type']==""){
-                // echo "ไม่พบรายการที่คล้ายกัน";
-                return;
-            }
-
-            // $result = mysqli_query($con,$sql);
-
-            echo "<table class='table table-hover'>";
-            foreach($post_result as $row) :
-                echo "<tr class='clickable-row' data-href='viewLost.php?id=".$row->id."'>";
-                echo "<td>" . $row->name . "</td>";
-                echo "<td>" . $row->category_id. "</td>";
-                echo "<td>" . $row->color_id . "</td>";
-                //echo "<td><img style='width:50px;height:50px' src='picture/".$entry['row']."'>"."</td>";
-                echo "</tr>";
-            endforeach;
-            echo "</table>";
-
-            // echo "<table class='table table-hover'>";
-            // while($entry = mysqli_fetch_array($result)){ 
-            //     echo "<tr class='clickable-row' data-href='viewLost.php?id=".$entry['id']."'>";
-            //     echo "<td>" . $entry['name'] . "</td>";
-            //     echo "<td>" . $entry['category_id'] . "</td>";
-            //     echo "<td>" . $entry['color_id'] . "</td>";
-            //     echo "<td><img style='width:50px;height:50px' src='picture/".$entry['imgurl1']."'>"."</td>";
-            //     echo "</tr>";
-            // }
-            // echo "</table>";
-            // mysqli_close($con);
-
+        echo "<h5 class='d-flex border-bottom border-gray pb-2 mb-0'>พบของที่หาย ". count($post_result) ." รายการ</h5>";
+        foreach($post_result as $row) :
+        echo "<div class='media text-muted pt-3'>";
+        echo "<img alt='32x32' class='mr-2 rounded' src='".base_url("assets/upload_images/test.png")."' data-holder-rendered='true' style='width: 42px; height: 32px;'>";
+        echo "<div class='media-body pb-3 mb-0 small lh-125 border-bottom border-gray'>";
+        echo "<div class='d-flex justify-content-between align-items-center w-100'>";
+        echo "<strong class='text-gray-dark'>$row->name</strong>";
+        echo "<a href='". base_url('viewPost/'.$row->id) ."'>ดูประกาศ</a>";
+        echo "</div>";
+        echo "<span class='d-block'>หมวดหมู่ : $row->category_id , สี : $row->color_id</span>";
+        echo "</div>";
+        echo "</div>";
+        endforeach;
     }
 
 

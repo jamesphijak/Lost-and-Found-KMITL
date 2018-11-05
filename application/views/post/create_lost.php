@@ -1,30 +1,17 @@
 <div class="row">
-        <div class="col-md-4 order-md-2 mb-4">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span>ของที่ถูกพบ</span>
-            <span class="badge badge-primary badge-pill">3</span>
-          </h4>
-          <!-- <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between">
-            <span class="pull-left ">
-             <img src="<?= base_url("assets/upload_images/")."test.png" ?>" width="80px" style="margin-top:10px;" class="img-reponsive img-rounded" />
-            </span>
-                <div class="text-left" style="margin-right:90px;"> กระเป๋าตังค์<br>หมวดหมู่ : กระเป๋า <br>สี : ดำ</div>
-            </li>
-          </ul> -->
-
-          <div id="txtHint"></div>
-          
+        <div class="col-md-4 order-md-2 mb-4" id="txtHint">
+        <h5 class="d-flex border-bottom border-gray pb-2 mb-0">ไม่พบประกาศของที่ถูกพบ</h5>
+        
         </div>
         <div class="col-md-8 order-md-1">
-        <h4 class="mb-3">ลงประกาศของหาย</h4>
+        <h4 class="mb-0">ลงประกาศของหาย</h4>
         <hr class="mb-4">
           <form class="needs-validation" novalidate="">
 
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="country">หมวดหมู่</label>
-                <select class="custom-select d-block w-100" id="typeOfItem" >
+                <select class="custom-select d-block w-100" id="categoryOfItem" >
                   <option value="">เลือกหมวดหมู่...</option>
                    <?php foreach($categories as $row) : ?>
                    <option value="<?= $row->id ?>"><?= $row->name.' ('.$row->id.')' ?></option>
@@ -89,9 +76,9 @@
 
           function find(str) {
             if (window.XMLHttpRequest) {
-              // code for IE7+, Firefox, Chrome, Opera, Safari
+              // Code for IE7+, Firefox, Chrome, Opera, Safari
               xmlhttp=new XMLHttpRequest();
-            } else {  // code for IE6, IE5
+            } else {  // Code for IE6, IE5
               xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
             }
             xmlhttp.onreadystatechange=function() {
@@ -100,23 +87,16 @@
                 clickableRow();
               }
             }
-            xmlhttp.open("GET","<?= base_url('post/loadLost')?>?q="+str,true);
+            xmlhttp.open("GET","<?= base_url('post/loadLost')?>?search="+str,true);
             xmlhttp.send();
           }
 
           $(document).ready(function(){
-              var inp = {type:"",color:"",text:""};
+              var inp = {category:"",color:""};
               var str;
-              // live data search text field
-              // $('#inputName').keyup(function(){
-              // //  showResult($(this).val());
-              // inp['text'] = $(this).val();
-              // str = JSON.stringify(inp);
-              // find(str);
-              // });
           
-              $('#typeOfItem').change(function(){
-                inp['type'] = $(this).val();
+              $('#categoryOfItem').change(function(){
+                inp['category'] = $(this).val();
                 // showUser($(this).val());
                 str = JSON.stringify(inp);
                 find(str);
