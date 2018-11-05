@@ -5,9 +5,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
     <title><?= $app_name.' | '.$title ?></title>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- CSS loader section -->
     <link href="<?= base_url('assets/css/bootstrap.css')?>" rel="stylesheet">
     <link href="<?= base_url('assets/font/sukhumvit/sukhumvit.css')?>" rel="stylesheet">

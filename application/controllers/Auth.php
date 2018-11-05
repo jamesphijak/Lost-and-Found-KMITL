@@ -170,6 +170,7 @@ public function facebook(){
 }
 
 function fbcallback(){
+    ob_start();
       $appid = "2359331964290771";
       $fb = new Facebook\Facebook([
         'app_id' => "2359331964290771", // Replace {app-id} with your app id

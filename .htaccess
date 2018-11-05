@@ -1,7 +1,13 @@
 RewriteEngine On
+RewriteCond %{HTTPS} off 
+RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} !^www.
+RewriteRule (.*) https://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond $l !^(index\.php|assets|css|js|images|fonts)
 RewriteRule ^(.*)$ index.php/$l [L]
 
 #Open rewrite module
+

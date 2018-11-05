@@ -14,7 +14,7 @@
                                     </tr>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">เบอร์โทรศัพท์</td>
-                                        <td class="col-8"><?= $user->mobile ?></td>
+                                        <td class="col-8"><?= empty($user->mobile)? 'ยังไม่ได้เพิ่มเบอร์โทรศัพท์':$user->mobile ?></td>
                                     </tr>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">ประเภทสมาชิก</td>
