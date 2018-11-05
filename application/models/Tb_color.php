@@ -8,7 +8,7 @@ class Tb_color extends CI_Model{
     }
 
     public function get_colors(){
-        $this->db->order_by('id','desc'); // เรียงลำดับ
+        $this->db->order_by('id','asc'); // เรียงลำดับ
         return $this->db->get($this->table)->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
     }
 

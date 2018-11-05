@@ -68,7 +68,7 @@
   $(document).ready(function() {
     $('#example').DataTable({
       
-      order: [[ 0, "desc" ]],
+      order: [[ 0, "asc" ]],
       columnDefs: [{ "orderable": false, "targets": 2 }],
       language: {
         search: "ค้นหา",
