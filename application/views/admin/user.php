@@ -27,6 +27,7 @@
                             <?= $row->user_type ?>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <h6 class="dropdown-header">ประเภทสมาชิก</h6>
                             <?php if ($row->user_type == 'Admin'){?>
                             <a class="dropdown-item" href="<?= base_url('admin/user/member/' . $row->user_id) ?>">Member</a>
                             <?php }else{ ?>

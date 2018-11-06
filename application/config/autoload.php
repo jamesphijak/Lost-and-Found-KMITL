@@ -62,8 +62,8 @@ $autoload['libraries'] = array(
     'database',
     'session',
     'form_validation',
-    'my_form_validation',
-    'encrypt'
+    'encrypt',
+    'upload',
 );
 
 /*
@@ -97,7 +97,8 @@ $autoload['drivers'] = array();
 */
 $autoload['helper'] = array(
     'url',
-    'security'
+    'security',
+    'file'
 );
 
 /*

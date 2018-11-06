@@ -14,7 +14,13 @@ class Tb_post extends CI_Model{
 
     public function get_posts_by_type($type){
         $this->db->order_by('post_id','desc'); // เรียงลำดับ
-        return $this->db->get_where($this->table, ['type' => $type])->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
+        return $this->db->get_where($this->table, ['post_type' => $type])->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
+    }
+
+    public function get_posts_by_type_limit($type, $status,$limit){
+        $this->db->order_by('post_id','desc'); // เรียงลำดับ
+        $this->db->limit($limit,0);
+        return $this->db->get_where($this->table, ['post_type' => $type,'post_status' => $status])->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
     }
 
     public function get_posts_by_status($status){

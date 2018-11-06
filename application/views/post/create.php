@@ -18,7 +18,7 @@
             <div class="alert alert-danger" role="alert"><?= $_SESSION['error'] ?></div>
         <?php } ?>
 
-        <form class="form-group" method="post">
+        <form class="form-group" method="post" action="<?= base_url('post/create/'.$type) ?>" enctype="multipart/form-data">
             <?php $select = "" ?>
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -83,18 +83,38 @@
                 <small class="text-danger"><b><?= form_error('description') ?></b></small>
             </div>
 
-            <h4 class="mb-3">รูปภาพ</h4>
             <hr class="mb-4">
 
+            <h4 class="mb-3">รูปภาพปก</h4>
+            <div class="form-group">
+                <label class="btn btn-sm btn-secondary" style="margin-bottom:0px;">
+                    เลือกรูปภาพ
+                    <input name="image1" onchange="show_image1.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>
+                </label>
+                <span id="show_image1" class="text-muted"></span>
+                <small class="text-danger"><b><?= form_error('image1') ?></b></small>
+             </div>
+
             <hr class="mb-4">
-            <button class="btn btn-success btn-lg btn-block" type="submit">ยืนยันการลงประกาศ</button>
+
+<!--            <h4 class="mb-3">รูปภาพเพิ่มเติม</h4>-->
+<!--            <div class="form-group">-->
+<!--                <label class="btn btn-sm btn-secondary" style="margin-bottom:0px;">-->
+<!--                    เลือกรูปภาพ-->
+<!--                    <input name="image2" onchange="show_image2.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>-->
+<!--                </label>-->
+<!--                <span id="show_image2" class="text-muted"></span>-->
+<!--                <small class="text-danger"><b>--><?//= form_error('image2') ?><!--</b></small>-->
+<!--            </div>-->
+<!---->
+<!--            <hr class="mb-4">-->
+            <button class="btn btn-success btn-block" type="submit">ยืนยันการลงประกาศ</button>
         </form>
     </div>
 </div>
 
 
 <script>
-
 
     function find(str) {
         if (window.XMLHttpRequest) {
