@@ -11,8 +11,8 @@
                     <form method="post">
                         <td width="120"><input type="text" value="<?= isset($category->id)? $category->id : '' ?>" name="id" readonly class="form-control"></td>
                         <td>
-                            <input type="text" placeholder="ใส่ชื่อหมวดหมู่" name="name" value="<?= set_value('name',isset($category->name)? $category->name : '') ?>" class="form-control">
-                            <small class="text-danger" ><b><?=form_error('name')?></b></small>
+                            <input type="text" placeholder="ใส่ชื่อหมวดหมู่" name="category_name" value="<?= set_value('category_name',isset($category->category_name)? $category->category_name : '') ?>" class="form-control">
+                            <small class="text-danger" ><b><?=form_error('category_name')?></b></small>
                         </td>
                         
                         <td>
@@ -42,7 +42,7 @@
             <?php foreach($categories as $row) : ?>
             <tr>
                     <th><?= $row->id ?></th>
-                    <td><?= $row->name ?></td>
+                    <td><?= $row->category_name ?></td>
                     <td>
                         <div class="row">
                             <div class="col">

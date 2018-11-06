@@ -23,6 +23,24 @@ class Admin extends CI_Controller{
 
     }
 
+    public function postApprove(){
+    $title = 'อนุมัติรายการประกาศ';
+    	$this->template->setHeader($title);
+        $this->template->loadHeader();
+        $this->load->view('admin/menu');
+
+        //pass parameter to profile
+        $body = array(
+            'title' => $title,
+            'posts' => $this->tb_post->get_posts_by_status('Wait')
+        );
+        $this->load->view('admin/postApprove',$body);
+        
+
+        // $this->load->view('user/profile',$body);
+        $this->template->loadFooter();
+    }
+
     public function user(){
     	$title = 'รายการผู้ใช้งาน';
     	$this->template->setHeader($title);

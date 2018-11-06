@@ -5,6 +5,8 @@ $unique = '%sนี้มีในระบบแล้ว';
 $matches = '%sไม่ตรงกัน';
 $min_mobile = '%sต้องไม่น้อยกว่า 10 ตัว';
 $max_mobile = '%sต้องไม่มากกว่า 10 ตัว';
+$max_name = '%sต้องไม่มากกว่า 50 ตัว';
+$max_description = '%sต้องไม่มากกว่า 200 ตัว';
 $natural = '%sต้องมีแต่ตัวเลข 0-9 เท่านั้น';
 // $old_value = $_SESSION['user_email'];
 
@@ -113,7 +115,7 @@ $config = array(
     ),
     'admin/category' => array(
         array(
-                'field' => 'name',
+                'field' => 'category_name',
                 'label' => 'ชื่อหมวดหมู่',
                 'rules' => 'required|trim',
                 'errors' => array(
@@ -123,14 +125,52 @@ $config = array(
     ),
     'admin/color' => array(
         array(
-                'field' => 'name',
+                'field' => 'color_name',
                 'label' => 'ชื่อสี',
                 'rules' => 'required|trim',
                 'errors' => array(
                     'required' => $required
                 )
         )
-    )        
+    )
+    ,
+    'post/createPost' => array(
+        array(
+            'field' => 'category',
+            'label' => 'หมวดหมู่',
+            'rules' => 'required|trim',
+            'errors' => array(
+                'required' => $required,
+                'max_length' => $max_mobile
+            )
+        ),
+        array(
+            'field' => 'color',
+            'label' => 'สี',
+            'rules' => 'required|trim',
+            'errors' => array(
+                'required' => $required,
+            )
+        ),
+        array(
+            'field' => 'name',
+            'label' => 'ชื่อของ',
+            'rules' => 'required|trim|max_length[50]',
+            'errors' => array(
+                'required' => $required,
+                'max_length' => $max_name
+            )
+        ),
+        array(
+            'field' => 'description',
+            'label' => 'รายละเอียด',
+            'rules' => 'required|trim|max_length[200]',
+            'errors' => array(
+                'required' => $required,
+                'max_length' => $max_description
+            )
+        )
+    )    
 
 );
 

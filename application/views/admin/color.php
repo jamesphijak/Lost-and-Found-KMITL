@@ -11,8 +11,8 @@
                     <form method="post">
                         <td width="120"><input type="text" value="<?= isset($color->id)? $color->id : '' ?>" name="id" readonly class="form-control"></td>
                         <td>
-                            <input type="text" placeholder="ใส่ชื่อสี" name="name" value="<?= set_value('name',isset($color->name)? $color->name : '') ?>" class="form-control">
-                            <small class="text-danger" ><b><?=form_error('name')?></b></small>
+                            <input type="text" placeholder="ใส่ชื่อสี" name="color_name" value="<?= set_value('color_name',isset($color->color_name)? $color->color_name : '') ?>" class="form-control">
+                            <small class="text-danger" ><b><?=form_error('color_name')?></b></small>
                         </td>
                         
                         <td>
@@ -42,7 +42,7 @@
             <?php foreach($colors as $row) : ?>
             <tr>
                     <th><?= $row->id ?></th>
-                    <td><?= $row->name ?></td>
+                    <td><?= $row->color_name ?></td>
                     <td>
                         <div class="row">
                             <div class="col">
