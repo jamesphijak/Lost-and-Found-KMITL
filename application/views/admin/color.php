@@ -9,7 +9,7 @@
         <thead>
                 <tr class="no-border">
                     <form method="post">
-                        <td width="120"><input type="text" value="<?= isset($color->id)? $color->id : '' ?>" name="id" readonly class="form-control"></td>
+                        <td width="120"><input type="text" value="<?= isset($color->color_id)? $color->color_id : '' ?>" name="color_id" readonly class="form-control"></td>
                         <td>
                             <input type="text" placeholder="ใส่ชื่อสี" name="color_name" value="<?= set_value('color_name',isset($color->color_name)? $color->color_name : '') ?>" class="form-control">
                             <small class="text-danger" ><b><?=form_error('color_name')?></b></small>
@@ -41,15 +41,15 @@
         <tbody>
             <?php foreach($colors as $row) : ?>
             <tr>
-                    <th><?= $row->id ?></th>
+                    <th><?= $row->color_id ?></th>
                     <td><?= $row->color_name ?></td>
                     <td>
                         <div class="row">
                             <div class="col">
-                                <a href="<?= base_url("admin/color/{$row->id}")?>" class="btn btn-success btn-block btn-sm">แก้ไข</a>
+                                <a href="<?= base_url("admin/color/{$row->color_id}")?>" class="btn btn-success btn-block btn-sm">แก้ไข</a>
                             </div>
                             <div class="col">
-                                <a onclick="return confirm('คุณต้องการลบใช่มั้ย?');" href="<?= base_url("admin/deleteColor/{$row->id}")?>" class="btn btn-danger btn-block btn-sm">ลบ</a>
+                                <a onclick="return confirm('คุณต้องการลบใช่มั้ย?');" href="<?= base_url("admin/deleteColor/{$row->color_id}")?>" class="btn btn-danger btn-block btn-sm">ลบ</a>
                             </div>
                         </div>
                     </td>

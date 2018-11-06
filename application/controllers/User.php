@@ -13,10 +13,6 @@ class User extends CI_Controller{
         //var_dump($_SESSION);
         if(isset($_SESSION['user_type'])){
             if($_SESSION['user_type'] == '1'){
-                // 1 = staff
-                exit('Staff');
-            }elseif($_SESSION['user_type'] == '2'){
-                // 2 = admin
                 exit('Admin');
             }else{
                 redirect(base_url('user/profile'));
@@ -40,13 +36,12 @@ class User extends CI_Controller{
 
     public function editProfile(){
         $input = $this->input->post();
-        // if(isset($_POST['register'])){
         if(!empty($input)){
-            if($this->input->post('mobile') != $_SESSION['mobile']){
+            if($this->input->post('mobile') != $_SESSION['user_mobile']){
                 if($this->form_validation->run('user/edit_profile')){
                     $id = $_SESSION['user_id'];
                     $value = array(
-                        'mobile' => $this->input->post('mobile')
+                        'user_mobile' => $this->input->post('mobile')
                     );
                     $result = $this->tb_user->update_user($id,$value);
 
@@ -62,7 +57,6 @@ class User extends CI_Controller{
             }
         }
 
-        // load view
         $title = 'แก้ไขข้อมูลส่วนตัว';
         $this->template->setHeader($title);
         $this->template->loadHeader();
@@ -76,17 +70,6 @@ class User extends CI_Controller{
         $this->template->loadFooter();
     }
 
-    // ยกเลิกเชื่อมต่อกับ Facebook
-    public function unsetFacebook(){
-        $id = $_SESSION['user_id'];
-        $value = array('facebook_id' => null);
-        $result = $this->tb_user->update_user($id,$value);
-        if($result){   
-            $this->session->set_flashdata('success','แก้ไขข้อมูลสำเร็จ');
-            redirect(base_url('user/profile'),'refresh');
-        }
-    }
-
     // แก้ไขรหัสผ่าน
     public function editPassword(){
         $input = $this->input->post();
@@ -95,10 +78,8 @@ class User extends CI_Controller{
             if($this->form_validation->run('user/edit_password')){
                 $id = $_SESSION['user_id'];
                 $encrypted_password = $this->tb_user->hash($this->input->post('password'));
-                // echo($encrypted_password);
-                // exit();
                 $value = array(
-                    'password' => $encrypted_password
+                    'user_password' => $encrypted_password
                 );
                 $result = $this->tb_user->update_user($id,$value);
 

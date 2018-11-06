@@ -9,7 +9,7 @@
         <thead>
                 <tr class="no-border">
                     <form method="post">
-                        <td width="120"><input type="text" value="<?= isset($category->id)? $category->id : '' ?>" name="id" readonly class="form-control"></td>
+                        <td width="120"><input type="text" value="<?= isset($category->category_id)? $category->category_id : '' ?>" name="category_id" readonly class="form-control"></td>
                         <td>
                             <input type="text" placeholder="ใส่ชื่อหมวดหมู่" name="category_name" value="<?= set_value('category_name',isset($category->category_name)? $category->category_name : '') ?>" class="form-control">
                             <small class="text-danger" ><b><?=form_error('category_name')?></b></small>
@@ -41,15 +41,15 @@
         <tbody>
             <?php foreach($categories as $row) : ?>
             <tr>
-                    <th><?= $row->id ?></th>
+                    <th><?= $row->category_id ?></th>
                     <td><?= $row->category_name ?></td>
                     <td>
                         <div class="row">
                             <div class="col">
-                                <a href="<?= base_url("admin/category/{$row->id}")?>" class="btn btn-success btn-block btn-sm">แก้ไข</a>
+                                <a href="<?= base_url("admin/category/{$row->category_id}")?>" class="btn btn-success btn-block btn-sm">แก้ไข</a>
                             </div>
                             <div class="col">
-                                <a onclick="return confirm('คุณต้องการลบใช่มั้ย?');" href="<?= base_url("admin/deleteCategory/{$row->id}")?>" class="btn btn-danger btn-block btn-sm">ลบ</a>
+                                <a onclick="return confirm('คุณต้องการลบใช่มั้ย?');" href="<?= base_url("admin/deleteCategory/{$row->category_id}")?>" class="btn btn-danger btn-block btn-sm">ลบ</a>
                             </div>
                         </div>
                     </td>

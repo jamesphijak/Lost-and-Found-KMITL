@@ -8,12 +8,12 @@ class Tb_color extends CI_Model{
     }
 
     public function get_colors(){
-        $this->db->order_by('id','asc'); // เรียงลำดับ
+        $this->db->order_by('color_id','asc'); // เรียงลำดับ
         return $this->db->get($this->table)->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
     }
 
     public function get_color_by_id($id){
-        return $this->db->get_where($this->table, ['id' => $id])->row(); // select * from table where id = id
+        return $this->db->get_where($this->table, ['color_id' => $id])->row(); // select * from table where id = id
     }
 
     public function create_color($value){
@@ -21,11 +21,11 @@ class Tb_color extends CI_Model{
     }
 
     public function update_color($id, $value){
-        $this->db->update($this->table, $value, ['id' => $id]); // update
+        $this->db->update($this->table, $value, ['color_id' => $id]); // update
     }
 
     public function delete_color($id){
-        $this->db->delete($this->table, ['id' => $id]); // delete from table where id = id
+        $this->db->delete($this->table, ['color_id' => $id]); // delete from table where id = id
     }
 }
 

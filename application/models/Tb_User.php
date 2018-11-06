@@ -19,8 +19,8 @@ class Tb_user extends CI_Model
 
     // แก้ไขข้อมูลสมาชิก
     public function update_user($id, $value){
-        $this->db->set('updated','now()', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
-        return $this->db->update($this->table, $value, ['id' => $id]); // update
+        $this->db->set('user_updated','now()', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
+        return $this->db->update($this->table, $value, ['user_id' => $id]); // update
     }
 
     // ใช้ดึงข้อมูลเข้าสู่ระบบ by user & pass
@@ -30,18 +30,18 @@ class Tb_user extends CI_Model
 
     // ดุงผู้ใช้ทั้งหมด
     public function get_users(){
-        $this->db->order_by('created','desc'); // เรียงลำดับ
+        $this->db->order_by('user_created','desc'); // เรียงลำดับ
         return $this->db->get($this->table)->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
     }
 
     // ใช้ดึงข้อมูล by id
     public function get_user_by_id($id){
-        return $this->db->get_where($this->table, ['id' => $id])->row(); // select * from table where id = id
+        return $this->db->get_where($this->table, ['user_id' => $id])->row(); // select * from table where id = id
     }
 
     // ใช้ดึงข้อมูล by email
     public function get_user_by_email($email){
-        return $this->db->get_where($this->table, ['email' => $email])->row(); // select * from table where id = id
+        return $this->db->get_where($this->table, ['user_email' => $email])->row(); // select * from table where id = id
     }
 
     // ใช้ set session
@@ -51,7 +51,7 @@ class Tb_user extends CI_Model
             'user_id' => $id,
             'user_email' => $email,
             'user_type' => $type,
-            'mobile' => $mobile
+            'user_mobile' => $mobile
         );
         $this->session->set_userdata($data);
     }
@@ -60,7 +60,7 @@ class Tb_user extends CI_Model
     public function user_session_update($id){
         $user = $this->get_user_by_id($id);
         if($user){
-            $this->user_session_set($id,$user->email,$user->user_type,$user->mobile); // เมื่อพบ user อัพเดทข้อมูลใหม่
+            $this->user_session_set($id,$user->user_email,$user->user_type,$user->user_mobile); // เมื่อพบ user อัพเดทข้อมูลใหม่
         }else{
             $this->user_session_destroy(); // กรณีไม่พบ user นี้แล้ว ถูกลบออกจากระบบ
         }

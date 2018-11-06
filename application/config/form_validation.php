@@ -134,7 +134,7 @@ $config = array(
         )
     )
     ,
-    'post/createPost' => array(
+    'post/create' => array(
         array(
             'field' => 'category',
             'label' => 'หมวดหมู่',

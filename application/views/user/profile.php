@@ -10,11 +10,11 @@
                                 <tbody>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">อีเมล</td>
-                                        <td class="col-8"><?= $user->email ?></td>
+                                        <td class="col-8"><?= $user->user_email ?></td>
                                     </tr>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">เบอร์โทรศัพท์</td>
-                                        <td class="col-8"><?= empty($user->mobile)? 'ยังไม่ได้เพิ่มเบอร์โทรศัพท์':$user->mobile ?></td>
+                                        <td class="col-8"><?= empty($user->user_mobile)? 'ยังไม่ได้เพิ่มเบอร์โทรศัพท์':$user->user_mobile ?></td>
                                     </tr>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">ประเภทสมาชิก</td>
@@ -22,11 +22,11 @@
                                     </tr>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">วันที่เป็นสมาชิก</td>
-                                        <td class="col-8"><?= $this->template->normalDatetime($user->created) ?></td>
+                                        <td class="col-8"><?= $this->template->normalDatetime($user->user_created) ?></td>
                                     </tr>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">แก้ไขข้อมูล่าสุด</td>
-                                        <td class="col-8"><?= $this->template->normalDatetime($user->updated) ?></td>
+                                        <td class="col-8"><?= $this->template->normalDatetime($user->user_updated) ?></td>
                                     </tr>
                                 </tbody> 
                             </table>

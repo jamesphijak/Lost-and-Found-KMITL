@@ -15,8 +15,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
     <!-- Javascript loader section -->
     <script src="<?= base_url('assets/js/jquery-3.3.1.js')?>"></script>
-    <script src="<?= base_url('assets/js/bootstrap.js')?>"></script>
+<!--    <script src="--><?//= base_url('assets/js/bootstrap.js')?><!--"></script>-->
     <script src="<?= base_url('assets/js/jquery.min.js')?>"></script>
+    <script src="<?= base_url('assets/js/bootstrap.bundle.min.js')?>"></script>
+
+
     
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -61,19 +64,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="navbar-nav mr-auto">
                         <!-- รายการประกาศ menu -->
-                        <li class="nav-item active">
-                            <a class="nav-link" style="font-size:18px;" href="<?= base_url('/') ?>">
-                                <i class="far fa-list-alt"></i> รายการประกาศ
-                            </a>
-                        </li>
+
                     </ul>
                         <!-- ปุ่มก่อน Login -->
                         <?php if(!isset($_SESSION['user_logged'])){ ?>
                             <a href="<?= base_url('auth/login')?>" class="btn btn-outline-light"><i class="fas fa-key"></i> เข้าสู่ระบบ / สมัครสมาชิก</a>&nbsp;
                         <?php }else{ ?>
                         <!-- ปุ่มหลัง Login -->
-                            <a href="<?= base_url('post/createLost')?>" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศของหาย</a>&nbsp;
-                            <a href="<?= base_url('post/createFound')?>" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศพบของหาย</a>
+                            <a href="<?= base_url('post/create/lost')?>" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศของหาย</a>&nbsp;
+                            <a href="<?= base_url('post/create/found')?>" class="btn btn-outline-light"><i class="fas fa-plus-circle"></i> ประกาศพบของ</a>
                         
                         &nbsp;
                         <ul class="navbar-nav mr-right">

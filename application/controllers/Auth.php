@@ -22,9 +22,9 @@ public function register()
             // $decrypted_password = $this->encrypt->decode(encrypted_password);
             $encrypted_password = $this->tb_user->hash($this->input->post('password'));
             $value = array(
-                'email' => $this->input->post('email'),
-                'password' => $encrypted_password,
-                'mobile' => $this->input->post('mobile')
+                'user_email' => $this->input->post('email'),
+                'user_password' => $encrypted_password,
+                'user_mobile' => $this->input->post('mobile')
             );
 
             $result = $this->tb_user->user_register($value);
@@ -50,20 +50,14 @@ public function login()
 
             $encrypted_password = $this->tb_user->hash($this->input->post('password'));
             $value = array(
-                'email' => $this->input->post('email'),
-                'password' => $encrypted_password
+                'user_email' => $this->input->post('email'),
+                'user_password' => $encrypted_password
             );
             $user = $this->tb_user->user_login($value);
             
             if($user){
                 $this->session->set_flashdata('success','เข้าสู่ระบบสำเร็จ');
-                $this->tb_user->user_session_set($user->id,$user->email,$user->user_type,$user->mobile);
-                //var_dump($user);
-                // var_dump($_SESSION);
-                // echo $_SESSION['user_logged'].'<br>';
-                // echo $_SESSION['user_id'].'<br>';
-                // echo $_SESSION['user_type'].'<br>';
-                // exit();
+                $this->tb_user->user_session_set($user->user_id,$user->user_email,$user->user_type,$user->user_mobile);
                 redirect(base_url('user/profile'),'refresh');
                 
             }else{
@@ -115,15 +109,15 @@ public function facebook(){
         //var_dump($_SESSION);
         if($user){ // ถ้าเจอ Email ในระบบ
             // เก็บ Facebook id
-            if(empty($user->facebook_id)){
+            if(empty($user->user_facebook_id)){
                 // Facebook id ว่าง
                 // เก็บค่า facebook id เข้าฐานข้อมูล
-                $value = array('facebook_id' => $facebook['id']);
-                $result = $this->tb_user->update_user($user->id,$value); // อัพเดทเข้าฐานข้อมูล
+                $value = array('user_facebook_id' => $facebook['id']);
+                $result = $this->tb_user->update_user($user->user_id, $value); // อัพเดทเข้าฐานข้อมูล
                 if($result){
                     // ทำการ Login
                     $this->session->set_flashdata('success','เข้าสู่ระบบด้วย Facebook สำเร็จ / ทำการรวมเข้ากับบัญชีเดิมเรียบร้อยแล้ว');
-                    $this->tb_user->user_session_set($user->id,$user->email,$user->user_type,$user->mobile);
+                    $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
                     // Redirect ไปหน้าแรก
                     redirect(base_url('user/profile'),'refresh');
                     // เสร็จกระบวนการ...
@@ -133,31 +127,28 @@ public function facebook(){
             }else{
                 // Facebook มี id อยู่แล้ว
                 // Login ได้เลย
-                $this->tb_user->user_session_set($user->id,$user->email,$user->user_type,$user->mobile);
+                $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
                 redirect(base_url('user/profile'),'refresh');
             }
         }else{
             // ไม่เจอ user
             // สร้าง Account ใหม่
             $value = array(
-                'email' => $facebook['email'],
-                'facebook_id' => $facebook['id']
+                'user_email' => $facebook['email'],
+                'user_facebook_id' => $facebook['id']
             );
             $created_user_id = $this->tb_user->user_register_id($value); // สร้าง Account พร้อม return id
-            if($created_user_id>0){   
+            if($created_user_id > 0){ // สร้าง Account สำเร็จ
                 $this->session->set_flashdata('success','เข้าสู่ระบบด้วย Facebook สำเร็จ / สร้าง Account ใหม่เรียบร้อยแล้ว');
                 // ทำการดึงข้อมูลมาสร้าง session
                 $user = $this->tb_user->get_user_by_id($created_user_id); // ดึงข้อมูลมา
-                $this->tb_user->user_session_set($user->id,$user->email,$user->user_type,$user->mobile); // นำไปสร้าง session
+                $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
                 redirect(base_url('user/profile'),'refresh'); // Redirect ไปหน้าแรก
             }else{
                 $this->session->set_flashdata('error','เข้าสู่ระบบด้วย Facebook ไม่สำเร็จ');
             }
         }
 
-        // $me = $response->getGraphUser();
-        // echo '<a href="'. base_url('auth/logout') .'">Logout</a>';
-        // SESSION_DESTROY();
       }
       else {
         $helper = $fb->getRedirectLoginHelper();

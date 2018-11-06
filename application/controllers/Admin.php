@@ -18,13 +18,20 @@ class Admin extends CI_Controller{
             'title' => $title
         );
         $this->load->view('admin/main',$body);
-        // $this->load->view('user/profile',$body);
         $this->template->loadFooter();
 
     }
 
-    public function postApprove(){
-    $title = 'อนุมัติรายการประกาศ';
+    public function post($type = null, $id = null){
+        if($type !=null && $id != null){ // id ว่าง
+            if($type == "approve"){
+                $this->tb_post->update_post($id,array('post_status' => 'OK'));
+            }else{
+                $this->tb_post->update_post($id,array('post_status' => 'Wait'));
+            }
+        }
+
+        $title = 'อนุมัติรายการประกาศ';
     	$this->template->setHeader($title);
         $this->template->loadHeader();
         $this->load->view('admin/menu');
@@ -32,16 +39,24 @@ class Admin extends CI_Controller{
         //pass parameter to profile
         $body = array(
             'title' => $title,
-            'posts' => $this->tb_post->get_posts_by_status('Wait')
+            'posts_not_approve' => $this->tb_post->get_posts_by_status('Wait'),
+            'posts_approved' => $this->tb_post->get_posts_by_status('OK')
         );
-        $this->load->view('admin/postApprove',$body);
-        
-
-        // $this->load->view('user/profile',$body);
+        $this->load->view('admin/post',$body);
         $this->template->loadFooter();
     }
 
-    public function user(){
+    public function user($type=null, $id=null){
+        if($type !=null && $id != null){ // id ว่าง
+            if($type == "member"){
+                $this->tb_user->update_user($id,array('user_type' => 'Member'));
+                redirect(base_url('admin/user'),'refresh');
+            }else{
+                $this->tb_user->update_user($id,array('user_type' => 'Admin'));
+                redirect(base_url('admin/user'),'refresh');
+            }
+        }
+
     	$title = 'รายการผู้ใช้งาน';
     	$this->template->setHeader($title);
         $this->template->loadHeader();
@@ -61,9 +76,18 @@ class Admin extends CI_Controller{
     }
 
     public function category($id = null){ // load id from index page assign to null becasue when page is not in edit mode
-        // echo '<br><br><br>';
-        // var_dump($_POST['name']);
-        $this->save_category(); // load for save function
+        $input = $this->input->post(); // ส่ง post มาจาก form
+        if(!empty($input)){ // ถ้า post ไม่ว่าง
+            if($this->form_validation->run('admin/category')){ // ถ้า valid ก็จะเข้า
+                if(empty($input['category_id'])){ // id ว่าง
+                    $this->tb_category->create_category($input); // create new user
+                    redirect(base_url('admin/category')); // มาจาก config
+                }else{
+                    // แก้ไขข้อมูล
+                    $this->tb_category->update_category($input['category_id'], $input);
+                }
+            }
+        }
 
         $title = 'หมวดหมู่';
         $this->template->setHeader($title);
@@ -81,21 +105,6 @@ class Admin extends CI_Controller{
         $this->template->loadFooter();
     }
 
-    private function save_category(){
-        $input = $this->input->post(); // ส่ง post มาจาก form
-        if(!empty($input)){ // ถ้า post ไม่ว่าง
-            if($this->form_validation->run('admin/category')){ // ถ้า valid ก็จะเข้า
-                if(empty($input['id'])){ // id ว่าง
-                    $this->tb_category->create_category($input); // create new user
-                    redirect(base_url('admin/category')); // มาจาก config
-                }else{
-                    // แก้ไขข้อมูล
-                    $this->tb_category->update_category($input['id'], $input);
-                }
-            } 
-        }
-    }
-
     public function deleteCategory($id){
         // exit('Delete is : '.$id);
         $this->tb_category->delete_category($id);
@@ -103,9 +112,19 @@ class Admin extends CI_Controller{
     }
 
     public function color($id = null){ // load id from index page assign to null becasue when page is not in edit mode
-        // echo '<br><br><br>';
-        // var_dump($_POST['name']);
-        $this->save_color(); // load for save function
+        $input = $this->input->post(); // ส่ง post มาจาก form
+        if(!empty($input)){ // ถ้า post ไม่ว่าง
+            if($this->form_validation->run('admin/color')){ // ถ้า valid ก็จะเข้า
+                if(empty($input['color_id'])){ // id ว่าง
+                    $this->tb_color->create_color($input); // create new user
+                    redirect(base_url('admin/color')); // มาจาก config
+                }else{
+                    // แก้ไขข้อมูล
+                    $this->tb_color->update_color($input['color_id'], $input);
+                }
+            }
+        }
+        //$this->save_color(); // load for save function
 
         $title = 'สี';
         $this->template->setHeader($title);
@@ -121,21 +140,6 @@ class Admin extends CI_Controller{
         $this->load->view('admin/color',$body);
         // $this->load->view('user/profile',$body);
         $this->template->loadFooter();
-    }
-
-    private function save_color(){
-        $input = $this->input->post(); // ส่ง post มาจาก form
-        if(!empty($input)){ // ถ้า post ไม่ว่าง
-            if($this->form_validation->run('admin/color')){ // ถ้า valid ก็จะเข้า
-                if(empty($input['id'])){ // id ว่าง
-                    $this->tb_color->create_color($input); // create new user
-                    redirect(base_url('admin/color')); // มาจาก config
-                }else{
-                    // แก้ไขข้อมูล
-                    $this->tb_color->update_color($input['id'], $input);
-                }
-            } 
-        }
     }
 
     public function deleteColor($id){

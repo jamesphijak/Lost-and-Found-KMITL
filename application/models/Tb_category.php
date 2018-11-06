@@ -8,12 +8,12 @@ class Tb_category extends CI_Model{
     }
 
     public function get_categories(){
-        $this->db->order_by('id','asc'); // เรียงลำดับ
+        $this->db->order_by('category_id','asc'); // เรียงลำดับ
         return $this->db->get($this->table)->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
     }
 
     public function get_category_by_id($id){
-        return $this->db->get_where($this->table, ['id' => $id])->row(); // select * from table where id = id
+        return $this->db->get_where($this->table, ['category_id' => $id])->row(); // select * from table where id = id
     }
 
     public function create_category($value){
@@ -21,11 +21,11 @@ class Tb_category extends CI_Model{
     }
 
     public function update_category($id, $value){
-        $this->db->update($this->table, $value, ['id' => $id]); // update
+        $this->db->update($this->table, $value, ['category_id' => $id]); // update
     }
 
     public function delete_category($id){
-        $this->db->delete($this->table, ['id' => $id]); // delete from table where id = id
+        $this->db->delete($this->table, ['category_id' => $id]); // delete from table where id = id
     }
 }
 
