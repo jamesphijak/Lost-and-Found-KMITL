@@ -22,7 +22,7 @@
                                     </tr>
                                     <tr class="d-flex">
                                         <td class="col-4" align="right">วันที่เป็นสมาชิก</td>
-                                        <td class="col-8"><?= $this->template->normalDatetime($user->user_created) ?></td>
+                                        <td class="col-8"><?= $this->template->thaiNormalDatetime($user->user_created) ?></td>
                                     </tr>
 <!--                                    <tr class="d-flex">-->
 <!--                                        <td class="col-4" align="right">แก้ไขข้อมูล่าสุด</td>-->

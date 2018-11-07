@@ -147,5 +147,6 @@ $autoload['model'] = array(
     'tb_user',
     'tb_category',
     'tb_color',
-    'tb_post'
+    'tb_post',
+    'tb_comment'
 );

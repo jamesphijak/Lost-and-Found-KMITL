@@ -8,60 +8,29 @@ class Post extends CI_Controller
         $this->tb_user->check_login();
     }
 
-    public function upload()
-    {
-        $this->load->view('upload');
-    }
-
-    public function uploadFile()
-    {
-//        var_dump($_FILES['image1']);
-//        var_dump($_FILES['image2']);
-//        echo($_FILES['image1']['name']);
-//        echo($_FILES['image2']['name']);
-
-        if ($_FILES['image1']['error'] > 0 && $_FILES['image2']['error'] > 0) {
-            echo "Error! Image 1 and 2 empty<br>";
-            // Error
-        } else {
-            if ($_FILES['image1']['error'] > 0 && $_FILES['image2']['error'] <= 0) {
-                echo "Error! Image 1 empty , Image 2 not empty<br>";
-                // Error
-            } elseif ($_FILES['image2']['error'] > 0 && $_FILES['image1']['error'] <= 0) {
-                echo "Upload only image 1 : Image 1 not empty , Image 2 empty <br>";
-                // Upload one photo
-            } else {
-                echo "Upload image 1&2 : Image 1 and 2 not empty<br>";
-                // Upload two photo
-            }
-        }
-
-        exit();
-    }
-
-    public function all($type = null,$id = null)
+    public function all($type = null, $id = null)
     {
         if ($type != null) {
-            if($type == 'lost' || $type == 'found' || $type == 'color' || $type == 'category') {
+            if ($type == 'lost' || $type == 'found' || $type == 'color' || $type == 'category') {
                 $select_field = '';
                 $value_field = '';
-                if($type == 'lost' || $type == 'found'){
+                if ($type == 'lost' || $type == 'found') {
                     $title_type = ($type == 'lost') ? 'ของหาย' : 'พบของ';
                     $select_field = 'post_type';
                     $value_field = $type;
-                }else{
-                    if($id != null) {
-                        if($type == 'color'){
+                } else {
+                    if ($id != null) {
+                        if ($type == 'color') {
                             $color = $this->tb_color->get_color_by_id($id);
-                            $title_type = 'ของสี'.$color->color_name;
+                            $title_type = 'ของสี' . $color->color_name;
                             $select_field = 'post_color_id';
-                        }else{
+                        } else {
                             $category = $this->tb_category->get_category_by_id($id);
-                            $title_type = 'ของหมวดหมู่'.$category->category_name;
+                            $title_type = 'ของหมวดหมู่' . $category->category_name;
                             $select_field = 'post_category_id';
                         }
                         $value_field = $id;
-                    }else{
+                    } else {
                         redirect(base_url(''));
                     }
                 }
@@ -72,13 +41,13 @@ class Post extends CI_Controller
                 //pass parameter to profile
                 $body = array(
                     'title' => $title,
-                    'posts' => $this->tb_post->get_posts_by_field_limit($select_field,$value_field, 'OK', 0)
+                    'posts' => $this->tb_post->get_posts_by_field_limit($select_field, $value_field, 'OK', 0)
                 );
                 $this->load->view('post/view_all', $body);
                 // $this->load->view('user/profile',$body);
                 $this->template->loadFooter();
 
-            }else{
+            } else {
                 redirect(base_url(''));
             }
         } else {
@@ -86,27 +55,67 @@ class Post extends CI_Controller
         }
     }
 
-    public function comment(){
-        $input = $this->input->post();
-        if(!empty($input)){
-            if($this->form_validation->run('auth/login')){
+    public function fetch_comment($post_id = null){
+        if($post_id != null) {
+            $output = '';
+            $parent_comment = $this->tb_comment->get_comments_by_post_id(0, $post_id,'desc');
+            foreach ($parent_comment as $pc) {
+                // parent comment
+                $output .= '
+                <div class="media text-muted pt-3">
+                <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+                <div class="d-flex justify-content-between align-items-center ">
+                    <strong class="text-gray-dark">โดย <b>' . $pc->user_email . '</b> เมื่อ <i>' . $this->template->thaiNormalDatetime($pc->comment_created) . '</i></strong>
+                    <a class="btn btn-secondary reply" id="'.$pc->comment_id.'" href="#">ตอบกลับ</a>
+                </div>
+                <span class="d-block">'.$pc->comment_text.'</span>
+                </div></div>';
 
-                $encrypted_password = $this->tb_user->hash($this->input->post('password'));
-                $value = array(
-                    'user_email' => $this->input->post('email'),
-                    'user_password' => $encrypted_password
-                );
-                $user = $this->tb_user->user_login($value);
-
-                if($user){
-                    $this->session->set_flashdata('success','เข้าสู่ระบบสำเร็จ');
-                    $this->tb_user->user_session_set($user->user_id,$user->user_email,$user->user_type,$user->user_mobile);
-                    redirect(base_url('user/profile'),'refresh');
-
-                }else{
-                    $this->session->set_flashdata('error','เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+                // sub comment
+                $sub_comment = $this->tb_comment->get_comments_by_post_id($pc->comment_id, $post_id,'asc');
+                foreach ($sub_comment as $sc) {
+                    $output .= '
+                     <div class="media text-muted pt-3" style="margin-left:50px;">
+                     <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="text-gray-dark">โดย <b>' . $sc->user_email . '</b> เมื่อ <i>' . $this->template->thaiNormalDatetime($sc->comment_created) . '</i></strong>
+                        </div>
+                        <span class="d-block">'.$sc->comment_text.'</span>
+                     </div>
+                     </div>    
+                    ';
                 }
             }
+
+            echo $output;
+        }
+    }
+
+    public function add_comment($post_id = null, $user_id = null)
+    {
+        if($post_id != null && $user_id != null) {
+            $message = '';
+
+            if ($this->input->post('comment_content') == '') {
+                $message .= '<div class="alert alert-danger">กรุณาระบุความคิดเห็นด้วย</div>';
+            } else {
+                $comment_parent_id = $this->input->post('comment_id');
+                $comment_text = $this->input->post('comment_content');
+                // $message .= '<div class="alert alert-success">สวัสดี อิอิ Comment_ID: '.$comment_parent_id.', Text: '.$comment_text.', Post_ID: '.$post_id.', User_ID: '.$user_id.'</div>';
+
+                $result = $this->tb_comment->create_comment($comment_parent_id,$comment_text,$user_id,$post_id);
+                if($result > 0){
+                    $message .= '<div class="alert alert-success">เพิ่มความคิดเห็นสำเร็จ</div>';
+                }else{
+                    $message .= '<div class="alert alert-danger">เพิ่มความคิดเห็นไม่สำเร็จ</div>';
+                }
+
+            }
+
+            $data = array(
+                'message'  => $message
+            );
+            echo json_encode($data);
         }
     }
 
@@ -120,6 +129,7 @@ class Post extends CI_Controller
             $body = array(
                 'title' => $title,
                 'post' => $this->tb_post->get_post_by_id($id),
+                'page_post_id' => $id
             );
             $this->load->view('post/view', $body);
             // $this->load->view('user/profile',$body);
@@ -159,10 +169,10 @@ class Post extends CI_Controller
                             // echo "Upload only image 1 : Image 1 not empty , Image 2 empty <br>";
                             // Upload one photo
                             $this->upload->initialize($config);
-                            if($this->upload->do_upload('image1')){
+                            if ($this->upload->do_upload('image1')) {
                                 $upload_img1 = $this->upload->data(); // เก็บข้อมูล
                                 $upload_check = true; // เปลี่ยนสถานะว่าอัพโหลดเสร็จ
-                            }else{
+                            } else {
                                 $this->session->set_flashdata('error', 'อัพโหลดภาพปกไม่สำเร็จ');
                             }
 
@@ -170,18 +180,18 @@ class Post extends CI_Controller
                             // echo "Upload image 1&2 : Image 1 and 2 not empty<br>";
                             // Upload two photo
                             $this->upload->initialize($config);
-                            if($this->upload->do_upload('image1')){
+                            if ($this->upload->do_upload('image1')) {
                                 $upload_img1 = $this->upload->data(); // เก็บข้อมูล
                                 $upload_check = true; // เปลี่ยนสถานะว่าอัพโหลดเสร็จ
 
-                                if($this->upload->do_upload('image2')){
+                                if ($this->upload->do_upload('image2')) {
                                     $upload_img2 = $this->upload->data(); // เก็บข้อมูล
                                     $upload_check = true; // เปลี่ยนสถานะว่าอัพโหลดเสร็จ
-                                }else{
+                                } else {
                                     $this->session->set_flashdata('error', 'อัพโหลดภาพเพิ่มเติมไม่สำเร็จ');
                                     $upload_check = false; // เปลี่ยนสถานะว่าอัพโหลดไม่เสร็จ
                                 }
-                            }else{
+                            } else {
                                 $this->session->set_flashdata('error', 'อัพโหลดภาพปกไม่สำเร็จ');
                             }
                         }
@@ -190,50 +200,59 @@ class Post extends CI_Controller
                     // หลังอัพโหลดภาพ ทำการ Resize
                     $config['image_library'] = 'gd2';
 
-                    if($upload_img1 != '' && $upload_img2 != '' && $upload_check == true){
+                    if ($upload_img1 != '' && $upload_img2 != '' && $upload_check == true) {
                         // Resize ทั้งสองรูป
                         // Resize image
-                        $config['source_image'] = 'uploads/'.$upload_img1['file_name'];
+                        $config['source_image'] = 'uploads/' . $upload_img1['file_name'];
                         list($width, $height) = getimagesize($config['source_image']);
-                        if ($width >= $height){ $config['width'] = 640; }
-                        else{ $config['height'] = 640; }
-                        $config['master_dim'] = 'auto';
-                        $this->load->library('image_lib', $config);
-
-                        if ($this->image_lib->resize()){
-                            $resize_check = true;
-
-                            $config['source_image'] = 'uploads/'.$upload_img2['file_name'];
-                            list($width, $height) = getimagesize($config['source_image']);
-                            if ($width >= $height){ $config['width'] = 640; }
-                            else{ $config['height'] = 640; }
-                            $config['master_dim'] = 'auto';
-                            $this->load->library('image_lib', $config);
-                            if ($this->image_lib->resize()) {
-                                $resize_check = true;
-                            }else{
-                                $this->session->set_flashdata('error', 'ลดขนาดภาพเพิ่มเติมไม่ได้');
-                                $resize_check = false;
-                            }
-                        }else{
-                            $this->session->set_flashdata('error', 'ลดขนาดภาพไม่ปกไม่ได้');
+                        if ($width >= $height) {
+                            $config['width'] = 640;
+                        } else {
+                            $config['height'] = 640;
                         }
-
-                    }elseif($upload_img1 != '' && $upload_img2 == '' && $upload_check == true){
-                        // Resize รูปแรกรูปเดียว
-                        $config['source_image'] = 'uploads/'.$upload_img1['file_name'];
-                        list($width, $height) = getimagesize($config['source_image']);
-                        if ($width >= $height){ $config['width'] = 640; }
-                        else{ $config['height'] = 640; }
                         $config['master_dim'] = 'auto';
                         $this->load->library('image_lib', $config);
 
                         if ($this->image_lib->resize()) {
                             $resize_check = true;
-                        }else{
+
+                            $config['source_image'] = 'uploads/' . $upload_img2['file_name'];
+                            list($width, $height) = getimagesize($config['source_image']);
+                            if ($width >= $height) {
+                                $config['width'] = 640;
+                            } else {
+                                $config['height'] = 640;
+                            }
+                            $config['master_dim'] = 'auto';
+                            $this->load->library('image_lib', $config);
+                            if ($this->image_lib->resize()) {
+                                $resize_check = true;
+                            } else {
+                                $this->session->set_flashdata('error', 'ลดขนาดภาพเพิ่มเติมไม่ได้');
+                                $resize_check = false;
+                            }
+                        } else {
                             $this->session->set_flashdata('error', 'ลดขนาดภาพไม่ปกไม่ได้');
                         }
-                    }else{
+
+                    } elseif ($upload_img1 != '' && $upload_img2 == '' && $upload_check == true) {
+                        // Resize รูปแรกรูปเดียว
+                        $config['source_image'] = 'uploads/' . $upload_img1['file_name'];
+                        list($width, $height) = getimagesize($config['source_image']);
+                        if ($width >= $height) {
+                            $config['width'] = 640;
+                        } else {
+                            $config['height'] = 640;
+                        }
+                        $config['master_dim'] = 'auto';
+                        $this->load->library('image_lib', $config);
+
+                        if ($this->image_lib->resize()) {
+                            $resize_check = true;
+                        } else {
+                            $this->session->set_flashdata('error', 'ลดขนาดภาพไม่ปกไม่ได้');
+                        }
+                    } else {
                         // Resize ไม่ได้ ไม่ม่รูป
                         $this->session->set_flashdata('error', 'ลดขนาดภาพไม่ได้ ไม่พบไฟล์รูป');
                     }
@@ -241,9 +260,9 @@ class Post extends CI_Controller
                     // หลัง Resize
 
 
-                    if($resize_check == true){
+                    if ($resize_check == true) {
                         $img1_name = $upload_img1['file_name'];
-                        if($upload_img2 != '') {
+                        if ($upload_img2 != '') {
                             $img2_name = ($upload_img2['file_name'] != '') ? $upload_img2['file_name'] : '';
                         }
 
@@ -264,11 +283,11 @@ class Post extends CI_Controller
                         $result = $this->tb_post->create_post($value);
                         if ($result) {
                             $this->session->set_flashdata('success', 'ลงประกาศสำเร็จ');
-                            redirect(base_url('post/create/'.$type), 'refresh');
+                            redirect(base_url('post/create/' . $type), 'refresh');
                         } else {
                             $this->session->set_flashdata('error', 'ลงประกาศไม่สำเร็จ');
                         }
-                    }else{
+                    } else {
                         $this->session->set_flashdata('error', 'ไม่สามารถลงประกาศได้ ไม่ได้เลิอกรูปภาพ');
                     }
                 }

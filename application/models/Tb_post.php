@@ -30,6 +30,7 @@ class Tb_post extends CI_Model{
         if($limit != 0) {
             $this->db->limit($limit, 0);
         }
+        $this->db->order_by('post.post_id','desc'); // เรียงลำดับ
         $query=$this->db->get();
         return $query->result();
     }

@@ -35,8 +35,11 @@
         <hr>
     </div>
     <div class="col-md-12">
-        <form method="post" id="comment_form">
+        <span id="comment_message"></span>
+        <form method="POST" id="comment_form">
             <div class="form-group">
+<!--                <input type="hidden" name="user_id" id="user_id" class="form-control" value="--><?//= $_SESSION['user_id'] ?><!--" />-->
+<!--                <input type="hidden" name="post_id" id="post_id" class="form-control" value="--><?//= $page_post_id ?><!--" />-->
                 <textarea name="comment_content" id="comment_content" class="form-control" placeholder="ข้อมูลความคิดเห็น" rows="5"></textarea>
             </div>
             <div class="form-group">
@@ -45,9 +48,10 @@
                 <a class="btn btn-danger" href="<?= base_url('post/view/'.$post->post_id) ?>">ยกเลิก</a>
             </div>
         </form>
-        <span id="comment_message"></span>
-<!--        <br />-->
-<!--        <div id="display_comment"></div>-->
+
+
+        <div class="my-3 p-3 bg-white rounded shadow-sm" id="display_comment">
+        </div>
     </div>
 </div>
 
@@ -58,7 +62,7 @@
 
         function startRefresh() {
             setTimeout(startRefresh,1000);
-            $.get('fetch_comment.php', function(data) {
+            $.get('<?= base_url('post/fetch_comment/'.$page_post_id) ?>', function(data) {
                 $('#display_comment').html(data);
             });
         }
@@ -67,7 +71,7 @@
             event.preventDefault();
             var form_data = $(this).serialize();
             $.ajax({
-                url:"<?= base_url('post/comment') ?>",
+                url:"<?= base_url('post/add_comment/'.$page_post_id.'/'.$_SESSION['user_id']) ?>",
                 method:"POST",
                 data:form_data,
                 dataType:"JSON",
@@ -76,33 +80,33 @@
                     if(data.error != '')
                     {
                         $('#comment_form')[0].reset();
-                        $('#comment_message').html(data.error);
+                        $('#comment_message').html(data.message);
                         $('#comment_id').val('0');
-                        load_comment();
+                        // load_comment();
                     }
                 }
             })
         });
 
-        load_comment();
-
-        function load_comment()
-        {
-            $.ajax({
-                url:"fetch_comment.php",
-                method:"POST",
-                success:function(data)
-                {
-                    $('#display_comment').html(data);
-                }
-            })
-        }
+        // load_comment();
+        //
+        //function load_comment()
+        //{
+        //    $.ajax({
+        //        url:"<?//= base_url('post/fetch_comment/'.$page_post_id) ?>//",
+        //        method:"POST",
+        //        success:function(data)
+        //        {
+        //            $('#display_comment').html(data);
+        //        }
+        //    })
+        //}
 
         $(document).on('click', '.reply', function(){
             var comment_id = $(this).attr("id");
             $('#comment_id').val(comment_id);
-            $('#comment_name').focus();
-            alert("ขณะนี้ท่านกำลังตอบกลับความคิดเห็น กรุณาพิมพ์ชื่อและรายละเอียดแล้วกด ' โพสต์ '"); // แจ้งเตือนว่ากำลังตอบกลับความคิดเห็น
+            $('#comment_content').focus();
+            //alert("ขณะนี้ท่านกำลังตอบกลับความคิดเห็น กรุณาพิมพ์ชื่อและรายละเอียดแล้วกด ' โพสต์ '"); // แจ้งเตือนว่ากำลังตอบกลับความคิดเห็น
         });
 
     });

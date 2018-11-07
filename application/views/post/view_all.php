@@ -42,7 +42,7 @@
             <?= (count($posts) == 0)?"\"searching\": false,\"paging\": false,\"info\": false,":'' ?>
             columnDefs: [{"orderable": false, "targets": 0}],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "ทั้งหมด"]],
-            order: [[ 2, "desc" ]],
+            order: [[ 4, "desc" ]],
             language: {
                 search: "ค้นหา",
                 paginate: {
