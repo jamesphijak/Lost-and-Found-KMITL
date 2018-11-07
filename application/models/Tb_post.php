@@ -34,14 +34,22 @@ class Tb_post extends CI_Model{
         return $query->result();
     }
 
+    public function get_post_by_id($id){
+        $this->db->select('*');
+        $this->db->from('tb_post as post');
+        $this->db->join('tb_category as category','category.category_id = post.post_category_id','LEFT');
+        $this->db->join('tb_color as color','color.color_id = post.post_color_id','LEFT');
+        //$this->db->join('tb_color','tb_color.id=tb_post.color_id');
+        $this->db->where('post.post_id',$id);
+        $query=$this->db->get();
+        return $query->row();
+    }
+
     public function get_post_like($like){
         $this->db->like($like);
         return $this->db->get($this->table)->result(); // // WHERE `title` LIKE '%match%' ESCAPE '!' AND  `page1` LIKE '%match%' ESCAPE '!' AND  `page2` LIKE '%match%' ESCAPE '!'
     }
 
-    public function get_post_by_id($id){
-        return $this->db->get_where($this->table, ['post_id' => $id])->row(); // select * from table where id = id
-    }
 
     public function create_post($value){
         return $this->db->insert($this->table, $value); // insert into

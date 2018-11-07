@@ -1,3 +1,10 @@
+<style rel="stylesheet">
+    img {
+        object-fit: contain;
+    }
+
+</style>
+
 <div class="row">
     <div class="col-md-4 order-md-2 mb-4" id="txtHint">
         <?php
@@ -18,7 +25,7 @@
             <div class="alert alert-danger" role="alert"><?= $_SESSION['error'] ?></div>
         <?php } ?>
 
-        <form class="form-group" method="post" action="<?= base_url('post/create/'.$type) ?>" enctype="multipart/form-data">
+        <form class="form-group" method="post" enctype="multipart/form-data">
             <?php $select = "" ?>
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -89,7 +96,7 @@
             <div class="form-group">
                 <label class="btn btn-sm btn-secondary" style="margin-bottom:0px;">
                     เลือกรูปภาพ
-                    <input name="image1" onchange="show_image1.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>
+                    <input id="image1" name="image1" onchange="show_image1.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>
                 </label>
                 <span id="show_image1" class="text-muted"></span>
                 <small class="text-danger"><b><?= form_error('image1') ?></b></small>
@@ -97,17 +104,17 @@
 
             <hr class="mb-4">
 
-<!--            <h4 class="mb-3">รูปภาพเพิ่มเติม</h4>-->
-<!--            <div class="form-group">-->
-<!--                <label class="btn btn-sm btn-secondary" style="margin-bottom:0px;">-->
-<!--                    เลือกรูปภาพ-->
-<!--                    <input name="image2" onchange="show_image2.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>-->
-<!--                </label>-->
-<!--                <span id="show_image2" class="text-muted"></span>-->
-<!--                <small class="text-danger"><b>--><?//= form_error('image2') ?><!--</b></small>-->
-<!--            </div>-->
-<!---->
-<!--            <hr class="mb-4">-->
+            <h4 class="mb-3">รูปภาพเพิ่มเติม</h4>
+            <div class="form-group">
+                <label class="btn btn-sm btn-secondary" style="margin-bottom:0px;">
+                    เลือกรูปภาพ
+                    <input id="image2" name="image2" onchange="show_image2.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>
+                </label>
+                <span id="show_image2" class="text-muted"></span>
+                <small class="text-danger"><b><?= form_error('image2') ?></b></small>
+            </div>
+
+            <hr class="mb-4">
             <button class="btn btn-success btn-block" type="submit">ยืนยันการลงประกาศ</button>
         </form>
     </div>

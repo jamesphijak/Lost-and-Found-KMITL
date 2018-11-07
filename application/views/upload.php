@@ -35,10 +35,13 @@
             <div class="card">
                 <h5 class="card-header">Codeignitor Upload single file example</h5>
                 <div class="card-body">
-                    <form action="<?= base_url('post/upload_file') ?>" method="post" enctype="multipart/form-data">
+                    <form action="<?= base_url('post/uploadFile') ?>" method="post" enctype="multipart/form-data">
                         <label class="col-form-label">รูปภาพ</label>
-                        <input type="file" accept="image/*"  class="form-control"  name="image1" />
-                        </div>
+                        <input type="file" accept="image/*"  class="form-control"  name="image1" id="image1" />
+
+                <label class="col-form-label">รูปภาพ2</label>
+                <input type="file" accept="image/*"  class="form-control"  name="image2" id="image2" />
+                        <br>
                         <input type="submit" value="อัพโหลดรูปภาพ" class="btn btn-success">
                     </form>
 

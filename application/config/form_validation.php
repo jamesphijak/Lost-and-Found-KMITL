@@ -170,17 +170,9 @@ $config = array(
                 'max_length' => $max_description
             )
         )
-        ,
-        array(
-            'field' => 'image1',
-            'label' => 'รูปภาพปก',
-            'rules' => 'required',
-            'errors' => array(
-                'required' => $required
-            )
-        )
     )    
 
 );
+
 
 ?>

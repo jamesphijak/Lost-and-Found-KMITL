@@ -224,6 +224,7 @@ function fbcallback(){
     // User is logged in with a long-lived access token.
     // You can redirect them to a members-only page.
     header('Location: '.base_url('auth/facebook'));
+    ob_end_flush();
 }
 }
 

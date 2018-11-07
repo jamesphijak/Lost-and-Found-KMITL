@@ -10,10 +10,17 @@
         <h4>ประกาศของหาย</h4>
         <hr>
     </div>
+    <?php if(count($posts_found) == 0){ ?>
+        <div class="col-md-12 text-center">
+            <h5 class="text-danger">ไม่พบรายการประกาศ</h5>
+            <hr>
+        </div>
+    <?php }else{ ?>
+
     <?php foreach ($posts_lost as $row) : ?>
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <h5 class="card-header text-left bg-primary text-white text-center"><?= $row->post_name ?></h5>
+                <h5 class="card-header text-left bg-secondary text-white text-center"><?= $row->post_name ?></h5>
                 <?php
                 if ($row->post_imgurl1 == "") {
                     $image = "image-not-found.jpg";
@@ -21,7 +28,7 @@
                     $image = $row->post_imgurl1;
                 }
                 ?>
-                <a href="test"><img class="card-img-bottom"
+                <a href="<?= base_url('post/view/' . $row->post_id) ?>"><img class="card-img-bottom"
                                     style="height: 225px; width: 100%; display: block; padding:20px;"
                                     src="<?= base_url("uploads/") . $image ?>" data-holder-rendered="true"></a>
                 <div class="card-body">
@@ -37,7 +44,7 @@
             </div>
         </div>
     <?php endforeach; ?>
-
+    <?php } ?>
 
     <div class="col-md-12">
         <a href="#" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการทั้งหมด</a><br>
@@ -48,12 +55,19 @@
         <hr>
     </div>
 
+    <?php if(count($posts_found) == 0){ ?>
+        <div class="col-md-12 text-center">
+            <h5 class="text-danger">ไม่พบรายการประกาศ</h5>
+            <hr>
+        </div>
+    <?php }else{ ?>
+
     <?php foreach ($posts_found as $row) : ?>
 
         <div class="col-md-4">
 
             <div class="card mb-4 shadow-sm">
-                <h5 class="card-header text-left bg-primary text-white text-center"><?= $row->post_name ?></h5>
+                <h5 class="card-header text-left bg-secondary text-white text-center"><?= $row->post_name ?></h5>
                 <?php
                 if ($row->post_imgurl1 == "") {
                     $image = "image-not-found.jpg";
@@ -61,7 +75,7 @@
                     $image = $row->post_imgurl1;
                 }
                 ?>
-                <a href="test"><img class="card-img-bottom"
+                <a href="<?= base_url('post/view/' . $row->post_id) ?>"><img class="card-img-bottom"
                                     style="height: 225px; width: 100%; display: block; padding:20px;"
                                     src="<?= base_url("uploads/") . $image ?>" data-holder-rendered="true"></a>
                 <div class="card-body">
@@ -78,7 +92,7 @@
         </div>
 
     <?php endforeach; ?>
-
+    <?php } ?>
 
     <div class="col-md-12">
         <a href="#" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการทั้งหมด</a>
