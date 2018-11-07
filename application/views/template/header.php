@@ -64,6 +64,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="navbar-nav mr-auto">
                         <!-- รายการประกาศ menu -->
+                        <li class="nav-item active">
+                            <a class="nav-link" style="font-size:18px;" href="<?= base_url('') ?>">
+                                <i class="fas fa-home"></i> หน้าแรก
+                            </a>
+                        </li>
 
                     </ul>
                         <!-- ปุ่มก่อน Login -->

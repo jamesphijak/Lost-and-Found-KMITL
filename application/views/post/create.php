@@ -94,7 +94,7 @@
 
             <h4 class="mb-3">รูปภาพปก</h4>
             <div class="form-group">
-                <label class="btn btn-sm btn-primary" style="margin-bottom:0px;">
+                <label class="btn btn-primary" style="margin-bottom:0px;">
                     เลือกรูปภาพ
                     <input id="image1" name="image1" onchange="show_image1.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>
                 </label>
@@ -106,7 +106,7 @@
 
             <h4 class="mb-3">รูปภาพเพิ่มเติม</h4>
             <div class="form-group">
-                <label class="btn btn-sm btn-outline-primary" style="margin-bottom:0px;">
+                <label class="btn btn-outline-primary" style="margin-bottom:0px;">
                     เลือกรูปภาพ
                     <input id="image2" name="image2" onchange="show_image2.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>
                 </label>

@@ -27,7 +27,8 @@ class User extends CI_Controller{
         // pass parameter to profile
         $body = array(
             'title' => $title,
-            'user' => $this->tb_user->get_user_by_id($_SESSION['user_id'])
+            'user' => $this->tb_user->get_user_by_id($_SESSION['user_id']),
+            'posts' => $this->tb_post->get_posts_by_field_limit('post_user_id',$_SESSION['user_id'], '', 0)
         );
 
         $this->load->view('user/profile',$body);

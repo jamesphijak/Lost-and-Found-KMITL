@@ -86,6 +86,30 @@ class Post extends CI_Controller
         }
     }
 
+    public function comment(){
+        $input = $this->input->post();
+        if(!empty($input)){
+            if($this->form_validation->run('auth/login')){
+
+                $encrypted_password = $this->tb_user->hash($this->input->post('password'));
+                $value = array(
+                    'user_email' => $this->input->post('email'),
+                    'user_password' => $encrypted_password
+                );
+                $user = $this->tb_user->user_login($value);
+
+                if($user){
+                    $this->session->set_flashdata('success','เข้าสู่ระบบสำเร็จ');
+                    $this->tb_user->user_session_set($user->user_id,$user->user_email,$user->user_type,$user->user_mobile);
+                    redirect(base_url('user/profile'),'refresh');
+
+                }else{
+                    $this->session->set_flashdata('error','เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+                }
+            }
+        }
+    }
+
     public function view($id = null)
     {
         if ($id != null) {
@@ -325,12 +349,15 @@ class Post extends CI_Controller
                             $image = $row->post_imgurl1;
                         }
 
+                        $color = $this->tb_color->get_color_by_id($row->post_color_id);
+                        $category = $this->tb_category->get_category_by_id($row->post_category_id);
+
                         echo "<img class='mr-2 rounded' src='" . base_url("uploads/") . $image . "' data-holder-rendered='true' style='width: 42px; height: 32px;'>";
                         echo "<div class='media-body pb-3 mb-0 small lh-125 border-bottom border-gray'>";
                         echo "<div class='d-flex justify-content-between align-items-center w-100'>";
                         echo "<h6 class='text-gray-dark'><strong>$row->post_name</strong></h6>";
                         echo "</div>";
-                        echo "<span class='d-block'>หมวดหมู่ : $row->post_category_id , สี : $row->post_color_id</span>";
+                        echo "<span class='d-block'><strong>หมวดหมู่ : $category->category_name</strong>  / <strong>สี : $color->color_name</strong> </span>";
                         echo "</div>";
                         echo "</div></a>";
                     endforeach;

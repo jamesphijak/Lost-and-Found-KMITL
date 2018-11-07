@@ -47,6 +47,38 @@ class Template extends CI_Model {
         $this->load->view('template/footer');
     }
 
+
+    public function thaiNormalDate($strDate)
+    {
+        $strYear = date("Y",strtotime($strDate))+543;
+        $strMonth= date("n",strtotime($strDate));
+        $strDay= date("j",strtotime($strDate));
+        $strMonthCut = Array("","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค.");
+        $strMonthThai=$strMonthCut[$strMonth];
+        return "$strDay $strMonthThai $strYear";
+    }
+
+    public function dayLeft($strDate){
+        $date1=date_create(date("d-M-Y"));
+        $date2=date_create($strDate);
+        $diff=date_diff($date1,$date2);
+        //return $diff->format("%R%a วัน"); + -
+        return $diff->format("%a วัน");
+    }
+
+    public function thaiNormalDatetime($strDate)
+    {
+        $strYear = date("Y",strtotime($strDate))+543;
+        $strMonth= date("n",strtotime($strDate));
+        $strDay= date("j",strtotime($strDate));
+        $strHour= date("H",strtotime($strDate));
+        $strMinute= date("i",strtotime($strDate));
+        $strSeconds= date("s",strtotime($strDate));
+        $strMonthCut = Array("","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค.");
+        $strMonthThai=$strMonthCut[$strMonth];
+        return "$strDay $strMonthThai $strYear, $strHour:$strMinute";
+    }
+
     public function normalDate($date) {
 		return date('d-M-Y', strtotime($date));
 	}

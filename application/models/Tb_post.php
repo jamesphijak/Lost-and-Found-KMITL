@@ -24,7 +24,9 @@ class Tb_post extends CI_Model{
         $this->db->join('tb_category as category','category.category_id = post.post_category_id','LEFT');
         $this->db->join('tb_color as color','color.color_id = post.post_color_id','LEFT');
         $this->db->where($field_name,$field_value);
-        $this->db->where('post.post_status',$status);
+        if($status != '') {
+            $this->db->where('post.post_status', $status);
+        }
         if($limit != 0) {
             $this->db->limit($limit, 0);
         }

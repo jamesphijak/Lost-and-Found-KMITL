@@ -35,7 +35,7 @@
         <hr>
     </div>
     <div class="col-md-12">
-        <form method="POST" id="comment_form">
+        <form method="post" id="comment_form">
             <div class="form-group">
                 <textarea name="comment_content" id="comment_content" class="form-control" placeholder="ข้อมูลความคิดเห็น" rows="5"></textarea>
             </div>
@@ -45,7 +45,7 @@
                 <a class="btn btn-danger" href="<?= base_url('post/view/'.$post->post_id) ?>">ยกเลิก</a>
             </div>
         </form>
-<!--        <span id="comment_message"></span>-->
+        <span id="comment_message"></span>
 <!--        <br />-->
 <!--        <div id="display_comment"></div>-->
     </div>
@@ -67,7 +67,7 @@
             event.preventDefault();
             var form_data = $(this).serialize();
             $.ajax({
-                url:"add_comment.php",
+                url:"<?= base_url('post/comment') ?>",
                 method:"POST",
                 data:form_data,
                 dataType:"JSON",

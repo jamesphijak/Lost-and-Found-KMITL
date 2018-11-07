@@ -16,7 +16,6 @@
                     <th>หมวดหมู่</th>
                     <th>สี</th>
                     <th>เมื่อ</th>
-                    <th>โดย</th>
 
                 </tr>
                 </thead>
@@ -29,8 +28,7 @@
                         <td><?= $row->post_name ?></td>
                         <td><?= $row->category_name ?></td>
                         <td><?= $row->color_name ?></td>
-                        <td><?= $this->template->normalDatetime($row->post_created) ?></td>
-                        <td><?= $row->user_email ?></td>
+                        <td><?= $this->template->thaiNormalDatetime($row->post_created) ?></td>
 
                     </tr>
                 <?php endforeach; ?>
@@ -42,7 +40,7 @@
     $(document).ready(function () {
         $('#data').DataTable({
             <?= (count($posts) == 0)?"\"searching\": false,\"paging\": false,\"info\": false,":'' ?>
-            // columnDefs: [{"orderable": false, "targets": 5}],
+            columnDefs: [{"orderable": false, "targets": 0}],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "ทั้งหมด"]],
             order: [[ 2, "desc" ]],
             language: {

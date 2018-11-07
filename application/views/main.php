@@ -37,7 +37,7 @@
                             <a href="<?= base_url('post/all/color/' . $row->post_color_id) ?>" class="btn btn-sm btn-primary">สี<?= $row->color_name ?></a>
                             <a href="<?= base_url('post/all/category/' . $row->post_category_id) ?>" class="btn btn-sm btn-outline-primary"><?= $row->category_name ?></a>
                         </div>
-                        <small class="text-muted"><?= $this->template->normalDatetime($row->post_created) ?></small>
+                        <small class="text-muted"><?= $this->template->thaiNormalDate($row->post_created) ?></small>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
                             <a href="<?= base_url('post/all/color/' . $row->post_color_id) ?>" class="btn btn-sm btn-primary">สี<?= $row->color_name ?></a>
                             <a href="<?= base_url('post/all/category/' . $row->post_category_id) ?>" class="btn btn-sm btn-outline-primary"><?= $row->category_name ?></a>
                         </div>
-                        <small class="text-muted"><?= $this->template->normalDatetime($row->post_created) ?></small>
+                        <small class="text-muted"><?= $this->template->thaiNormalDate($row->post_created) ?></small>
                     </div>
                 </div>
 
