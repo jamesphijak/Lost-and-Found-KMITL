@@ -8,10 +8,10 @@
                 <tr>
                     <th>#</th>
                     <th>ชื่อ</th>
-                    <th>สร้างเมื่อ</th>
-                    <th>สร้างโดย</th>
+                    <th>เมื่อ</th>
+                    <th>โดย</th>
                     <th>สี</th>
-                    <th>เปลี่ยนสถานะ</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -19,12 +19,14 @@
                     <tr>
                         <td><?= $row->post_id ?></td>
                         <td><?= $row->post_name ?></td>
-                        <td><?= $row->post_created ?></td>
+                        <td><?= $this->template->normalDatetime($row->post_created) ?></td>
                         <td><?= $row->user_email ?></td>
                         <td><?= $row->color_name ?></td>
                         <td>
                             <a href="<?= base_url('admin/post/approve/' . $row->post_id) ?>"
                                class="btn btn-sm btn-primary"><i class="fas fa-check-circle"></i> อนุมติ</a>
+                            <a target="_blank" href="<?= base_url('post/view/' . $row->post_id) ?>"
+                               class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -42,25 +44,27 @@
                 <tr>
                     <th>#</th>
                     <th>ชื่อ</th>
-                    <th>สร้างเมื่อ</th>
-                    <th>สร้างโดย</th>
+                    <th>เมื่อ</th>
+                    <th>โดย</th>
                     <th>สี</th>
-                    <th>เปลี่ยนสถานะ</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($posts_approved as $row) : ?>
-                    <tr>
+                    <tr >
                         <td><?= $row->post_id ?></td>
                         <td><?= $row->post_name ?></td>
-                        <td><?= $row->post_created ?></td>
+                        <td><?= $this->template->normalDatetime($row->post_created) ?></td>
                         <td><?= $row->user_email ?></td>
                         <td><?= $row->color_name ?></td>
                         <td>
                             <a href="<?= base_url('admin/post/unapprove/' . $row->post_id) ?>"
                                class="btn btn-sm btn-danger"><i class="fas fa-ban"></i> เลิกอนุมติ</a>
+                            <a target="_blank" href="<?= base_url('post/view/' . $row->post_id) ?>"
+                               class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i></a>
                         </td>
-                    </tr>
+                        </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
@@ -76,6 +80,7 @@
         $('#data').DataTable({
             <?= (count($posts_not_approve) == 0)?"\"searching\": false,\"paging\": false,\"info\": false,":'' ?>
             columnDefs: [{"orderable": false, "targets": 5}],
+            order: [[ 2, "desc" ]],
             language: {
                 search: "ค้นหา",
                 paginate: {
@@ -93,6 +98,7 @@
         $('#data2').DataTable({
             <?= (count($posts_approved) == 0)?"\"searching\": false,\"paging\": false,\"info\": false,":'' ?>
             columnDefs: [{"orderable": false, "targets": 5}],
+            order: [[ 2, "desc" ]],
             language: {
                 search: "ค้นหา",
                 paginate: {

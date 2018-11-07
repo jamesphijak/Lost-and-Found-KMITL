@@ -10,12 +10,13 @@ class Main extends CI_Controller
         //pass parameter to profile
         $body = array(
             'title' => $title,
-            'posts_lost' => $this->tb_post->get_posts_by_type_limit('lost','OK',3),
-            'posts_found' => $this->tb_post->get_posts_by_type_limit('found','OK',3)
+            'posts_lost' => $this->tb_post->get_posts_by_field_limit('post_type','lost','OK',3),
+            'posts_found' => $this->tb_post->get_posts_by_field_limit('post_type','found','OK',3)
         );
         $this->load->view('main', $body);
         $this->template->loadFooter();
     }
+
 }
 
 ?>

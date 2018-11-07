@@ -17,10 +17,19 @@ class Tb_post extends CI_Model{
         return $this->db->get_where($this->table, ['post_type' => $type])->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
     }
 
-    public function get_posts_by_type_limit($type, $status,$limit){
-        $this->db->order_by('post_id','desc'); // เรียงลำดับ
-        $this->db->limit($limit,0);
-        return $this->db->get_where($this->table, ['post_type' => $type,'post_status' => $status])->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
+    public function get_posts_by_field_limit($field_name,$field_value, $status,$limit){
+        $this->db->select('*');
+        $this->db->from('tb_post as post');
+        $this->db->join('tb_user as user','user.user_id = post.post_user_id','LEFT');
+        $this->db->join('tb_category as category','category.category_id = post.post_category_id','LEFT');
+        $this->db->join('tb_color as color','color.color_id = post.post_color_id','LEFT');
+        $this->db->where($field_name,$field_value);
+        $this->db->where('post.post_status',$status);
+        if($limit != 0) {
+            $this->db->limit($limit, 0);
+        }
+        $query=$this->db->get();
+        return $query->result();
     }
 
     public function get_posts_by_status($status){
@@ -28,7 +37,7 @@ class Tb_post extends CI_Model{
         $this->db->from('tb_post as post');
         $this->db->join('tb_user as user','user.user_id = post.post_user_id','LEFT');
         $this->db->join('tb_color as color','color.color_id = post.post_color_id','LEFT');
-        //$this->db->join('tb_color','tb_color.id=tb_post.color_id');
+        $this->db->join('tb_category as category','category.category_id = post.post_category_id','LEFT');
         $this->db->where('post.post_status',$status);
         $query=$this->db->get();
         return $query->result();
@@ -39,7 +48,6 @@ class Tb_post extends CI_Model{
         $this->db->from('tb_post as post');
         $this->db->join('tb_category as category','category.category_id = post.post_category_id','LEFT');
         $this->db->join('tb_color as color','color.color_id = post.post_color_id','LEFT');
-        //$this->db->join('tb_color','tb_color.id=tb_post.color_id');
         $this->db->where('post.post_id',$id);
         $query=$this->db->get();
         return $query->row();

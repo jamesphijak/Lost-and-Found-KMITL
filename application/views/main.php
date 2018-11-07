@@ -10,9 +10,9 @@
         <h4>ประกาศของหาย</h4>
         <hr>
     </div>
-    <?php if(count($posts_found) == 0){ ?>
+    <?php if(count($posts_lost) == 0){ ?>
         <div class="col-md-12 text-center">
-            <h5 class="text-danger">ไม่พบรายการประกาศ</h5>
+            <h5 class="text-danger">ไม่พบรายการประกาศของหาย</h5>
             <hr>
         </div>
     <?php }else{ ?>
@@ -20,7 +20,7 @@
     <?php foreach ($posts_lost as $row) : ?>
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
-                <h5 class="card-header text-left bg-secondary text-white text-center"><?= $row->post_name ?></h5>
+                <h5 class="card-header text-left bg-primary text-white text-center"><?= $row->post_name ?></h5>
                 <?php
                 if ($row->post_imgurl1 == "") {
                     $image = "image-not-found.jpg";
@@ -34,8 +34,8 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Color</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Categorie</button>
+                            <a href="<?= base_url('post/all/color/' . $row->post_color_id) ?>" class="btn btn-sm btn-primary">สี<?= $row->color_name ?></a>
+                            <a href="<?= base_url('post/all/category/' . $row->post_category_id) ?>" class="btn btn-sm btn-outline-primary"><?= $row->category_name ?></a>
                         </div>
                         <small class="text-muted"><?= $this->template->normalDatetime($row->post_created) ?></small>
                     </div>
@@ -47,7 +47,7 @@
     <?php } ?>
 
     <div class="col-md-12">
-        <a href="#" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการทั้งหมด</a><br>
+        <a href="<?= base_url('post/all/lost') ?>" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการประกาศของหายทั้งหมด</a><br>
     </div>
 
     <div class="col-md-12 text-center">
@@ -57,7 +57,7 @@
 
     <?php if(count($posts_found) == 0){ ?>
         <div class="col-md-12 text-center">
-            <h5 class="text-danger">ไม่พบรายการประกาศ</h5>
+            <h5 class="text-danger">ไม่พบรายการประกาศพบของหาย</h5>
             <hr>
         </div>
     <?php }else{ ?>
@@ -67,7 +67,7 @@
         <div class="col-md-4">
 
             <div class="card mb-4 shadow-sm">
-                <h5 class="card-header text-left bg-secondary text-white text-center"><?= $row->post_name ?></h5>
+                <h5 class="card-header text-left bg-primary text-white text-center"><?= $row->post_name ?></h5>
                 <?php
                 if ($row->post_imgurl1 == "") {
                     $image = "image-not-found.jpg";
@@ -81,8 +81,8 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Color</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Categorie</button>
+                            <a href="<?= base_url('post/all/color/' . $row->post_color_id) ?>" class="btn btn-sm btn-primary">สี<?= $row->color_name ?></a>
+                            <a href="<?= base_url('post/all/category/' . $row->post_category_id) ?>" class="btn btn-sm btn-outline-primary"><?= $row->category_name ?></a>
                         </div>
                         <small class="text-muted"><?= $this->template->normalDatetime($row->post_created) ?></small>
                     </div>
@@ -95,7 +95,7 @@
     <?php } ?>
 
     <div class="col-md-12">
-        <a href="#" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการทั้งหมด</a>
+        <a href="<?= base_url('post/all/found') ?>" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการประกาศพบของหายทั้งหมด</a>
     </div>
 
 

@@ -43,7 +43,7 @@
                             ?>
 
                             <option <?= $select ?>
-                                    value="<?= $row->category_id ?>"><?= $row->category_name . ' (' . $row->category_id . ')' ?></option>
+                                    value="<?= $row->category_id ?>"><?= $row->category_name ?></option>
                         <?php endforeach; ?>
 
                     </select>
@@ -65,7 +65,7 @@
 
                             ?>
                             <option <?= $select ?>
-                                    value="<?= $row->color_id ?>"><?= $row->color_name . ' (' . $row->color_id . ')' ?></option>
+                                    value="<?= $row->color_id ?>"><?= $row->color_name ?></option>
                         <?php endforeach; ?>
                     </select>
                     <small class="text-danger"><b><?= form_error('color') ?></b></small>
@@ -94,7 +94,7 @@
 
             <h4 class="mb-3">รูปภาพปก</h4>
             <div class="form-group">
-                <label class="btn btn-sm btn-secondary" style="margin-bottom:0px;">
+                <label class="btn btn-sm btn-primary" style="margin-bottom:0px;">
                     เลือกรูปภาพ
                     <input id="image1" name="image1" onchange="show_image1.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>
                 </label>
@@ -106,7 +106,7 @@
 
             <h4 class="mb-3">รูปภาพเพิ่มเติม</h4>
             <div class="form-group">
-                <label class="btn btn-sm btn-secondary" style="margin-bottom:0px;">
+                <label class="btn btn-sm btn-outline-primary" style="margin-bottom:0px;">
                     เลือกรูปภาพ
                     <input id="image2" name="image2" onchange="show_image2.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>
                 </label>

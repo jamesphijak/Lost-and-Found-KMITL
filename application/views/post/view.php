@@ -26,28 +26,29 @@
         <h5>รายละเอียด :</h5>
         <h5><?= $post->post_description ?></h5>
 
-        <hr>
+
     </div>
 
-<!--    <div class="col-md-12">-->
-<!--        <h4 class="text-center">ความคิดเห็น</h4>-->
-<!--        <hr>-->
-<!--    </div>-->
-<!--    <div class="col-md-12">-->
-<!--        <form method="POST" id="comment_form">-->
-<!--            <div class="form-group">-->
-<!--                <textarea name="comment_content" id="comment_content" class="form-control" placeholder="ข้อมูลความคิดเห็น" rows="5"></textarea>-->
-<!--            </div>-->
-<!--            <div class="form-group">-->
-<!--                <input type="hidden" name="comment_id" id="comment_id" value="0" />-->
-<!--                <input type="submit" name="submit" id="submit" class="btn btn-info" value="แสดงความคิดเห็น" />-->
-<!--                <a class="btn btn-danger" href="--><?//= base_url('post/view/'.$post->post_id) ?><!--">ยกเลิก</a>-->
-<!--            </div>-->
-<!--        </form>-->
+    <div class="col-md-12">
+        <hr>
+        <h4 class="text-center">ความคิดเห็น</h4>
+        <hr>
+    </div>
+    <div class="col-md-12">
+        <form method="POST" id="comment_form">
+            <div class="form-group">
+                <textarea name="comment_content" id="comment_content" class="form-control" placeholder="ข้อมูลความคิดเห็น" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="comment_id" id="comment_id" value="0" />
+                <input type="submit" name="submit" id="submit" class="btn btn-info" value="แสดงความคิดเห็น" />
+                <a class="btn btn-danger" href="<?= base_url('post/view/'.$post->post_id) ?>">ยกเลิก</a>
+            </div>
+        </form>
 <!--        <span id="comment_message"></span>-->
 <!--        <br />-->
 <!--        <div id="display_comment"></div>-->
-<!--    </div>-->
+    </div>
 </div>
 
 <script>

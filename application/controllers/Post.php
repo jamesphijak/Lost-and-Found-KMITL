@@ -5,7 +5,7 @@ class Post extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        //$this->tb_user->check_login();
+        $this->tb_user->check_login();
     }
 
     public function upload()
@@ -37,6 +37,53 @@ class Post extends CI_Controller
         }
 
         exit();
+    }
+
+    public function all($type = null,$id = null)
+    {
+        if ($type != null) {
+            if($type == 'lost' || $type == 'found' || $type == 'color' || $type == 'category') {
+                $select_field = '';
+                $value_field = '';
+                if($type == 'lost' || $type == 'found'){
+                    $title_type = ($type == 'lost') ? 'ของหาย' : 'พบของ';
+                    $select_field = 'post_type';
+                    $value_field = $type;
+                }else{
+                    if($id != null) {
+                        if($type == 'color'){
+                            $color = $this->tb_color->get_color_by_id($id);
+                            $title_type = 'ของสี'.$color->color_name;
+                            $select_field = 'post_color_id';
+                        }else{
+                            $category = $this->tb_category->get_category_by_id($id);
+                            $title_type = 'ของหมวดหมู่'.$category->category_name;
+                            $select_field = 'post_category_id';
+                        }
+                        $value_field = $id;
+                    }else{
+                        redirect(base_url(''));
+                    }
+                }
+
+                $title = 'รายการประกาศ' . $title_type;
+                $this->template->setHeader($title);
+                $this->template->loadHeader();
+                //pass parameter to profile
+                $body = array(
+                    'title' => $title,
+                    'posts' => $this->tb_post->get_posts_by_field_limit($select_field,$value_field, 'OK', 0)
+                );
+                $this->load->view('post/view_all', $body);
+                // $this->load->view('user/profile',$body);
+                $this->template->loadFooter();
+
+            }else{
+                redirect(base_url(''));
+            }
+        } else {
+            redirect(base_url(''));
+        }
     }
 
     public function view($id = null)
@@ -198,7 +245,7 @@ class Post extends CI_Controller
                             $this->session->set_flashdata('error', 'ลงประกาศไม่สำเร็จ');
                         }
                     }else{
-                        $this->session->set_flashdata('error', 'ไม่สามารถลงประกาศได้ ไม่ได้เลิอกรูปภาพปก');
+                        $this->session->set_flashdata('error', 'ไม่สามารถลงประกาศได้ ไม่ได้เลิอกรูปภาพ');
                     }
                 }
             }
@@ -278,7 +325,7 @@ class Post extends CI_Controller
                             $image = $row->post_imgurl1;
                         }
 
-                        echo "<img alt='32x32' class='mr-2 rounded' src='" . base_url("uploads/") . $image . "' data-holder-rendered='true' style='width: 42px; height: 32px;'>";
+                        echo "<img class='mr-2 rounded' src='" . base_url("uploads/") . $image . "' data-holder-rendered='true' style='width: 42px; height: 32px;'>";
                         echo "<div class='media-body pb-3 mb-0 small lh-125 border-bottom border-gray'>";
                         echo "<div class='d-flex justify-content-between align-items-center w-100'>";
                         echo "<h6 class='text-gray-dark'><strong>$row->post_name</strong></h6>";
