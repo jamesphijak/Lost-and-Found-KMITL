@@ -17,7 +17,9 @@
             $image = $post->post_imgurl1;
         }
         ?>
-        <img src="<?= base_url("uploads/") . $image ?>" alt="" class="img-thumbnail">
+<!--        <img src="--><?//= base_url("uploads/") . $image ?><!--" alt="" class="img-thumbnail">-->
+
+
     </div>
     <div class="col-md-8">
         <br>

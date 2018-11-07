@@ -162,6 +162,89 @@ class Post extends CI_Controller
         }
     }
 
+    public function edit($id = null)
+    {
+        if ($id != null) {
+            $post = $this->tb_post->get_post_by_id($id);
+            if(!empty($post)) {
+                $input = $this->input->post();
+                if (!empty($input)) {
+                    if ($this->form_validation->run('post/create')) {
+                        $value = array(
+                            'post_name' => $this->input->post('name'),
+                            'post_description' => $this->input->post('description'),
+//                            'post_imgurl1' => $img1_name,
+//                            'post_imgurl2' => $img2_name,
+                            'post_category_id' => $this->input->post('category'),
+                            'post_color_id' => $this->input->post('color')
+                        );
+
+                        $result = $this->tb_post->update_post($id,$value);
+
+                        if ($result > 0) {
+                            $this->session->set_flashdata('success', 'แก้ไขประกาศสำเร็จ');
+                            redirect(base_url('post/edit/' . $id), 'refresh');
+                        } else {
+                            $this->session->set_flashdata('error', 'แก้ไขประกาศไม่สำเร็จ');
+                        }
+                    }
+                }
+
+
+
+                $title = 'แก้ไขประกาศ';
+                $this->template->setHeader($title);
+                $this->template->loadHeader();
+                //pass parameter to profile
+                $body = array(
+                    'title' => $title,
+                    'post' => $this->tb_post->get_post_by_id($id),
+                    'page_post_id' => $id,
+                    'categories' => $this->tb_category->get_categories(),
+                    'colors' => $this->tb_color->get_colors(),
+                );
+                $this->load->view('post/edit', $body);
+                // $this->load->view('user/profile',$body);
+                $this->template->loadFooter();
+            }else{
+                redirect(base_url('user/profile'));
+            }
+        } else {
+            redirect(base_url('user/profile'));
+        }
+    }
+
+    public function remove($id = null){
+        if ($id != null) {
+            $post = $this->tb_post->get_post_by_id($id);
+            if(!isset($post)){
+                redirect(base_url('user/profile'));
+            }
+            if($_SESSION['user_id']  == $post->post_user_id){
+                // remove image
+                if($post->post_imgurl1 != ''){
+                    if (@getimagesize($_SERVER['DOCUMENT_ROOT'].'/uploads/'.$post->post_imgurl1)) {
+                        unlink($_SERVER['DOCUMENT_ROOT'].'/uploads/'.$post->post_imgurl1);
+                    }
+                }
+                if($post->post_imgurl2 != ''){
+                    if (@getimagesize($_SERVER['DOCUMENT_ROOT'].'/uploads/'.$post->post_imgurl2)) {
+                        unlink($_SERVER['DOCUMENT_ROOT'].'/uploads/'.$post->post_imgurl2);
+                    }
+                }
+                // remove comment
+
+                // delete post
+                $this->tb_post->delete_post($id);
+                redirect(base_url('user/profile'));
+            }else{
+                redirect(base_url('user/profile'));
+            }
+        }else{
+            redirect(base_url('user/profile'));
+        }
+    }
+
     public function create($type = null)
     {
         if ($type != null) {

@@ -63,6 +63,7 @@ class Tb_post extends CI_Model{
 
 
     public function create_post($value){
+        $this->db->set('post_expire','DATE_ADD(now(), INTERVAL 30 DAY)', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
         return $this->db->insert($this->table, $value); // insert into
     }
 
@@ -70,6 +71,7 @@ class Tb_post extends CI_Model{
         $this->db->set('post_updated','now()', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
         $this->db->set('post_expire','DATE_ADD(now(), INTERVAL 30 DAY)', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
         $this->db->update($this->table, $value, ['post_id' => $id]); // update
+        return $this->db->affected_rows();
     }
 
     public function delete_post($id){

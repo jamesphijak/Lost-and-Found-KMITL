@@ -81,7 +81,7 @@
                         <?php foreach ($posts as $row) : ?>
                             <tr class="text-center" >
                                 <td>
-                                    <a onclick="return confirm('คุณต้องการลบใช่มั้ย?');" href="<?= base_url("admin/deleteCategory/{$row->category_id}")?>" class="btn btn-danger btn-block btn-sm"><i class="fas fa-trash-alt"></i></a>
+                                    <a onclick="return confirm('คุณต้องการลบใช่มั้ย?');" href="<?= base_url("post/remove/{$row->post_id}")?>" class="btn btn-danger btn-block btn-sm"><i class="fas fa-trash-alt"></i></a>
                                 </td>
                                 <td>
                                     <img class="rounded" src=' <?= base_url("uploads/") . $row->post_imgurl1 ?>' data-holder-rendered='true' style='width: 50px; height: 50px;'>
@@ -104,7 +104,10 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td><a href="<?= base_url("admin/category/{$row->category_id}")?>" class="btn btn-success btn-block btn-sm">แก้ไข</a></td>
+                                <td>
+                                    <a href="<?= base_url("post/view/{$row->post_id}")?>" class="btn btn-primary btn-block btn-sm"><i class="fas fa-eye"></i></a>
+                                    <a href="<?= base_url("post/edit/{$row->post_id}")?>" class="btn btn-success btn-block btn-sm"><i class="fas fa-edit"></i></a>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
