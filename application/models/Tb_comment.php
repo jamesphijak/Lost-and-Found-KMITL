@@ -13,6 +13,10 @@ class Tb_comment extends CI_Model{
         return $this->db->get_where($this->table, ['comment_post_id' => $post_id,'comment_parent_id' => $parent_id])->result(); // ดึงข้อมูลทั้งหมด , row = ดึงแค่ row เดียว
     }
 
+    public function get_comment_by_id($id){
+        return $this->db->get_where($this->table, ['comment_id' => $id])->row(); // select * from table where id = id
+    }
+
     public function get_comments_by_post_id($parent_comment_id,$post_id,$sort){
         $this->db->select('*');
         $this->db->from('tb_comment as comment');
@@ -39,12 +43,12 @@ class Tb_comment extends CI_Model{
         return $this->db->insert_id(); // return last insert record id
     }
 
-    public function update_color($id, $value){
-        $this->db->update($this->table, $value, ['color_id' => $id]); // update
+    public function update_comment($id, $value){
+        $this->db->update($this->table, $value, ['comment_id' => $id]); // update
     }
 
-    public function delete_color($id){
-        $this->db->delete($this->table, ['color_id' => $id]); // delete from table where id = id
+    public function delete_comment($id){
+        $this->db->delete($this->table, ['comment_id' => $id]); // delete from table where id = id
     }
 }
 

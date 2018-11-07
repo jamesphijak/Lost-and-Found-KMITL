@@ -55,18 +55,25 @@ class Post extends CI_Controller
         }
     }
 
+
     public function fetch_comment($post_id = null){
         if($post_id != null) {
             $output = '';
             $parent_comment = $this->tb_comment->get_comments_by_post_id(0, $post_id,'desc');
             foreach ($parent_comment as $pc) {
+
                 // parent comment
                 $output .= '
                 <div class="media text-muted pt-3">
                 <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
                 <div class="d-flex justify-content-between align-items-center ">
                     <strong class="text-gray-dark">โดย <b>' . $pc->user_email . '</b> เมื่อ <i>' . $this->template->thaiNormalDatetime($pc->comment_created) . '</i></strong>
-                    <a class="btn btn-secondary reply" id="'.$pc->comment_id.'" href="#">ตอบกลับ</a>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-info text-white reply" id="'.$pc->comment_id.'" ><i class="fas fa-reply"></i> ตอบกลับ</a>';
+
+                $output .= ($_SESSION['user_id'] == $pc->comment_user_id)? '<a class="btn btn-danger text-white remove" id="'.$pc->comment_id .'"><i class="fas fa-times-circle"></i></a>':'';
+
+                $output .= '</div> 
                 </div>
                 <span class="d-block">'.$pc->comment_text.'</span>
                 </div></div>';
@@ -79,6 +86,9 @@ class Post extends CI_Controller
                      <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
                         <div class="d-flex justify-content-between align-items-center">
                             <strong class="text-gray-dark">โดย <b>' . $sc->user_email . '</b> เมื่อ <i>' . $this->template->thaiNormalDatetime($sc->comment_created) . '</i></strong>
+                             <div class="btn-group" role="group">';
+                    $output .= ($_SESSION['user_id'] == $sc->comment_user_id)? '<a class="btn btn-danger text-white remove" id="'.$sc->comment_id .'"><i class="fas fa-times-circle"></i></a>':'';
+                    $output .= '</div>
                         </div>
                         <span class="d-block">'.$sc->comment_text.'</span>
                      </div>
@@ -90,6 +100,19 @@ class Post extends CI_Controller
             echo $output;
         }
     }
+
+    public function remove_comment($id = null){
+        if($id != null) {
+            // check session again
+            $comment = $this->tb_comment->get_comment_by_id($id);
+            if(isset($comment)){
+                if($_SESSION['user_id'] == $comment->comment_user_id){
+                    $this->tb_comment->delete_comment($id);
+                }
+            }
+        }
+    }
+
 
     public function add_comment($post_id = null, $user_id = null)
     {
@@ -328,15 +351,6 @@ class Post extends CI_Controller
 //        }
 //    }
 
-//    public function addComment(){
-//        $input = $this->input->post();
-//        if (!empty($input)) {
-//            if ($this->form_validation->run('post/create')) {
-//
-//            }
-//        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                `
-//    }
-
     public function loadPost($type = null)
     {
         if ($type != null) {
@@ -359,7 +373,7 @@ class Post extends CI_Controller
                 } else {
                     echo "<h5 class='d-flex border-bottom border-gray pb-2 mb-0'>มีของที่$searh_title " . count($post_result) . " รายการ</h5>";
                     foreach ($post_result as $row) :
-                        echo "<a style='color: inherit; text-decoration: none;' href='" . base_url('post/view/' . $row->post_id) . "'>";
+                        echo "<a style='color: inherit; text-decoration: none;' target='_blank' href='" . base_url('post/view/' . $row->post_id) . "'>";
                         echo "<div class='media text-muted pt-3'>";
 
                         if ($row->post_imgurl1 == "") {

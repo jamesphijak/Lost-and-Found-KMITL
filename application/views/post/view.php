@@ -31,7 +31,7 @@
 
     <div class="col-md-12">
         <hr>
-        <h4 class="text-center">ความคิดเห็น</h4>
+        <h4 class="text-center"><i class="fas fa-comments"></i> ความคิดเห็น</h4>
         <hr>
     </div>
     <div class="col-md-12">
@@ -44,8 +44,8 @@
             </div>
             <div class="form-group">
                 <input type="hidden" name="comment_id" id="comment_id" value="0" />
-                <input type="submit" name="submit" id="submit" class="btn btn-info" value="แสดงความคิดเห็น" />
-                <a class="btn btn-danger" href="<?= base_url('post/view/'.$post->post_id) ?>">ยกเลิก</a>
+                <button type="submit" name="submit" id="submit" class="btn btn-success"><i class="fas fa-comment"></i> แสดงความคิดเห็น</button>
+                <a class="btn btn-danger" href="<?= base_url('post/view/'.$post->post_id) ?>"><i class="fas fa-ban"></i> ยกเลิก</a>
             </div>
         </form>
 
@@ -101,6 +101,22 @@
         //        }
         //    })
         //}
+
+        $(document).on('click', '.remove', function(){
+            var comment_id = $(this).attr("id");
+            $.ajax({
+                type: 'POST',
+                url: '<?= base_url('post/remove_comment/')?>'.concat(comment_id),
+                beforeSend:function(){
+                    return confirm("คุณต้องการลบใช่มั้ย?");
+                }
+                // success: function(data) {
+                //     alert(data);
+                //     $("p").text(data);
+                //
+                // }
+            });
+        });
 
         $(document).on('click', '.reply', function(){
             var comment_id = $(this).attr("id");
