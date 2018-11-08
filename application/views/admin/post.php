@@ -27,6 +27,8 @@
                                class="btn btn-sm btn-primary"><i class="fas fa-check-circle"></i> อนุมติ</a>
                             <a target="_blank" href="<?= base_url('post/view/' . $row->post_id) ?>"
                                class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i></a>
+                            <a href="<?= base_url('post/admin_remove/' . $row->post_id) ?>"
+                               class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -63,6 +65,7 @@
                                class="btn btn-sm btn-danger"><i class="fas fa-ban"></i> เลิกอนุมติ</a>
                             <a target="_blank" href="<?= base_url('post/view/' . $row->post_id) ?>"
                                class="btn btn-sm btn-secondary"><i class="fas fa-eye"></i></a>
+
                         </td>
                         </tr>
                 <?php endforeach; ?>

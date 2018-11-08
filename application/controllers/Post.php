@@ -5,7 +5,7 @@ class Post extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->tb_user->check_login();
+
     }
 
     public function all($type = null, $id = null)
@@ -69,7 +69,7 @@ class Post extends CI_Controller
                 <div class="d-flex justify-content-between align-items-center ">
                     <strong class="text-gray-dark">โดย <b>' . $pc->user_email . '</b> เมื่อ <i>' . $this->template->thaiNormalDatetime($pc->comment_created) . '</i></strong>
                     <div class="btn-group" role="group">
-                        <a class="btn btn-info text-white reply" id="'.$pc->comment_id.'" ><i class="fas fa-reply"></i> ตอบกลับ</a>';
+                        <a class="btn btn-info text-white reply" id="'.$pc->comment_id.'" comment_to="'. $pc->user_email .'"><i class="fas fa-reply"></i> ตอบกลับ</a>';
 
                 $output .= ($_SESSION['user_id'] == $pc->comment_user_id)? '<a class="btn btn-danger text-white remove" id="'.$pc->comment_id .'"><i class="fas fa-times-circle"></i></a>':'';
 
@@ -87,7 +87,7 @@ class Post extends CI_Controller
                         <div class="d-flex justify-content-between align-items-center">
                             <strong class="text-gray-dark">โดย <b>' . $sc->user_email . '</b> เมื่อ <i>' . $this->template->thaiNormalDatetime($sc->comment_created) . '</i></strong>
                              <div class="btn-group" role="group">';
-                    $output .= ($_SESSION['user_id'] == $sc->comment_user_id)? '<a class="btn btn-danger text-white remove" id="'.$sc->comment_id .'"><i class="fas fa-times-circle"></i></a>':'';
+                    $output .= ($_SESSION['user_id'] == $sc->comment_user_id)? '<a class="btn btn-danger text-white remove" id="'.$sc->comment_id .'" ><i class="fas fa-times-circle"></i></a>':'';
                     $output .= '</div>
                         </div>
                         <span class="d-block">'.$sc->comment_text.'</span>
@@ -113,6 +113,12 @@ class Post extends CI_Controller
         }
     }
 
+    public function test_array(){
+        $age = array(array(1,2,3),array(4,5,6),array(7,8,9));
+        print_r(($age));
+        print_r($age[0]);
+        exit();
+    }
 
     public function add_comment($post_id = null, $user_id = null)
     {
@@ -123,6 +129,7 @@ class Post extends CI_Controller
                 $message .= '<div class="alert alert-danger">กรุณาระบุความคิดเห็นด้วย</div>';
             } else {
                 $comment_parent_id = $this->input->post('comment_id');
+                //htmlspecialchars(strip_tags(
                 $comment_text = $this->input->post('comment_content');
                 // $message .= '<div class="alert alert-success">สวัสดี อิอิ Comment_ID: '.$comment_parent_id.', Text: '.$comment_text.', Post_ID: '.$post_id.', User_ID: '.$user_id.'</div>';
 
@@ -145,6 +152,10 @@ class Post extends CI_Controller
     public function view($id = null)
     {
         if ($id != null) {
+            $post = $this->tb_post->get_post_by_id($id);
+            if(!isset($post)){
+                redirect(base_url('main'));
+            }
             $title = 'ดูประกาศ';
             $this->template->setHeader($title);
             $this->template->loadHeader();
@@ -152,7 +163,8 @@ class Post extends CI_Controller
             $body = array(
                 'title' => $title,
                 'post' => $this->tb_post->get_post_by_id($id),
-                'page_post_id' => $id
+                'page_post_id' => $id,
+                'page_login' => $this->tb_user->check_page_login()
             );
             $this->load->view('post/view', $body);
             // $this->load->view('user/profile',$body);
@@ -164,6 +176,7 @@ class Post extends CI_Controller
 
     public function edit($id = null)
     {
+        $this->tb_user->check_login();
         if ($id != null) {
             $post = $this->tb_post->get_post_by_id($id);
             if(!empty($post)) {
@@ -214,7 +227,40 @@ class Post extends CI_Controller
         }
     }
 
+    public function admin_remove($id = null){
+        $this->tb_user->check_login();
+        if ($id != null) {
+            $post = $this->tb_post->get_post_by_id($id);
+            if(!isset($post)){
+                redirect(base_url('user/profile'));
+            }
+            if($_SESSION['user_type']  == 'Admin'){
+                // remove image
+                if($post->post_imgurl1 != ''){
+                    if (@getimagesize($_SERVER['DOCUMENT_ROOT'].'/uploads/'.$post->post_imgurl1)) {
+                        unlink($_SERVER['DOCUMENT_ROOT'].'/uploads/'.$post->post_imgurl1);
+                    }
+                }
+                if($post->post_imgurl2 != ''){
+                    if (@getimagesize($_SERVER['DOCUMENT_ROOT'].'/uploads/'.$post->post_imgurl2)) {
+                        unlink($_SERVER['DOCUMENT_ROOT'].'/uploads/'.$post->post_imgurl2);
+                    }
+                }
+                // remove comment
+
+                // delete post
+                $this->tb_post->delete_post($id);
+                redirect(base_url('admin/post'));
+            }else{
+                redirect(base_url('admin/post'));
+            }
+        }else{
+            redirect(base_url('user/profile'));
+        }
+    }
+
     public function remove($id = null){
+        $this->tb_user->check_login();
         if ($id != null) {
             $post = $this->tb_post->get_post_by_id($id);
             if(!isset($post)){
@@ -247,6 +293,7 @@ class Post extends CI_Controller
 
     public function create($type = null)
     {
+        $this->tb_user->check_login();
         if ($type != null) {
             $input = $this->input->post();
             if (!empty($input)) {
@@ -285,6 +332,7 @@ class Post extends CI_Controller
                         } else {
                             // echo "Upload image 1&2 : Image 1 and 2 not empty<br>";
                             // Upload two photo
+
                             $this->upload->initialize($config);
                             if ($this->upload->do_upload('image1')) {
                                 $upload_img1 = $this->upload->data(); // เก็บข้อมูล
@@ -321,25 +369,28 @@ class Post extends CI_Controller
 
                         if ($this->image_lib->resize()) {
                             $resize_check = true;
-
-                            $config['source_image'] = 'uploads/' . $upload_img2['file_name'];
-                            list($width, $height) = getimagesize($config['source_image']);
-                            if ($width >= $height) {
-                                $config['width'] = 640;
-                            } else {
-                                $config['height'] = 640;
-                            }
-                            $config['master_dim'] = 'auto';
-                            $this->load->library('image_lib', $config);
-                            if ($this->image_lib->resize()) {
-                                $resize_check = true;
-                            } else {
-                                $this->session->set_flashdata('error', 'ลดขนาดภาพเพิ่มเติมไม่ได้');
-                                $resize_check = false;
-                            }
                         } else {
                             $this->session->set_flashdata('error', 'ลดขนาดภาพไม่ปกไม่ได้');
                         }
+                        // Resize image 2
+                        $this->image_lib->clear();
+                        $config2['source_image'] = 'uploads/' . $upload_img2['file_name'];
+                        list($width, $height) = getimagesize($config2['source_image']);
+                        if ($width >= $height) {
+                            $config2['width'] = 640;
+                        } else {
+                            $config2['height'] = 640;
+                        }
+                        $config2['master_dim'] = 'auto';
+//                        $this->load->library('image_lib', $config2);
+                        $this->image_lib->initialize($config2);
+
+                        if ($this->image_lib->resize()) {
+                            $resize_check = true;
+                        } else {
+                            $this->session->set_flashdata('error', 'ลดขนาดภาพไม่ปกไม่ได้');
+                        }
+
 
                     } elseif ($upload_img1 != '' && $upload_img2 == '' && $upload_check == true) {
                         // Resize รูปแรกรูปเดียว

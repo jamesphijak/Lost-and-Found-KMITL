@@ -15,14 +15,13 @@ $natural = '%sต้องมีแต่ตัวเลข 0-9 เท่าน�
 // : $set_email = ''
 // ;
 
-
 $config = array(
     // หน้าสมัครสมาชิก
     'auth/register' => array(
             array(
                     'field' => 'email',
                     'label' => 'อีเมล',
-                    'rules' => 'required|trim|valid_email|is_unique[tb_user.email]',
+                    'rules' => 'required|trim|valid_email|is_unique[tb_user.user_email]',
                     'errors' => array(
                         'required' => $required,
                         'valid_email' => $valid,

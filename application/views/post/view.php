@@ -16,9 +16,54 @@
         } else {
             $image = $post->post_imgurl1;
         }
+
+        if ($post->post_imgurl2 != "") {
+            $image2 = $post->post_imgurl2;
+        }else{
+
+        }
         ?>
+
 <!--        <img src="--><?//= base_url("uploads/") . $image ?><!--" alt="" class="img-thumbnail">-->
 
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <?php
+            if ($post->post_imgurl2 != "") {
+            ?>
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <?php
+                if ($post->post_imgurl2 != "") {
+                ?>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <?php } ?>
+            </ol>
+            <?php }?>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block img-thumbnail" src="<?= base_url("uploads/") . $image ?>" alt="First slide">
+                </div>
+                <?php
+                if ($post->post_imgurl2 != "") {
+                ?>
+                <div class="carousel-item">
+                    <img class="d-block img-thumbnail" src="<?= base_url("uploads/") . $post->post_imgurl2 ?>" alt="Second slide">
+                </div>
+                <?php } ?>
+            </div>
+            <?php
+            if ($post->post_imgurl2 != "") {
+            ?>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">ก่อนหน้า</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">ถัดไป</span>
+            </a>
+            <?php } ?>
+        </div>
 
     </div>
     <div class="col-md-8">
@@ -37,6 +82,7 @@
         <hr>
     </div>
     <div class="col-md-12">
+        <?php if($page_login == true){ ?>
         <span id="comment_message"></span>
         <form method="POST" id="comment_form">
             <div class="form-group">
@@ -50,6 +96,9 @@
                 <a class="btn btn-danger" href="<?= base_url('post/view/'.$post->post_id) ?>"><i class="fas fa-ban"></i> ยกเลิก</a>
             </div>
         </form>
+        <?php }else{?>
+            <h6 class="text-center text-danger">กรุณาเข้าสู่ระบบเพื่อแสดงความคิดเห็น <br><a style="margin-top:10px;" href="<?= base_url('auth/login') ?>" class="btn btn-primary btn-sm">เข้าสู่ระบบ</a></a> </h6>
+        <?php } ?>
 
 
         <div class="my-3 p-3 bg-white rounded shadow-sm" id="display_comment">
@@ -63,7 +112,7 @@
         startRefresh();
 
         function startRefresh() {
-            setTimeout(startRefresh,1000);
+            setTimeout(startRefresh,3000);
             $.get('<?= base_url('post/fetch_comment/'.$page_post_id) ?>', function(data) {
                 $('#display_comment').html(data);
             });
@@ -84,25 +133,25 @@
                         $('#comment_form')[0].reset();
                         $('#comment_message').html(data.message);
                         $('#comment_id').val('0');
-                        // load_comment();
+                        load_comment();
                     }
                 }
             })
         });
 
-        // load_comment();
-        //
-        //function load_comment()
-        //{
-        //    $.ajax({
-        //        url:"<?//= base_url('post/fetch_comment/'.$page_post_id) ?>//",
-        //        method:"POST",
-        //        success:function(data)
-        //        {
-        //            $('#display_comment').html(data);
-        //        }
-        //    })
-        //}
+          load_comment();
+
+        function load_comment()
+        {
+            $.ajax({
+                url:"<?= base_url('post/fetch_comment/'.$page_post_id) ?>",
+                method:"POST",
+                success:function(data)
+                {
+                    $('#display_comment').html(data);
+                }
+            })
+        }
 
         $(document).on('click', '.remove', function(){
             var comment_id = $(this).attr("id");
@@ -111,20 +160,22 @@
                 url: '<?= base_url('post/remove_comment/')?>'.concat(comment_id),
                 beforeSend:function(){
                     return confirm("คุณต้องการลบใช่มั้ย?");
+                },
+                success: function(data) {
+                    // alert(data);
+                    // $("p").text(data);
+                    load_comment();
                 }
-                // success: function(data) {
-                //     alert(data);
-                //     $("p").text(data);
-                //
-                // }
             });
         });
 
         $(document).on('click', '.reply', function(){
             var comment_id = $(this).attr("id");
+            var comment_to = $(this).attr("comment_to");
             $('#comment_id').val(comment_id);
             $('#comment_content').focus();
             //alert("ขณะนี้ท่านกำลังตอบกลับความคิดเห็น กรุณาพิมพ์ชื่อและรายละเอียดแล้วกด ' โพสต์ '"); // แจ้งเตือนว่ากำลังตอบกลับความคิดเห็น
+            $('#comment_message').html('<div class="alert alert-warning">ขณะนี้ท่านกำลังตอบกลับความคิดเห็นของ '.concat(comment_to).concat('</div>'));
         });
 
     });

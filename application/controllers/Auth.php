@@ -58,7 +58,7 @@ public function login()
             if($user){
                 $this->session->set_flashdata('success','เข้าสู่ระบบสำเร็จ');
                 $this->tb_user->user_session_set($user->user_id,$user->user_email,$user->user_type,$user->user_mobile);
-                redirect(base_url('user/profile'),'refresh');
+                redirect(base_url('main'),'refresh');
                 
             }else{
                 $this->session->set_flashdata('error','เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
@@ -119,7 +119,7 @@ public function facebook(){
                     $this->session->set_flashdata('success','เข้าสู่ระบบด้วย Facebook สำเร็จ / ทำการรวมเข้ากับบัญชีเดิมเรียบร้อยแล้ว');
                     $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
                     // Redirect ไปหน้าแรก
-                    redirect(base_url('user/profile'),'refresh');
+                    redirect(base_url('main'),'refresh');
                     // เสร็จกระบวนการ...
                 }else{
                     $this->session->set_flashdata('error','เข้าสู่ระบบด้วย Facebook ไม่สำเร็จ');
@@ -128,7 +128,7 @@ public function facebook(){
                 // Facebook มี id อยู่แล้ว
                 // Login ได้เลย
                 $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
-                redirect(base_url('user/profile'),'refresh');
+                redirect(base_url('main'),'refresh');
             }
         }else{
             // ไม่เจอ user
@@ -143,7 +143,7 @@ public function facebook(){
                 // ทำการดึงข้อมูลมาสร้าง session
                 $user = $this->tb_user->get_user_by_id($created_user_id); // ดึงข้อมูลมา
                 $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
-                redirect(base_url('user/profile'),'refresh'); // Redirect ไปหน้าแรก
+                redirect(base_url('main'),'refresh'); // Redirect ไปหน้าแรก
             }else{
                 $this->session->set_flashdata('error','เข้าสู่ระบบด้วย Facebook ไม่สำเร็จ');
             }

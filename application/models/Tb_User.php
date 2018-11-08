@@ -91,6 +91,14 @@ class Tb_user extends CI_Model
         }
     }
 
+    public function check_page_login(){
+        if(!isset($_SESSION['user_logged'])){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     // ใช้เข้ารหัส
     public static function hash($password) {
         return hash('sha512', self::SALT . $password);
