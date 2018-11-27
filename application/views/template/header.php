@@ -18,6 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!--    <script src="--><?//= base_url('assets/js/bootstrap.js')?><!--"></script>-->
     <script src="<?= base_url('assets/js/jquery.min.js')?>"></script>
     <script src="<?= base_url('assets/js/bootstrap.bundle.min.js')?>"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
 
     

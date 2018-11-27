@@ -15,6 +15,7 @@
                     <th>ชื่อ</th>
                     <th>หมวดหมู่</th>
                     <th>สี</th>
+                    <th>ประเภท</th>
                     <th>เมื่อ</th>
 
                 </tr>
@@ -28,6 +29,7 @@
                         <td><?= $row->post_name ?></td>
                         <td><?= $row->category_name ?></td>
                         <td><?= $row->color_name ?></td>
+                        <td><?= ($row->post_type == 'lost')? 'ของหาย':'พบของหาย' ?></td>
                         <td><?= $this->template->thaiNormalDatetime($row->post_created) ?></td>
 
                     </tr>

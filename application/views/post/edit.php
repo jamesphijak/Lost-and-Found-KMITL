@@ -80,46 +80,47 @@
 
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label for="firstName">ชื่อ</label>
-                    <input type="text" class="form-control" placeholder="ใส่ชื่อ" value="<?= set_value('name',$post->post_name) ?>"
+                    <label for="count_name" id="count_name">ชื่อ</label>
+                    <input id="name" type="text" class="form-control" placeholder="ใส่ชื่อ" value="<?= set_value('name',$post->post_name) ?>"
                            name="name">
                     <small class="text-danger"><b><?= form_error('name') ?></b></small>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label for="address">รายละเอียดเกี่ยวกับของ</label>
-                <textarea type="text" class="form-control" rows="5" name="description"
+                <label for="address" id="count_description">รายละเอียดเกี่ยวกับของ</label>
+                <textarea id="description" type="text" class="form-control" rows="5" name="description"
                           placeholder="ใส่รายละเอียดของ"><?= set_value('description',$post->post_description) ?></textarea>
                 <small class="text-danger"><b><?= form_error('description') ?></b></small>
             </div>
 
-<!--            <hr class="mb-4">-->
-<!---->
-<!--            <h4 class="mb-3">รูปภาพปก</h4>-->
-<!--            <div class="form-group">-->
-<!--                <label class="btn btn-primary" style="margin-bottom:0px;">-->
-<!--                    เลือกรูปภาพ-->
-<!--                    <input id="image1" name="image1" onchange="show_image1.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>-->
-<!--                </label>-->
-<!--                <span id="show_image1" class="text-muted"></span>-->
-<!--                <small class="text-danger"><b>--><?//= form_error('image1') ?><!--</b></small>-->
-<!--            </div>-->
-<!---->
-<!--            <hr class="mb-4">-->
-<!---->
-<!--            <h4 class="mb-3">รูปภาพเพิ่มเติม</h4>-->
-<!--            <div class="form-group">-->
-<!--                <label class="btn btn-outline-primary" style="margin-bottom:0px;">-->
-<!--                    เลือกรูปภาพ-->
-<!--                    <input id="image2" name="image2" onchange="show_image2.innerText = this.value.split(/(\\|\/)/g).pop();" type="file" accept=".jpg,.jpeg,.png" hidden>-->
-<!--                </label>-->
-<!--                <span id="show_image2" class="text-muted"></span>-->
-<!--                <small class="text-danger"><b>--><?//= form_error('image2') ?><!--</b></small>-->
-<!--            </div>-->
 
             <hr class="mb-4">
-            <button class="btn btn-success btn-block" type="submit">แก้ไขประกาศ</button>
+            <button class="btn btn-success btn-block" onclick="return confirm('การแก้ไขประกาศจะต้องให้ผู้ดูแลระบบตรวจสอบอีกครั้ง?');" type="submit">แก้ไขประกาศ</button>
         </form>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var count_name = 0;
+        document.getElementById('name').onkeyup = function () {
+            count_name = 50 - this.value.length;
+            if (count_name < 0) {
+                document.getElementById('count_name').innerHTML = "ชื่อ คุณพิมพ์เกิน 50 ตัวอักษรแล้ว";
+            } else {
+                document.getElementById('count_name').innerHTML = "ชื่อ จำนวนตัวอักษร " + this.value.length + "/50";
+            }
+        };
+
+        var count_description = 0;
+        document.getElementById('description').onkeyup = function () {
+            count_description = 200 - this.value.length;
+            if (count_description < 0) {
+                document.getElementById('count_description').innerHTML = "รายละเอียดเกี่ยวกับของ  คุณพิมพ์เกิน 200 ตัวอักษรแล้ว";
+            } else {
+                document.getElementById('count_description').innerHTML = "รายละเอียดเกี่ยวกับของ จำนวนตัวอักษร " + this.value.length + "/200";
+            }
+        };
+    });
+</script>

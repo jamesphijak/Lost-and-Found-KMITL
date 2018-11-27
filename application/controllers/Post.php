@@ -2,10 +2,34 @@
 
 class Post extends CI_Controller
 {
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
+    }
 
+    public function status($type = null, $id = null){
+        if ($type != null) {
+            if ($type == 'wait' || $type == 'ok') {
+                //exit($type);
+                if ($id != null) {
+                    //exit($id);
+                    if($type == 'ok'){
+                        // change to ok
+                        $this->tb_post->update_post_status($id,array('post_status' => 'OK'));
+                        redirect(base_url('user/profile'));
+                    }else{
+                        // change to wait
+                        $this->tb_post->update_post_status($id,array('post_status' => 'Wait'));
+                        redirect(base_url('user/profile'));
+                    }
+                }else{
+                    redirect(base_url(''));
+                }
+            }else{
+                redirect(base_url(''));
+            }
+        }else{
+            redirect(base_url(''));
+        }
     }
 
     public function all($type = null, $id = null)
@@ -41,7 +65,7 @@ class Post extends CI_Controller
                 //pass parameter to profile
                 $body = array(
                     'title' => $title,
-                    'posts' => $this->tb_post->get_posts_by_field_limit($select_field, $value_field, 'OK', 0)
+                    'posts' => $this->tb_post->get_posts_by_field_limit($select_field, $value_field, 'Approve', 0)
                 );
                 $this->load->view('post/view_all', $body);
                 // $this->load->view('user/profile',$body);
@@ -54,7 +78,6 @@ class Post extends CI_Controller
             redirect(base_url(''));
         }
     }
-
 
     public function fetch_comment($post_id = null){
         if($post_id != null) {
@@ -112,11 +135,26 @@ class Post extends CI_Controller
             $comment = $this->tb_comment->get_comment_by_id($id);
             if(isset($comment)){
                 if($_SESSION['user_id'] == $comment->comment_user_id || $_SESSION['user_type'] == "Admin"){
+                    if($comment->comment_parent_id == 0) {
+                        $this->tb_comment->delete_comment_child($id);
+                    }
                     $this->tb_comment->delete_comment($id);
                 }
             }
         }
     }
+
+//    public function remove_child_comment($id = null){
+//        if($id != null) {
+//            // check session again
+//            $comment = $this->tb_comment->get_comment_by_id($id);
+//            if(isset($comment)){
+//                if($_SESSION['user_id'] == $comment->comment_user_id || $_SESSION['user_type'] == "Admin"){
+//                    $this->tb_comment->delete_comment($id);
+//                }
+//            }
+//        }
+//    }
 
     public function test_array(){
         $age = array(array(1,2,3),array(4,5,6),array(7,8,9));
@@ -135,7 +173,7 @@ class Post extends CI_Controller
             } else {
                 $comment_parent_id = $this->input->post('comment_id');
                 // htmlspecialchars(strip_tags(
-                $comment_text = htmlspecialchars(strip_tags($this->input->post('comment_content')));
+                $comment_text = nl2br(strip_tags($this->input->post('comment_content')));
                 // $message .= '<div class="alert alert-success">สวัสดี อิอิ Comment_ID: '.$comment_parent_id.', Text: '.$comment_text.', Post_ID: '.$post_id.', User_ID: '.$user_id.'</div>';
 
                 if($comment_text != ""){
@@ -175,6 +213,21 @@ class Post extends CI_Controller
             if(!isset($post)){
                 redirect(base_url('main'));
             }
+            if(isset($_SESSION['user_id'])) {
+                if($_SESSION['user_type'] != "Admin") {
+                    if ($_SESSION['user_id'] != $post->post_user_id && $post->post_approve != "Approve") {
+                        redirect(base_url('main'));
+                    }
+                }
+            }else{
+                if($post->post_status == "OK") { // ได้รับคืนแล้ว
+                    redirect(base_url('main'));
+                }
+
+                if($post->post_is_expire == 1) { // expire
+                    redirect(base_url('main'));
+                }
+            }
             $title = 'ดูประกาศ';
             $this->template->setHeader($title);
             $this->template->loadHeader();
@@ -208,22 +261,25 @@ class Post extends CI_Controller
 //                            'post_imgurl1' => $img1_name,
 //                            'post_imgurl2' => $img2_name,
                             'post_category_id' => $this->input->post('category'),
-                            'post_color_id' => $this->input->post('color')
+                            'post_color_id' => $this->input->post('color'),
+                            'post_approve' => 'Unapprove',
+                            'post_status' => 'Wait'
                         );
 
-                        $result = $this->tb_post->update_post($id,$value);
-
-                        if ($result > 0) {
-                            $this->session->set_flashdata('success', 'แก้ไขประกาศสำเร็จ');
-                            redirect(base_url('post/edit/' . $id), 'refresh');
-                        } else {
-                            $this->session->set_flashdata('error', 'แก้ไขประกาศไม่สำเร็จ');
+                        if($post->post_name == $value['post_name'] && $post->post_description == $value['post_description'] &&
+                        $post->post_category_id == $value['post_category_id'] && $post->post_color_id == $value['post_color_id']) {
+                            $this->session->set_flashdata('success', 'ข้อมูลไม่มีการเปลี่ยนแปลง');
+                        }else{
+                            $result = $this->tb_post->update_post($id,$value);
+                            if ($result > 0) {
+                                $this->session->set_flashdata('success', 'แก้ไขประกาศสำเร็จ');
+                                redirect(base_url('post/view/' . $id), 'refresh');
+                            } else {
+                                $this->session->set_flashdata('error', 'แก้ไขประกาศไม่สำเร็จ');
+                            }
                         }
                     }
                 }
-
-
-
                 $title = 'แก้ไขประกาศ';
                 $this->template->setHeader($title);
                 $this->template->loadHeader();
@@ -269,6 +325,7 @@ class Post extends CI_Controller
 
                 // delete post
                 $this->tb_post->delete_post($id);
+                $this->tb_comment->delete_comment_post($id);
                 redirect(base_url('admin/post'));
             }else{
                 redirect(base_url('admin/post'));
@@ -301,6 +358,7 @@ class Post extends CI_Controller
 
                 // delete post
                 $this->tb_post->delete_post($id);
+                $this->tb_comment->delete_comment_post($id);
                 redirect(base_url('user/profile'));
             }else{
                 redirect(base_url('user/profile'));
@@ -440,12 +498,11 @@ class Post extends CI_Controller
                             $img2_name = ($upload_img2['file_name'] != '') ? $upload_img2['file_name'] : '';
                         }
 
-                        // $textSuccess = 'Name: '.$upload_img['file_name'].' Size: '.$upload_img['file_size'].'kb. Width: '.$upload_img['image_width'].'px Height: '.$upload_img['image_height'].'px';
+                        //$textSuccess = 'Name: '.$upload_img['file_name'].' Size: '.$upload_img['file_size'].'kb. Width: '.$upload_img['image_width'].'px Height: '.$upload_img['image_height'].'px';
                         //$this->session->set_flashdata('success', 'อัพโหลดไฟล์และลดขนาดรูปสมบูรณ์ '.$textSuccess);
-
                         $value = array(
-                            'post_name' => $this->input->post('name'),
-                            'post_description' => $this->input->post('description'),
+                            'post_name' => strip_tags($this->input->post('name')),
+                            'post_description' => nl2br(strip_tags($this->input->post('description'))),
                             'post_type' => $type,
                             'post_imgurl1' => $img1_name,
                             'post_imgurl2' => $img2_name,
@@ -454,12 +511,22 @@ class Post extends CI_Controller
                             'post_color_id' => $this->input->post('color')
                         );
 
-                        $result = $this->tb_post->create_post($value);
-                        if ($result) {
-                            $this->session->set_flashdata('success', 'ลงประกาศสำเร็จ');
-                            redirect(base_url('post/create/' . $type), 'refresh');
-                        } else {
-                            $this->session->set_flashdata('error', 'ลงประกาศไม่สำเร็จ');
+                        if($value['post_name'] != "" && $value['post_description'] != "") {
+                            if (ctype_space($value['post_name']) && ctype_space($value['post_description'])) {
+                                $this->session->set_flashdata('error','เพิ่มประกาศไม่สำเร็จ (ต้องใส่ข้อความเท่านั้น)');
+                            } else {
+                                $result = $this->tb_post->create_post($value);
+                                if ($result > 0) {
+                                    $this->session->set_flashdata('success', 'ลงประกาศสำเร็จ');
+//                                    var_dump($result);
+//                                    exit();
+                                    redirect(base_url('post/view/' . $result));
+                                } else {
+                                    $this->session->set_flashdata('error', 'ลงประกาศไม่สำเร็จ');
+                                }
+                            }
+                        }else{
+                            $this->session->set_flashdata('error','เพิ่มประกาศไม่สำเร็จ (ต้องใส่ข้อความเท่านั้น)');
                         }
                     } else {
                         $this->session->set_flashdata('error', 'ไม่สามารถลงประกาศได้ ไม่ได้เลิอกรูปภาพ');
@@ -486,22 +553,6 @@ class Post extends CI_Controller
         }
     }
 
-//    public function file_check($str){
-//        $allowed_mime_type_arr = array('image/jpeg','image/png','image/jpg');
-//        $mime = get_mine_by_extension($_FILES['file']['image1']);
-//        if(isset($_FILES['file']['image1']) && $_FILES['file']['image1'] != ''){
-//            if(in_array($mime, $allowed_mime_type_arr)){
-//                return true;
-//            }else{
-//                $this->form_validation->set_message('file_check','ไฟล์ไม่รองรับ โปรดเลือกรูปภาพที่เป็น jpg/jpeg/png');
-//                return false;
-//            }
-//        }else{
-//            $this->form_validation->set_message('file_check','ไฟล์ไม่รองรับ โปรดเลือกรูปภาพที่เป็น jpg/jpeg/png');
-//            return false;
-//        }
-//    }
-
     public function loadPost($type = null)
     {
         if ($type != null) {
@@ -510,7 +561,10 @@ class Post extends CI_Controller
             $searchType = ($type == 'lost') ? 'found' : 'lost';
             $searh_title = ($type == 'lost') ? 'ถูกพบ' : 'หาย';
 
-            $like = array('post_type' => $searchType, 'post_status' => 'OK', 'post_category_id' => $decode['category'], 'post_color_id' => $decode['color']);
+            $like = array('post_type' => $searchType,
+
+                'post_category_id' => $decode['category'],
+                'post_color_id' => $decode['color']);
             $post_result = $this->tb_post->get_post_like($like);
 
             if ($decode['color'] == "" && $decode['category'] == "") {

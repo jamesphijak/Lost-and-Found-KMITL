@@ -7,6 +7,23 @@
 
 <div class="row">
     <div class="col-md-12">
+        <?php
+            if($post->post_approve != "Approve"){
+        ?>
+        <div class="alert alert-danger" role="alert">ประกาศนี้อยู่ระหว่างรอการอนุมัติจากผู้ดูแลระบบ</div>
+        <?php } ?>
+
+        <?php
+        if($post->post_status != "Wait"){
+            ?>
+            <div class="alert alert-danger" role="alert">ประกาศนี้ถูกปิดแล้ว</div>
+        <?php } ?>
+
+        <?php
+        if($post->post_is_expire != 0){
+            ?>
+            <div class="alert alert-danger" role="alert">ประกาศนี้หมดอายุแล้ว</div>
+        <?php } ?>
     <h3 class="text-center"><?= $post->post_name ?></h3><hr>
     </div>
     <div class="col-md-4">
@@ -68,6 +85,7 @@
     </div>
     <div class="col-md-8">
         <br>
+        <h5>ประเภท : <?= ($post->post_type == 'lost')? 'ตามหาของหาย':'พบของหาย' ?></h5>
         <h5>หมวดหมู่ : <?= $post->category_name ?></h5>
         <h5>สี : <?= $post->color_name ?></h5>
         <h5>รายละเอียด :</h5>
@@ -82,7 +100,7 @@
         <hr>
     </div>
     <div class="col-md-12">
-        <?php if($page_login == true){ ?>
+        <?php if($page_login == true && $post->post_approve == "Approve" && $post->post_status == "Wait"){ ?>
         <span id="comment_message"></span>
         <form method="POST" id="comment_form">
             <div class="form-group">
@@ -98,7 +116,13 @@
             </div>
         </form>
         <?php }else{?>
-            <h6 class="text-center text-danger">กรุณาเข้าสู่ระบบเพื่อแสดงความคิดเห็น <br><a style="margin-top:10px;" href="<?= base_url('auth/login') ?>" class="btn btn-primary btn-sm">เข้าสู่ระบบ</a></a> </h6>
+            <?php if($post->post_approve != "Approve"){ ?>
+                <h6 class="text-center text-danger">ต้องรอการอนุมัติจากผู้ดูแลระบบก่อน</h6>
+            <?php }elseif($post->post_status != "Wait"){ ?>
+                <h6 class="text-center text-danger">ประกาศถูกปิดแล้ว</h6>
+            <?php }else{ ?>
+                <h6 class="text-center text-danger">กรุณาเข้าสู่ระบบเพื่อแสดงความคิดเห็น <br><a style="margin-top:10px;" href="<?= base_url('auth/login') ?>" class="btn btn-primary btn-sm">เข้าสู่ระบบ</a></a> </h6>
+            <?php } ?>
         <?php } ?>
 
 
@@ -184,6 +208,8 @@
                 }
             });
         });
+
+
 
         $(document).on('click', '.reply', function(){
             var comment_id = $(this).attr("id");

@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </td>
-                <td><?= $this->template->normalDatetime($row->user_created) ?></td>
+                <td><?= $this->template->thaiNormalDatetime($row->user_created) ?></td>
             </tr>
             <?php endforeach; ?>
         </tbody>

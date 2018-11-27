@@ -25,11 +25,25 @@ class Tb_post extends CI_Model{
         $this->db->join('tb_color as color','color.color_id = post.post_color_id','LEFT');
         $this->db->where($field_name,$field_value);
         if($status != '') {
-            $this->db->where('post.post_status', $status);
+            $this->db->where('post.post_approve', $status);
         }
+        $this->db->where('post.post_status', "Wait"); // Need to find
+        $this->db->where('post.post_is_expire', 0); // Non Expire
         if($limit != 0) {
             $this->db->limit($limit, 0);
         }
+        $this->db->order_by('post.post_id','desc'); // เรียงลำดับ
+        $query=$this->db->get();
+        return $query->result();
+    }
+
+    public function get_my_post($field_name,$field_value){
+        $this->db->select('*');
+        $this->db->from('tb_post as post');
+        $this->db->join('tb_user as user','user.user_id = post.post_user_id','LEFT');
+        $this->db->join('tb_category as category','category.category_id = post.post_category_id','LEFT');
+        $this->db->join('tb_color as color','color.color_id = post.post_color_id','LEFT');
+        $this->db->where($field_name,$field_value);
         $this->db->order_by('post.post_id','desc'); // เรียงลำดับ
         $query=$this->db->get();
         return $query->result();
@@ -46,6 +60,17 @@ class Tb_post extends CI_Model{
         return $query->result();
     }
 
+    public function get_posts_by_approve($status){
+        $this->db->select('*');
+        $this->db->from('tb_post as post');
+        $this->db->join('tb_user as user','user.user_id = post.post_user_id','LEFT');
+        $this->db->join('tb_color as color','color.color_id = post.post_color_id','LEFT');
+        $this->db->join('tb_category as category','category.category_id = post.post_category_id','LEFT');
+        $this->db->where('post.post_approve',$status);
+        $query=$this->db->get();
+        return $query->result();
+    }
+
     public function get_post_by_id($id){
         $this->db->select('*');
         $this->db->from('tb_post as post');
@@ -58,18 +83,29 @@ class Tb_post extends CI_Model{
 
     public function get_post_like($like){
         $this->db->like($like);
+        $this->db->where('post_approve', 'Approve');
+        $this->db->where('post_status', 'Wait'); // Need to find
+        $this->db->where('post_is_expire', 0); // Non Expire
         return $this->db->get($this->table)->result(); // // WHERE `title` LIKE '%match%' ESCAPE '!' AND  `page1` LIKE '%match%' ESCAPE '!' AND  `page2` LIKE '%match%' ESCAPE '!'
     }
 
 
     public function create_post($value){
         $this->db->set('post_expire','DATE_ADD(now(), INTERVAL 30 DAY)', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
-        return $this->db->insert($this->table, $value); // insert into
+        $this->db->insert($this->table, $value);
+        $insert_id = $this->db->insert_id();
+        return $insert_id; // insert into
     }
 
     public function update_post($id, $value){
         $this->db->set('post_updated','now()', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
         $this->db->set('post_expire','DATE_ADD(now(), INTERVAL 30 DAY)', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
+        $this->db->update($this->table, $value, ['post_id' => $id]); // update
+        return $this->db->affected_rows();
+    }
+
+    public function update_post_status($id, $value){
+        $this->db->set('post_updated','now()', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
         $this->db->update($this->table, $value, ['post_id' => $id]); // update
         return $this->db->affected_rows();
     }

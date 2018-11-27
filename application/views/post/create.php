@@ -76,16 +76,16 @@
 
             <div class="row">
                 <div class="col-md-12 mb-3">
-                    <label for="firstName">ชื่อ</label>
-                    <input type="text" class="form-control" placeholder="ใส่ชื่อ" value="<?= set_value('name') ?>"
+                    <label for="name" id="count_name">ชื่อ</label>
+                    <input type="text" id="name" class="form-control" placeholder="ใส่ชื่อ" value="<?= set_value('name') ?>"
                            name="name">
                     <small class="text-danger"><b><?= form_error('name') ?></b></small>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label for="address">รายละเอียดเกี่ยวกับของ</label>
-                <textarea type="text" class="form-control" rows="5" name="description"
+                <label for="description" id="count_description">รายละเอียดเกี่ยวกับของ</label>
+                <textarea type="text" class="form-control" rows="5" name="description" id="description"
                           placeholder="ใส่รายละเอียดของ"><?= set_value('description') ?></textarea>
                 <small class="text-danger"><b><?= form_error('description') ?></b></small>
             </div>
@@ -141,6 +141,26 @@
     }
 
     $(document).ready(function () {
+        var count_name = 0;
+        document.getElementById('name').onkeyup = function () {
+            count_name = 50 - this.value.length;
+            if(count_name < 0){
+                document.getElementById('count_name').innerHTML = "ชื่อ คุณพิมพ์เกิน 50 ตัวอักษรแล้ว";
+            }else {
+                document.getElementById('count_name').innerHTML = "ชื่อ จำนวนตัวอักษร " + this.value.length + "/50";
+            }
+        };
+
+        var count_description = 0;
+        document.getElementById('description').onkeyup = function () {
+            count_description = 200 - this.value.length;
+            if(count_description < 0){
+                document.getElementById('count_description').innerHTML = "รายละเอียดเกี่ยวกับของ  คุณพิมพ์เกิน 200 ตัวอักษรแล้ว";
+            }else {
+                document.getElementById('count_description').innerHTML = "รายละเอียดเกี่ยวกับของ จำนวนตัวอักษร " + this.value.length + "/200";
+            }
+        };
+
         var inp = {category: "", color: ""};
         var str;
 

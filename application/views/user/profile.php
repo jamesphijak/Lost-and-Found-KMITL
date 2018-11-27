@@ -72,6 +72,7 @@
                             <th>ชื่อ</th>
                             <th>ประเภท</th>
                             <th>วันหมดอายุ</th>
+                            <th>การอนุมัติ</th>
                             <th>สถานะ</th>
                             <th>แก้ไข</th>
 
@@ -79,7 +80,7 @@
                         </thead>
                         <tbody>
                         <?php foreach ($posts as $row) : ?>
-                            <tr class="text-center" >
+                            <tr class="text-left" >
                                 <td>
                                     <a onclick="return confirm('คุณต้องการลบใช่มั้ย?');" href="<?= base_url("post/remove/{$row->post_id}")?>" class="btn btn-danger btn-block btn-sm"><i class="fas fa-trash-alt"></i></a>
                                 </td>
@@ -89,18 +90,34 @@
                                 <td><?= $row->post_name ?></td>
                                 <td><?= ($row->post_type == 'lost')? 'ของหาย':'พบของหาย'; ?></td>
                                 <td><?= $this->template->thaiNormalDate($row->post_expire) .' ('.$this->template->dayLeft($row->post_expire).')' ?></td>
+                                <td><?= ($row->post_approve == 'Approve')? 'อนุมัติแล้ว':'รอการอนุมัติ'; ?></td>
+
                                 <td>
+                                    <?php $disableStatus = ($row->post_approve != 'Approve')? 'disabled':''; // disable button status ?>
+                                    <?php
+                                    if($row->post_type == 'lost'){
+                                        // lost แสดงตรงข้าม
+                                        $menu = ($row->post_status != 'Wait')? // AP
+                                            '<a class="dropdown-item" href="'. base_url("post/status/wait/" . $row->post_id) .'">ยังไม่ได้รับคืน</a>'
+                                            :
+                                            '<a class="dropdown-item" href="'. base_url("post/status/ok/" . $row->post_id) .'">ได้รับคืนแล้ว</a>';
+                                        $menu_name = ($row->post_status != 'OK')? 'ยังไม่ได้รับคืน':'ได้รับคืนแล้ว';
+                                    }else{
+                                        // found แสดงตรงข้าม
+                                        $menu = ($row->post_status != 'Wait')?
+                                            '<a class="dropdown-item" href="'. base_url("post/status/wait/" . $row->post_id) .'">ยังไม่ได้คืน</a>'
+                                            :
+                                            '<a class="dropdown-item" href="'. base_url("post/status/ok/" . $row->post_id) .'">คืนแล้ว</a>';
+                                        $menu_name = ($row->post_status != 'OK')? 'ยังไม่ได้คืน':'คืนแล้ว';
+                                    }
+                                    ?>
+
                                     <div class="dropdown">
-                                        <a class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <?= $row->post_status ?>
-                                        </a>
+                                        <button class="btn btn-secondary btn-sm text-white dropdown-toggle <?= $disableStatus ?>" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <?= $menu_name ?>
+                                        </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <h6 class="dropdown-header">สถานะประกาศ</h6>
-                                            <?php if ($row->user_type == 'Admin'){?>
-                                                <a class="dropdown-item" href="<?= base_url('admin/user/member/' . $row->user_id) ?>">Member</a>
-                                            <?php }else{ ?>
-                                                <a class="dropdown-item"  href="<?= base_url('admin/user/admin/' . $row->user_id) ?>">Admin</a>
-                                            <?php } ?>
+                                            <?= $menu ?>
                                         </div>
                                     </div>
                                 </td>
@@ -123,7 +140,7 @@
     $(document).ready(function () {
         $('#data').DataTable({
             <?= (count($posts) == 0)?"\"searching\": false,\"paging\": false,\"info\": false,":'' ?>
-            columnDefs: [{"orderable": false, "targets": [0,1,5,6]}],
+            columnDefs: [{"orderable": false, "targets": [0,1,5,6] }],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "ทั้งหมด"]],
             // order: [[ 3, "desc" ]],
             language: {

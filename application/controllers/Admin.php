@@ -25,9 +25,9 @@ class Admin extends CI_Controller{
     public function post($type = null, $id = null){
         if($type !=null && $id != null){ // id ว่าง
             if($type == "approve"){
-                $this->tb_post->update_post($id,array('post_status' => 'OK'));
+                $this->tb_post->update_post($id,array('post_approve' => 'Approve'));
             }else{
-                $this->tb_post->update_post($id,array('post_status' => 'Wait'));
+                $this->tb_post->update_post($id,array('post_approve' => 'Unapprove'));
             }
         }
 
@@ -39,8 +39,8 @@ class Admin extends CI_Controller{
         //pass parameter to profile
         $body = array(
             'title' => $title,
-            'posts_not_approve' => $this->tb_post->get_posts_by_status('Wait'),
-            'posts_approved' => $this->tb_post->get_posts_by_status('OK')
+            'posts_not_approve' => $this->tb_post->get_posts_by_approve('Unapprove'),
+            'posts_approved' => $this->tb_post->get_posts_by_approve('Approve')
         );
         $this->load->view('admin/post',$body);
         $this->template->loadFooter();

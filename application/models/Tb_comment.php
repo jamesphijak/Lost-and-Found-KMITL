@@ -50,6 +50,14 @@ class Tb_comment extends CI_Model{
     public function delete_comment($id){
         $this->db->delete($this->table, ['comment_id' => $id]); // delete from table where id = id
     }
+
+    public function delete_comment_post($post_id){
+        $this->db->delete($this->table, ['comment_post_id' => $post_id]); // delete from table where id = id
+    }
+
+    public function delete_comment_child($parent_id){
+        $this->db->delete($this->table, ['comment_parent_id' => $parent_id]); // delete from table where id = id
+    }
 }
 
 ?>

@@ -43,12 +43,15 @@
 
             </div>
         </div>
+
+
     <?php endforeach; ?>
+        <div class="col-md-12">
+            <a href="<?= base_url('post/all/lost') ?>" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการประกาศของหายทั้งหมด</a><br>
+        </div>
     <?php } ?>
 
-    <div class="col-md-12">
-        <a href="<?= base_url('post/all/lost') ?>" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการประกาศของหายทั้งหมด</a><br>
-    </div>
+
 
     <div class="col-md-12 text-center">
         <h4>ประกาศพบของหาย</h4>
@@ -92,11 +95,13 @@
         </div>
 
     <?php endforeach; ?>
+
+        <div class="col-md-12">
+            <a href="<?= base_url('post/all/found') ?>" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการประกาศพบของหายทั้งหมด</a>
+        </div>
     <?php } ?>
 
-    <div class="col-md-12">
-        <a href="<?= base_url('post/all/found') ?>" class="btn btn-success btn-block"><i class="far fa-caret-square-down"></i> ดูรายการประกาศพบของหายทั้งหมด</a>
-    </div>
+
 
 
 </div>
