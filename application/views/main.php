@@ -34,8 +34,8 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <a href="<?= base_url('post/all/color/' . $row->post_color_id) ?>" class="btn btn-sm btn-primary">สี<?= $row->color_name ?></a>
-                            <a href="<?= base_url('post/all/category/' . $row->post_category_id) ?>" class="btn btn-sm btn-outline-primary"><?= $row->category_name ?></a>
+                            <a title="คลิกเพื่อดูของทั้งหมดในสีนี้" href="<?= base_url('post/all/color/' . $row->post_color_id) ?>" class="btn btn-sm btn-primary">สี<?= $row->color_name ?></a>
+                            <a title="คลิกเพื่อดูของทั้งหมดในหมวดหมู่นี้" href="<?= base_url('post/all/category/' . $row->post_category_id) ?>" class="btn btn-sm btn-outline-primary"><?= $row->category_name ?></a>
                         </div>
                         <small class="text-muted"><?= $this->template->thaiNormalDatetime($row->post_created) ?></small>
                     </div>
@@ -81,8 +81,8 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <a href="<?= base_url('post/all/color/' . $row->post_color_id) ?>" class="btn btn-sm btn-primary">สี<?= $row->color_name ?></a>
-                            <a href="<?= base_url('post/all/category/' . $row->post_category_id) ?>" class="btn btn-sm btn-outline-primary"><?= $row->category_name ?></a>
+                            <a title="คลิกเพื่อดูของทั้งหมดในสีนี้" href="<?= base_url('post/all/color/' . $row->post_color_id) ?>" class="btn btn-sm btn-primary">สี<?= $row->color_name ?></a>
+                            <a title="คลิกเพื่อดูของทั้งหมดในหมวดหมู่นี้" href="<?= base_url('post/all/category/' . $row->post_category_id) ?>" class="btn btn-sm btn-outline-primary"><?= $row->category_name ?></a>
                         </div>
                         <small class="text-muted"><?= $this->template->thaiNormalDatetime($row->post_created) ?></small>
                     </div>

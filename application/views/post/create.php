@@ -92,7 +92,7 @@
 
             <hr class="mb-4">
 
-            <h4 class="mb-3">รูปภาพปก</h4>
+            <h4 class="mb-3">รูปภาพปก <small class="text-danger">*จำเป็น</small></h4>
             <div class="form-group">
                 <label class="btn btn-primary" style="margin-bottom:0px;">
                     เลือกรูปภาพ
@@ -104,7 +104,7 @@
 
             <hr class="mb-4">
 
-            <h4 class="mb-3">รูปภาพเพิ่มเติม</h4>
+            <h4 class="mb-3">รูปภาพเพิ่มเติม <small>(ถ้ามี)</small></h4>
             <div class="form-group">
                 <label class="btn btn-outline-primary" style="margin-bottom:0px;">
                     เลือกรูปภาพ
@@ -116,6 +116,7 @@
 
             <hr class="mb-4">
             <button class="btn btn-success btn-block" type="submit">ยืนยันการลงประกาศ</button>
+            <a href="<?= base_url('post/all') ?>" class="btn btn-danger btn-block">ยกเลิก</a>
         </form>
     </div>
 </div>

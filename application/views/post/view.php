@@ -88,7 +88,8 @@
             <div class="form-group">
 <!--                <input type="hidden" name="user_id" id="user_id" class="form-control" value="--><?//= $_SESSION['user_id'] ?><!--" />-->
 <!--                <input type="hidden" name="post_id" id="post_id" class="form-control" value="--><?//= $page_post_id ?><!--" />-->
-                <textarea name="comment_content" id="comment_content" class="form-control" placeholder="ข้อมูลความคิดเห็น" rows="5"></textarea>
+                <label id="count" for="comment_content"></label>
+                <textarea name="comment_content" id="comment_content" class="form-control" placeholder="ข้อมูลความคิดเห็น" rows="2"></textarea>
             </div>
             <div class="form-group">
                 <input type="hidden" name="comment_id" id="comment_id" value="0" />
@@ -107,7 +108,18 @@
 </div>
 
 <script>
+
+
     $(document).ready(function(){
+        var count_comment = 0;
+        document.getElementById('comment_content').onkeyup = function () {
+            count_comment = 250 - this.value.length;
+            if(count_comment < 0){
+                document.getElementById('count').innerHTML = "คุณพิมพ์เกิน 250 ตัวอักษรแล้ว";
+            }else {
+                document.getElementById('count').innerHTML = "เหลือจำนวนตัวอักษรที่พิมพ์ได้: " + count_comment;
+            }
+        };
 
         startRefresh();
 
@@ -133,6 +145,10 @@
                         $('#comment_form')[0].reset();
                         $('#comment_message').html(data.message);
                         $('#comment_id').val('0');
+
+                        document.getElementById('count').innerHTML = "";
+                        count_comment = 0;
+
                         load_comment();
                     }
                 }

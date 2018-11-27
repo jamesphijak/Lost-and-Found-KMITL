@@ -8,6 +8,9 @@ $max_mobile = '%sต้องไม่มากกว่า 10 ตัว';
 $max_name = '%sต้องไม่มากกว่า 50 ตัว';
 $max_description = '%sต้องไม่มากกว่า 200 ตัว';
 $natural = '%sต้องมีแต่ตัวเลข 0-9 เท่านั้น';
+
+$min_name = '%sต้องไม่น้อยกว่า 3 ตัว';
+$min_description = '%sต้องไม่น้อยกว่า 5 ตัว';
 // $old_value = $_SESSION['user_email'];
 
 // ($this->input->post('password')!=$old_value)
@@ -133,6 +136,7 @@ $config = array(
         )
     )
     ,
+    // หน้าโพสต์
     'post/create' => array(
         array(
             'field' => 'category',
@@ -154,18 +158,20 @@ $config = array(
         array(
             'field' => 'name',
             'label' => 'ชื่อของ',
-            'rules' => 'required|trim|max_length[50]',
+            'rules' => 'required|trim|min_length[3]|max_length[50]',
             'errors' => array(
                 'required' => $required,
+                'min_length' => $min_name,
                 'max_length' => $max_name
             )
         ),
         array(
             'field' => 'description',
             'label' => 'รายละเอียด',
-            'rules' => 'required|trim|max_length[200]',
+            'rules' => 'required|trim|min_length[5]|max_length[200]',
             'errors' => array(
                 'required' => $required,
+                'min_length' => $min_description,
                 'max_length' => $max_description
             )
         )

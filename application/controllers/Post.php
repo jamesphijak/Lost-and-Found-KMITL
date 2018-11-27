@@ -61,39 +61,44 @@ class Post extends CI_Controller
             $output = '';
             $parent_comment = $this->tb_comment->get_comments_by_post_id(0, $post_id,'desc');
             foreach ($parent_comment as $pc) {
+                $admin = ($pc->user_type == "Admin" )? ' bg-secondary text-white':'';
+                $name = ($pc->user_type == "Admin" )? 'Administrator':$pc->user_email;
+                $output .= '<div class="card" style="margin-bottom:10px;">
+                            <p class="card-header '.$admin.'">โดย <b>' . $name . '</b> 
+                            เมื่อ <i>' . $this->template->thaiNormalDatetime($pc->comment_created) . '</i>';
 
-                // parent comment
-                $output .= '
-                <div class="media text-muted pt-3">
-                <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-                <div class="d-flex justify-content-between align-items-center ">
-                    <strong class="text-gray-dark">โดย <b>' . $pc->user_email . '</b> เมื่อ <i>' . $this->template->thaiNormalDatetime($pc->comment_created) . '</i></strong>
-                    <div class="btn-group" role="group">
-                        <a class="btn btn-info text-white reply" id="'.$pc->comment_id.'" comment_to="'. $pc->user_email .'"><i class="fas fa-reply"></i> ตอบกลับ</a>';
+                $output .= ($_SESSION['user_id'] == $pc->comment_user_id || $_SESSION['user_type'] == "Admin" )? '<a style="margin-left:5px;" class="btn btn-small btn-danger text-white remove float-right" id="'.$pc->comment_id .'">
+                <i class="fas fa-times-circle"></i></a>':'';
 
-                $output .= ($_SESSION['user_id'] == $pc->comment_user_id)? '<a class="btn btn-danger text-white remove" id="'.$pc->comment_id .'"><i class="fas fa-times-circle"></i></a>':'';
+                $output .= '<a class="btn btn-small btn-info text-white reply float-right" id="'.$pc->comment_id.'" comment_to="'. $pc->user_email .'"><i class="fas fa-reply"></i> ตอบกลับ</a>';
+                $output .=  '</p>
+                            
+                            <div class="card-body">
+                            
+                            <p class="card-text">'.$pc->comment_text.'</p>
+                            </div>
+                            </div>';
 
-                $output .= '</div> 
-                </div>
-                <span class="d-block">'.$pc->comment_text.'</span>
-                </div></div>';
-
-                // sub comment
                 $sub_comment = $this->tb_comment->get_comments_by_post_id($pc->comment_id, $post_id,'asc');
                 foreach ($sub_comment as $sc) {
-                    $output .= '
-                     <div class="media text-muted pt-3" style="margin-left:50px;">
-                     <div class="media-body pb-3 mb-0 lh-125 border-bottom border-gray">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <strong class="text-gray-dark">โดย <b>' . $sc->user_email . '</b> เมื่อ <i>' . $this->template->thaiNormalDatetime($sc->comment_created) . '</i></strong>
-                             <div class="btn-group" role="group">';
-                    $output .= ($_SESSION['user_id'] == $sc->comment_user_id)? '<a class="btn btn-danger text-white remove" id="'.$sc->comment_id .'" ><i class="fas fa-times-circle"></i></a>':'';
-                    $output .= '</div>
-                        </div>
-                        <span class="d-block">'.$sc->comment_text.'</span>
-                     </div>
-                     </div>    
-                    ';
+                    $admin = ($sc->user_type == "Admin" )? ' bg-secondary text-white':'';
+                    $name = ($sc->user_type == "Admin" )? 'Administrator':$sc->user_email;
+                    $output .= '<div class="card" style="margin-bottom:10px; margin-left:60px;">
+                                <p class="card-header '.$admin.'">โดย <b>' . $name . '</b> 
+                                เมื่อ <i>' . $this->template->thaiNormalDatetime($sc->comment_created) . '</i>';
+
+                    $output .= ($_SESSION['user_id'] == $sc->comment_user_id || $_SESSION['user_type'] == "Admin" )? '<a class="btn btn-small btn-danger text-white remove float-right" id="'.$sc->comment_id .'">
+                    <i class="fas fa-times-circle"></i></a>':'';
+
+
+                    $output .=  '</p>
+                                
+                                <div class="card-body">
+                                
+                                <p class="card-text">'.$sc->comment_text.'</p>
+                                </div>
+                                </div>';
+
                 }
             }
 
@@ -106,7 +111,7 @@ class Post extends CI_Controller
             // check session again
             $comment = $this->tb_comment->get_comment_by_id($id);
             if(isset($comment)){
-                if($_SESSION['user_id'] == $comment->comment_user_id){
+                if($_SESSION['user_id'] == $comment->comment_user_id || $_SESSION['user_type'] == "Admin"){
                     $this->tb_comment->delete_comment($id);
                 }
             }
@@ -129,15 +134,29 @@ class Post extends CI_Controller
                 $message .= '<div class="alert alert-danger">กรุณาระบุความคิดเห็นด้วย</div>';
             } else {
                 $comment_parent_id = $this->input->post('comment_id');
-                //htmlspecialchars(strip_tags(
-                $comment_text = $this->input->post('comment_content');
+                // htmlspecialchars(strip_tags(
+                $comment_text = htmlspecialchars(strip_tags($this->input->post('comment_content')));
                 // $message .= '<div class="alert alert-success">สวัสดี อิอิ Comment_ID: '.$comment_parent_id.', Text: '.$comment_text.', Post_ID: '.$post_id.', User_ID: '.$user_id.'</div>';
 
-                $result = $this->tb_comment->create_comment($comment_parent_id,$comment_text,$user_id,$post_id);
-                if($result > 0){
-                    $message .= '<div class="alert alert-success">เพิ่มความคิดเห็นสำเร็จ</div>';
-                }else{
-                    $message .= '<div class="alert alert-danger">เพิ่มความคิดเห็นไม่สำเร็จ</div>';
+                if($comment_text != ""){
+                    if (ctype_space($comment_text)) {
+                        $message .= '<div class="alert alert-danger">เพิ่มความคิดเห็นไม่สำเร็จ (ใส่แต่ช่องว่างไม่ได้)</div>';
+                    }else {
+                        if (strlen($comment_text) > 250) {
+                            $message .= '<div class="alert alert-danger">เพิ่มความคิดเห็นไม่สำเร็จ (ความยาวความคิดเห็นต้องไม่เกิน 250 ตัว)</div>';
+                        } else {
+
+                            $result = $this->tb_comment->create_comment($comment_parent_id, $comment_text, $user_id, $post_id);
+                            if ($result > 0) {
+                                $message .= '<div class="alert alert-success">เพิ่มความคิดเห็นสำเร็จ</div>';
+                            } else {
+                                $message .= '<div class="alert alert-danger">เพิ่มความคิดเห็นไม่สำเร็จ</div>';
+                            }
+                        }
+                    }
+                }
+                else{
+                    $message .= '<div class="alert alert-danger">เพิ่มความคิดเห็นไม่สำเร็จ (โปรดใส่เฉพาะข้อความ)</div>';
                 }
 
             }
@@ -415,8 +434,6 @@ class Post extends CI_Controller
                     }
 
                     // หลัง Resize
-
-
                     if ($resize_check == true) {
                         $img1_name = $upload_img1['file_name'];
                         if ($upload_img2 != '') {
