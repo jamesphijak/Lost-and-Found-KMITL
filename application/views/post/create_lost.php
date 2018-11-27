@@ -23,7 +23,7 @@
                   <option value="">เลือกหมวดหมู่...</option>
                    <?php foreach($categories as $row) : 
                     if(set_value('category') != null){
-                      if(set_value('category') == $row->id){
+                      if(set_value('category') == $row->category_id){
                         $select = "selected";
                       }else{
                         $select = "";
@@ -31,7 +31,7 @@
                     }
                     ?>
 
-                   <option <?= $select ?> value="<?= $row->id ?>"><?= $row->category_name.' ('.$row->id.')' ?></option>
+                   <option <?= $select ?> value="<?= $row->category_id ?>"><?= $row->category_name.' ('.$row->category_id.')' ?></option>
                    <?php endforeach; ?>
                       
                 </select>
@@ -44,7 +44,7 @@
                   <option value="">เลือกสี...</option>
                   <?php foreach($colors as $row) : 
                   if(set_value('color') != null){
-                    if(set_value('color') == $row->id){
+                    if(set_value('color') == $row->color_id){
                       $select = "selected";
                     }else{
                       $select = "";
@@ -52,7 +52,7 @@
                   }  
                     
                   ?>
-                   <option <?= $select ?> value="<?= $row->id ?>"><?= $row->color_name.' ('.$row->id.')' ?></option>
+                   <option <?= $select ?> value="<?= $row->color_id ?>"><?= $row->color_name.' ('.$row->color_id.')' ?></option>
                    <?php endforeach; ?>
                 </select>
                 <small class="text-danger"><b><?= form_error('color')?></b></small>
@@ -86,6 +86,7 @@
 
 
       <script>
+
 
           function find(str) {
             if (window.XMLHttpRequest) {
