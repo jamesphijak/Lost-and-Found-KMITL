@@ -83,7 +83,7 @@
                     <label for="count_name" id="count_name">ชื่อ</label>
                     <input id="name" type="text" class="form-control" placeholder="ใส่ชื่อ" value="<?= set_value('name',$post->post_name) ?>"
                            name="name">
-                    <small class="text-danger"><b><?= form_error('name') ?></b></small>
+                    <small id="nameError" class="text-danger"><b><?= form_error('name') ?></b></small>
                 </div>
             </div>
 
@@ -109,11 +109,19 @@
     $(document).ready(function () {
         var count_name = 0;
         document.getElementById('name').onkeyup = function () {
+            var check =  /^[a-zA-Z0-9ก-๛เ ]*$/;
+
             count_name = 50 - this.value.length;
             if (count_name < 0) {
                 document.getElementById('count_name').innerHTML = "ชื่อ คุณพิมพ์เกิน 50 ตัวอักษรแล้ว";
             } else {
                 document.getElementById('count_name').innerHTML = "ชื่อ จำนวนตัวอักษร " + this.value.length + "/50";
+            }
+
+            if(!check.test(this.value)){
+                document.getElementById('nameError').innerHTML = "<b>ห้ามมีอักขระพิเศษ</b>";
+            }else{
+                document.getElementById('nameError').innerHTML = "";
             }
         };
 
@@ -126,5 +134,7 @@
                 document.getElementById('count_description').innerHTML = "รายละเอียดเกี่ยวกับของ จำนวนตัวอักษร " + this.value.length + "/200";
             }
         };
+
+
     });
 </script>

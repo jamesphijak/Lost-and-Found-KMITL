@@ -151,7 +151,7 @@ class CI_Upload {
 	 *
 	 * @var	string
 	 */
-	public $file_ext_tolower = FALSE;
+	public $file_ext_tolower = TRUE;
 
 	/**
 	 * Upload path

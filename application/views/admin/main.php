@@ -12,12 +12,13 @@
 
     <?php
 
-    $dataPoints = array(
-        array("y" => 3373.64, "label" => "Member" ),
-        array("y" => 2435.94, "label" => "Admin" ),
-        array("y" => 1842.55, "label" => "Lost" ),
-        array("y" => 1828.55, "label" => "Found" ),
+    $data = array(
+        array("y" => $count_member, "label" => "Member" ),
+        array("y" => $count_admin, "label" => "Admin" ),
+        array("y" => $count_lost, "label" => "Lost" ),
+        array("y" => $count_found, "label" => "Found" ),
     );
+
 
     ?>
 
@@ -31,10 +32,11 @@
 
                 data: [{
                     type: "column",
-                    yValueFormatString: "#,##0.## tonnes",
-                    dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+                    dataPoints: <?php echo json_encode($data, JSON_NUMERIC_CHECK); ?>
                 }]
             });
+
+
             chart.render();
 
         }

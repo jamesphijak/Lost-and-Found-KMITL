@@ -15,7 +15,11 @@ class Admin extends CI_Controller{
         
         // pass parameter to profile
         $body = array(
-            'title' => $title
+            'title' => $title,
+            'count_admin' => $this->tb_user->get_user_by_type('Admin'),
+            'count_member' => $this->tb_user->get_user_by_type('Member'),
+            'count_lost' => $this->tb_post->get_post_by_type('Lost'),
+            'count_found' => $this->tb_post->get_post_by_type('Found')
         );
         $this->load->view('admin/main',$body);
         $this->template->loadFooter();

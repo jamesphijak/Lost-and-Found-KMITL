@@ -161,7 +161,7 @@ class Post extends CI_Controller
             } else {
                 $comment_parent_id = $this->input->post('comment_id');
                 // htmlspecialchars(strip_tags(
-                $comment_text = nl2br(strip_tags($this->input->post('comment_content')));
+                $comment_text = nl2br(strip_tags(trim($this->input->post('comment_content'))));
                 // $message .= '<div class="alert alert-success">สวัสดี อิอิ Comment_ID: '.$comment_parent_id.', Text: '.$comment_text.', Post_ID: '.$post_id.', User_ID: '.$user_id.'</div>';
 
                 if($comment_text != ""){

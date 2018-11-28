@@ -86,7 +86,7 @@ class User extends CI_Controller{
 
                 if($result){   
                     $this->session->set_flashdata('success','แก้ไขรหัสผ่านสำเร็จ');
-                    redirect(base_url('user/editProfile'),'refresh');
+                    redirect(base_url('user/editPassword'),'refresh');
                 }else{
                     $this->session->set_flashdata('error','แก้ไขรหัสผ่านสำเร็จ');
                 }

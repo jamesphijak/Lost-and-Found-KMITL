@@ -21,6 +21,7 @@ $min_description = '%sต้องไม่น้อยกว่า 5 ตัว'
 // ;
 
 $min_password = '%sต้องไม่ต่ำกว่า 4 ตัว';
+$max_password = '%sต้องไม่มากกว่า 200 ตัว';
 
 $config = array(
     // หน้าสมัครสมาชิก
@@ -38,26 +39,30 @@ $config = array(
             array(
                     'field' => 'password',
                     'label' => 'รหัสผ่าน',
-                    'rules' => 'required|trim|min_length[4]',
+                    'rules' => 'required|min_length[4]|max_length[200]|regex_match[/^[a-zA-Z0-9ก-๛เ]*$/]',
                     'errors' => array(
                         'required' => $required,
-                        'min_length' => $min_password
+                        'min_length' => $min_password,
+                        'max_length' => $max_password,
+                        'regex_match' => '%sห้ามมีอักขระพิเศษหรือช่องว่าง'
                     )
             ),
             array(
                     'field' => 'confirm_password',
                     'label' => 'ยืนยันรหัสผ่าน',
-                    'rules' => 'required|trim|min_length[4]|matches[password]',
+                    'rules' => 'required|min_length[4]|max_length[200]|matches[password]|regex_match[/^[a-zA-Z0-9ก-๛เ]*$/]',
                     'errors' => array(
                         'required' => $required,
                         'matches' => $matches,
-                        'min_length' => $min_password
+                        'min_length' => $min_password,
+                        'max_length' => $max_password,
+                        'regex_match' => '%sห้ามมีอักขระพิเศษหรือช่องว่าง'
                     )
             ),
             array(
                     'field' => 'mobile',
                     'label' => 'เบอร์โทรศัพท์',
-                    'rules' => 'required|trim|is_natural|min_length[10]|max_length[10]',
+                    'rules' => 'required|is_natural|min_length[10]|max_length[10]',
                     'errors' => array(
                         'required' => $required,
                         'is_natural' => $natural,
@@ -80,9 +85,12 @@ $config = array(
             array(
                     'field' => 'password',
                     'label' => 'รหัสผ่าน',
-                    'rules' => 'required|trim',
+                    'rules' => 'required|min_length[4]|regex_match[/^[a-zA-Z0-9ก-๛เ]*$/]',
                     'errors' => array(
-                        'required' => $required
+                        'required' => $required,
+                        'min_length' => $min_password,
+                        'max_length' => $max_password,
+                        'regex_match' => '%sห้ามมีอักขระพิเศษหรือช่องว่าง'
                     )
             )                
     ),
@@ -93,7 +101,7 @@ $config = array(
         array(
                 'field' => 'mobile',
                 'label' => 'เบอร์โทรศัพท์',
-                'rules' => 'required|trim|is_natural|min_length[10]|max_length[10]',
+                'rules' => 'required|is_natural|min_length[10]|max_length[10]',
                 'errors' => array(
                     'required' => $required,
                     'is_natural' => $natural,
@@ -106,18 +114,24 @@ $config = array(
         array(
                 'field' => 'password',
                 'label' => 'รหัสผ่านใหม่',
-                'rules' => 'required|trim',
+                'rules' => 'required|min_length[4]|max_length[200]|regex_match[/^[a-zA-Z0-9ก-๛เ]*$/]',
                 'errors' => array(
-                    'required' => $required
+                    'required' => $required,
+                    'min_length' => $min_password,
+                    'max_length' => $max_password,
+                    'regex_match' => '%sห้ามมีอักขระพิเศษหรือช่องว่าง'
                 )
         ),
         array(
                 'field' => 'confirm_password',
                 'label' => 'ยืนยันรหัสผ่านใหม่',
-                'rules' => 'required|trim|matches[password]',
+                'rules' => 'required|min_length[4]|max_length[200]|matches[password]|regex_match[/^[a-zA-Z0-9ก-๛เ]*$/]',
                 'errors' => array(
                     'required' => $required,
-                    'matches' => $matches
+                    'matches' => $matches,
+                    'min_length' => $min_password,
+                    'max_length' => $max_password,
+                    'regex_match' => '%sห้ามมีอักขระพิเศษหรือช่องว่าง'
                 )
         )
     ),

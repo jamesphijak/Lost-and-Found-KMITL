@@ -61,6 +61,10 @@ class Tb_post extends CI_Model{
         return $query->result();
     }
 
+    public function get_post_by_type($type){
+        return $this->db->get_where($this->table, ['post_type' => $type])->num_rows(); // select * from table where id = id
+    }
+
     public function get_posts_by_approve($status){
         $this->db->select('*');
         $this->db->from('tb_post as post');

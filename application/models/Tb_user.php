@@ -44,6 +44,10 @@ class Tb_user extends CI_Model
         return $this->db->get_where($this->table, ['user_email' => $email])->row(); // select * from table where id = id
     }
 
+    public function get_user_by_type($type){
+        return $this->db->get_where($this->table, ['user_type' => $type])->num_rows(); // select * from table where id = id
+    }
+
     // ใช้ set session
     public function user_session_set($id,$email,$type,$mobile,$status){
         $data = array(
