@@ -54,19 +54,23 @@ public function login()
                 'user_password' => $encrypted_password
             );
             $user = $this->tb_user->user_login($value);
-            
-            if($user){
-                $this->session->set_flashdata('success','เข้าสู่ระบบสำเร็จ');
-                $this->tb_user->user_session_set($user->user_id,$user->user_email,$user->user_type,$user->user_mobile);
-                redirect(base_url('main'),'refresh');
-                
-            }else{
-                $this->session->set_flashdata('error','เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
-            }
+
+                if($user){
+                    if($user->user_status == 'Active') {
+                        $this->session->set_flashdata('success', 'เข้าสู่ระบบสำเร็จ');
+                        $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile,$user->user_status);
+                        redirect(base_url('main'), 'refresh');
+                    }else{
+                        $this->session->set_flashdata('error','สมาชิกนี้ถูกระงับการใช้งานอยู่');
+                    }
+
+                }else{
+                    $this->session->set_flashdata('error','เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+                }
         }
     }
-
     $this->tb_user->already_login();
+
     $this->template->setTemplate('เข้าสู่ระบบ', 'auth/login');
     $this->template->loadTemplate();
 }
@@ -116,10 +120,15 @@ public function facebook(){
                 $result = $this->tb_user->update_user($user->user_id, $value); // อัพเดทเข้าฐานข้อมูล
                 if($result){
                     // ทำการ Login
-                    $this->session->set_flashdata('success','เข้าสู่ระบบด้วย Facebook สำเร็จ / ทำการรวมเข้ากับบัญชีเดิมเรียบร้อยแล้ว');
-                    $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
-                    // Redirect ไปหน้าแรก
-                    redirect(base_url('main'),'refresh');
+                    if($user->user_status == 'Active') {
+                        $this->session->set_flashdata('success', 'เข้าสู่ระบบด้วย Facebook สำเร็จ / ทำการรวมเข้ากับบัญชีเดิมเรียบร้อยแล้ว');
+                        $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile,$user->user_status);
+                        // Redirect ไปหน้าแรก
+                        $this->tb_user->check_password();
+                    }else{
+                        $this->session->set_flashdata('error','สมาชิกนี้ถูกระงับการใช้งานอยู่');
+                        redirect(base_url('auth/login'));
+                    }
                     // เสร็จกระบวนการ...
                 }else{
                     $this->session->set_flashdata('error','เข้าสู่ระบบด้วย Facebook ไม่สำเร็จ');
@@ -127,8 +136,13 @@ public function facebook(){
             }else{
                 // Facebook มี id อยู่แล้ว
                 // Login ได้เลย
-                $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
-                redirect(base_url('main'),'refresh');
+                if($user->user_status == 'Active') {
+                    $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile,$user->user_status);
+                    $this->tb_user->check_password();
+                }else{
+                    $this->session->set_flashdata('error','สมาชิกนี้ถูกระงับการใช้งานอยู่');
+                    redirect(base_url('auth/login'));
+                }
             }
         }else{
             // ไม่เจอ user
@@ -142,8 +156,8 @@ public function facebook(){
                 $this->session->set_flashdata('success','เข้าสู่ระบบด้วย Facebook สำเร็จ / สร้าง Account ใหม่เรียบร้อยแล้ว');
                 // ทำการดึงข้อมูลมาสร้าง session
                 $user = $this->tb_user->get_user_by_id($created_user_id); // ดึงข้อมูลมา
-                $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile);
-                redirect(base_url('main'),'refresh'); // Redirect ไปหน้าแรก
+                $this->tb_user->user_session_set($user->user_id, $user->user_email, $user->user_type, $user->user_mobile,$user->user_status);
+                $this->tb_user->check_password();
             }else{
                 $this->session->set_flashdata('error','เข้าสู่ระบบด้วย Facebook ไม่สำเร็จ');
             }

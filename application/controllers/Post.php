@@ -144,24 +144,6 @@ class Post extends CI_Controller
         }
     }
 
-//    public function remove_child_comment($id = null){
-//        if($id != null) {
-//            // check session again
-//            $comment = $this->tb_comment->get_comment_by_id($id);
-//            if(isset($comment)){
-//                if($_SESSION['user_id'] == $comment->comment_user_id || $_SESSION['user_type'] == "Admin"){
-//                    $this->tb_comment->delete_comment($id);
-//                }
-//            }
-//        }
-//    }
-
-    public function test_array(){
-        $age = array(array(1,2,3),array(4,5,6),array(7,8,9));
-        print_r(($age));
-        print_r($age[0]);
-        exit();
-    }
 
     public function add_comment($post_id = null, $user_id = null)
     {
@@ -246,6 +228,33 @@ class Post extends CI_Controller
         }
     }
 
+    public function renew($type = null,$id = null)
+    {
+        $this->tb_user->check_login();
+        if ($id != null) {
+            $post = $this->tb_post->get_post_by_id($id);
+            if(!empty($post)) {
+                if($post->post_is_expire == 1){
+                    $this->tb_post->renew_post($id);
+                    if($type == 'view'){
+                        redirect(base_url('post/view/'.$id));
+                    }else{
+                        redirect(base_url('user/profile'));
+                    }
+
+                }else{
+                    redirect(base_url('user/profile'));
+                }
+                // ต้องหมดอายุแล้ว
+                // ต่ออายุ
+            }else{
+                redirect(base_url('user/profile'));
+            }
+        } else {
+            redirect(base_url('user/profile'));
+        }
+    }
+
     public function edit($id = null)
     {
         $this->tb_user->check_login();
@@ -257,7 +266,7 @@ class Post extends CI_Controller
                     if ($this->form_validation->run('post/create')) {
                         $value = array(
                             'post_name' => $this->input->post('name'),
-                            'post_description' => $this->input->post('description'),
+                            'post_description' => nl2br(strip_tags($this->input->post('description'))),
 //                            'post_imgurl1' => $img1_name,
 //                            'post_imgurl2' => $img2_name,
                             'post_category_id' => $this->input->post('category'),

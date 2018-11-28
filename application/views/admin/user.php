@@ -12,6 +12,7 @@
                 <th>อีเมล</th>
                 <th>เบอร์โทรศัพท์</th>
                 <th>ประเภท</th>
+                <th>สถานะ</th>
                 <th>วันที่สมัคร</th>
             </tr>
         </thead>
@@ -27,7 +28,6 @@
                             <?= $row->user_type ?>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <h6 class="dropdown-header">ประเภทสมาชิก</h6>
                             <?php if ($row->user_type == 'Admin'){?>
                             <a class="dropdown-item" href="<?= base_url('admin/user/member/' . $row->user_id) ?>">Member</a>
                             <?php }else{ ?>
@@ -35,6 +35,22 @@
                             <?php } ?>
                         </div>
                     </div>
+                </td>
+                <td>
+                    <div class="dropdown">
+
+                        <a class="btn btn-<?= ($row->user_status == 'Active')? 'success':'danger'; ?> btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <?=  $row->user_status ?>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <?php if ($row->user_status == 'Active'){?>
+                                <a class="dropdown-item" href="<?= base_url('admin/userStatus/inactive/' . $row->user_id) ?>">Inactive</a>
+                            <?php }else{ ?>
+                                <a class="dropdown-item"  href="<?= base_url('admin/userStatus/active/' . $row->user_id) ?>">Active</a>
+                            <?php } ?>
+                        </div>
+                    </div>
+
                 </td>
                 <td><?= $this->template->thaiNormalDatetime($row->user_created) ?></td>
             </tr>

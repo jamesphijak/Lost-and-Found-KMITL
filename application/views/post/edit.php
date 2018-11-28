@@ -89,8 +89,12 @@
 
             <div class="mb-3">
                 <label for="address" id="count_description">รายละเอียดเกี่ยวกับของ</label>
+                <?php
+                $breaks = array("<br />","<br>","<br/>");
+                $desc = str_ireplace($breaks, "", $post->post_description);
+                ?>
                 <textarea id="description" type="text" class="form-control" rows="5" name="description"
-                          placeholder="ใส่รายละเอียดของ"><?= set_value('description',$post->post_description) ?></textarea>
+                          placeholder="ใส่รายละเอียดของ"><?= set_value('description',$desc) ?></textarea>
                 <small class="text-danger"><b><?= form_error('description') ?></b></small>
             </div>
 

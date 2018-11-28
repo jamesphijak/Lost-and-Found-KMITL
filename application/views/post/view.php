@@ -22,7 +22,7 @@
         <?php
         if($post->post_is_expire != 0){
             ?>
-            <div class="alert alert-danger" role="alert">ประกาศนี้หมดอายุแล้ว</div>
+            <div class="alert alert-danger" role="alert">ประกาศนี้หมดอายุแล้ว หากต้องการต่ออายุ <a href="<?= base_url('/post/renew/view/'.$post->post_id)?>">คลิกที่นี่</a></div>
         <?php } ?>
     <h3 class="text-center"><?= $post->post_name ?></h3><hr>
     </div>
@@ -100,7 +100,8 @@
         <hr>
     </div>
     <div class="col-md-12">
-        <?php if($page_login == true && $post->post_approve == "Approve" && $post->post_status == "Wait"){ ?>
+        <?php if($page_login == true && $post->post_approve == "Approve" && $post->post_status == "Wait" && $post->post_is_expire == 0){ ?>
+        <?php $disableCount = false; ?>
         <span id="comment_message"></span>
         <form method="POST" id="comment_form">
             <div class="form-group">
@@ -116,25 +117,27 @@
             </div>
         </form>
         <?php }else{?>
+            <?php $disableCount = true; ?>
             <?php if($post->post_approve != "Approve"){ ?>
                 <h6 class="text-center text-danger">ต้องรอการอนุมัติจากผู้ดูแลระบบก่อน</h6>
             <?php }elseif($post->post_status != "Wait"){ ?>
-                <h6 class="text-center text-danger">ประกาศถูกปิดแล้ว</h6>
+                <h6 class="text-center text-danger">ไม่สามารถแสดงความคิดเห็นได้เนื่องจากประกาศถูกปิดแล้ว</h6>
+            <?php }elseif($post->post_is_expire != 0){ ?>
+                <h6 class="text-center text-danger">ไม่สามารถแสดงความคิดเห็นได้เนื่องจากประกาศหมดอายุแล้ว</h6>
             <?php }else{ ?>
-                <h6 class="text-center text-danger">กรุณาเข้าสู่ระบบเพื่อแสดงความคิดเห็น <br><a style="margin-top:10px;" href="<?= base_url('auth/login') ?>" class="btn btn-primary btn-sm">เข้าสู่ระบบ</a></a> </h6>
+                <h6 class="text-center text-danger">กรุณาเข้าสู่ระบบเพื่อแสดงความคิดเห็น <br><a style="margin-top:10px;" href="<?= base_url('auth/login') ?>" class="btn btn-primary btn-sm">เข้าสู่ระบบ</a> </h6>
             <?php } ?>
         <?php } ?>
 
-
-        <div class="my-3 p-3 bg-white rounded shadow-sm" id="display_comment">
-        </div>
     </div>
+    <div class="col-md-12">
+    <div class="my-3 p-3 bg-white rounded shadow-sm" id="display_comment"></div>
+    </div>
+
 </div>
 
 <script>
-
-
-    $(document).ready(function(){
+    <?php if($disableCount == false){ ?>
         var count_comment = 0;
         document.getElementById('comment_content').onkeyup = function () {
             count_comment = 250 - this.value.length;
@@ -144,7 +147,9 @@
                 document.getElementById('count').innerHTML = "เหลือจำนวนตัวอักษรที่พิมพ์ได้: " + count_comment;
             }
         };
+    <?php } ?>
 
+    $(document).ready(function(){
         startRefresh();
 
         function startRefresh() {

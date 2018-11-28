@@ -38,8 +38,16 @@ class Template extends CI_Model {
         // Update session when refresh page
         if(isset($_SESSION['user_id'])){
             $this->tb_user->user_session_update($_SESSION['user_id']);
+            if($_SESSION['user_status'] != 'Active'){
+                unset($_SESSION);
+                session_destroy();
+                //$this->session->set_flashdata('error','สมาชิกนี้ถูกระงับการใช้งานอยู่');
+                redirect(base_url('auth/login'));
+                //$this->tb_user->check_login();
+            }
         }
-
+        $this->tb_user->need_password();
+        $this->tb_post->update_expire_post();
         $this->load->view('template/header',$header);
     }
 
@@ -64,6 +72,14 @@ class Template extends CI_Model {
         $diff=date_diff($date1,$date2);
         //return $diff->format("%R%a วัน"); + -
         return $diff->format("%a วัน");
+    }
+
+    public function findDayLeft($strDate){
+        $date1=date_create(date("d-M-Y"));
+        $date2=date_create($strDate);
+        $diff=date_diff($date1,$date2);
+        //return $diff->format("%R%a วัน"); + -
+        return $diff->format("%R");
     }
 
     public function thaiNormalDatetime($strDate)

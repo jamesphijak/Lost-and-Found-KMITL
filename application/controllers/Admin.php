@@ -22,6 +22,27 @@ class Admin extends CI_Controller{
 
     }
 
+    public function userStatus($type = null, $id = null){
+        if($type !=null && $id != null) { // id ว่าง
+            $user = $this->tb_user->get_user_by_id($id);
+            if(isset($user)) {
+                if ($type == "active") {
+                    $value = array('user_status' => 'Active');
+                    $this->tb_user->update_user($id,$value);
+                    redirect(base_url('admin/user'));
+                } else {
+                    $value = array('user_status' => 'Inactive');
+                    $this->tb_user->update_user($id,$value);
+                    redirect(base_url('admin/user'));
+                }
+            }else{
+                redirect(base_url('admin/user'));
+            }
+        }else{
+            redirect(base_url('admin/user'));
+        }
+    }
+
     public function post($type = null, $id = null){
         if($type !=null && $id != null){ // id ว่าง
             if($type == "approve"){

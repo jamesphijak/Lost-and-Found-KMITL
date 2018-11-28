@@ -7,6 +7,16 @@
 
 <div class="row">
     <div class="col-md-12 text-center">
+        <!-- Message -->
+        <?php if (isset($_SESSION['success'])) {?>
+            <div class="alert alert-success" role="alert"><?=$_SESSION['success']?></div>
+        <?php }?>
+        <?php if (isset($_SESSION['password'])) {?>
+            <div class="alert alert-danger" role="alert"><?=$_SESSION['password']?></div>
+        <?php }?>
+    </div>
+
+    <div class="col-md-12 text-center">
         <h4>ประกาศของหาย</h4>
         <hr>
     </div>

@@ -89,8 +89,14 @@
                                 </td>
                                 <td><?= $row->post_name ?></td>
                                 <td><?= ($row->post_type == 'lost')? 'ของหาย':'พบของหาย'; ?></td>
-                                <td><?= $this->template->thaiNormalDate($row->post_expire) .' ('.$this->template->dayLeft($row->post_expire).')' ?></td>
-                                <td><?= ($row->post_approve == 'Approve')? 'อนุมัติแล้ว':'รอการอนุมัติ'; ?></td>
+                                <td>
+                                    <?= ($this->template->findDayLeft($row->post_expire) != "-")? $this->template->thaiNormalDate($row->post_expire) .' (อีก '.$this->template->dayLeft($row->post_expire).')':$this->template->thaiNormalDate($row->post_expire) ?>
+                                </td>
+
+                                <td>
+                                    <?php $approve = ($row->post_approve == 'Approve')? 'อนุมัติแล้ว':'รอการอนุมัติ'; ?>
+                                    <?= ($this->template->findDayLeft($row->post_expire) == "-")? 'หมดอายุแล้ว':$approve; ?>
+                                </td>
 
                                 <td>
                                     <?php $disableStatus = ($row->post_approve != 'Approve')? 'disabled':''; // disable button status ?>
@@ -112,18 +118,35 @@
                                     }
                                     ?>
 
+                                    <?php if($this->template->findDayLeft($row->post_expire) != "-"){?>
                                     <div class="dropdown">
-                                        <button class="btn btn-secondary btn-sm text-white dropdown-toggle <?= $disableStatus ?>" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button class="btn btn-<?= ($row->post_status == 'OK')? 'success':'danger'; ?> btn-sm text-white dropdown-toggle <?= $disableStatus ?>" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <?= $menu_name ?>
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             <?= $menu ?>
                                         </div>
                                     </div>
+                                    <?php
+
+                                    }else{
+                                        ?>
+                                        <a href="<?= base_url("post/renew/{$row->post_id}")?>" class="btn btn-warning text-white btn-block btn-sm">ต่ออายุ 30 วัน</a>
+
+                                    <?php
+
+                                    }
+
+                                    ?>
                                 </td>
                                 <td>
+
                                     <a href="<?= base_url("post/view/{$row->post_id}")?>" class="btn btn-primary btn-block btn-sm"><i class="fas fa-eye"></i></a>
+                                    <?php
+                                    if($this->template->findDayLeft($row->post_expire) != "-"){
+                                        ?>
                                     <a href="<?= base_url("post/edit/{$row->post_id}")?>" class="btn btn-success btn-block btn-sm"><i class="fas fa-edit"></i></a>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

@@ -3,20 +3,24 @@ $required = 'กรุณาใส่%sด้วย';
 $valid = 'กรุณาใส่%sให้ถูกต้อง';
 $unique = '%sนี้มีในระบบแล้ว';
 $matches = '%sไม่ตรงกัน';
-$min_mobile = '%sต้องไม่น้อยกว่า 10 ตัว';
-$max_mobile = '%sต้องไม่มากกว่า 10 ตัว';
+$min_mobile = '%sต้องมี 10 ตัว';
+$max_mobile = '%sต้องมี 10 ตัว';
 $max_name = '%sต้องไม่มากกว่า 50 ตัว';
 $max_description = '%sต้องไม่มากกว่า 200 ตัว';
 $natural = '%sต้องมีแต่ตัวเลข 0-9 เท่านั้น';
 
 $min_name = '%sต้องไม่น้อยกว่า 3 ตัว';
 $min_description = '%sต้องไม่น้อยกว่า 5 ตัว';
+
+//$alpha_numeric = '%sต้องไม่มีอักขระพิเศษ';
 // $old_value = $_SESSION['user_email'];
 
 // ($this->input->post('password')!=$old_value)
 // ? $set_email = 'is_unique[tb_user.email]'
 // : $set_email = ''
 // ;
+
+$min_password = '%sต้องไม่ต่ำกว่า 4 ตัว';
 
 $config = array(
     // หน้าสมัครสมาชิก
@@ -34,18 +38,20 @@ $config = array(
             array(
                     'field' => 'password',
                     'label' => 'รหัสผ่าน',
-                    'rules' => 'required|trim',
+                    'rules' => 'required|trim|min_length[4]',
                     'errors' => array(
-                        'required' => $required
+                        'required' => $required,
+                        'min_length' => $min_password
                     )
             ),
             array(
                     'field' => 'confirm_password',
                     'label' => 'ยืนยันรหัสผ่าน',
-                    'rules' => 'required|trim|matches[password]',
+                    'rules' => 'required|trim|min_length[4]|matches[password]',
                     'errors' => array(
                         'required' => $required,
-                        'matches' => $matches
+                        'matches' => $matches,
+                        'min_length' => $min_password
                     )
             ),
             array(

@@ -32,7 +32,7 @@ class Tb_post extends CI_Model{
         if($limit != 0) {
             $this->db->limit($limit, 0);
         }
-        $this->db->order_by('post.post_id','desc'); // เรียงลำดับ
+        $this->db->order_by('post.post_updated','desc'); // เรียงลำดับ
         $query=$this->db->get();
         return $query->result();
     }
@@ -89,6 +89,35 @@ class Tb_post extends CI_Model{
         return $this->db->get($this->table)->result(); // // WHERE `title` LIKE '%match%' ESCAPE '!' AND  `page1` LIKE '%match%' ESCAPE '!' AND  `page2` LIKE '%match%' ESCAPE '!'
     }
 
+    public function update_expire_post(){
+//        foreach ($this->get_posts() as $post) {
+//            echo $post->post_id.':'.$post->post_is_expire.' <br>';
+//        }
+//
+//        echo "=========================<br>";
+
+        foreach ($this->get_posts() as $post) {
+            // Loop to find expire
+            if($this->template->findDayLeft($post->post_expire) == "-") {
+                //echo $post->post_id.' expire <br>';
+                $this->update_post($post->post_id,array('post_is_expire' => 1));
+            }else{
+                $this->update_post($post->post_id,array('post_is_expire' => 0));
+            }
+	    }
+
+//        foreach ($this->get_posts() as $post) {
+//            echo $post->post_id.':'.$post->post_is_expire.' <br>';
+//        }
+
+    }
+
+    public function renew_post($id){
+        $this->db->set('post_expire','DATE_ADD(now(), INTERVAL 30 DAY)', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
+        $this->db->update($this->table); // update
+        $this->db->where('post_id', $id);
+        return $this->db->affected_rows();
+    }
 
     public function create_post($value){
         $this->db->set('post_expire','DATE_ADD(now(), INTERVAL 30 DAY)', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
@@ -98,8 +127,13 @@ class Tb_post extends CI_Model{
     }
 
     public function update_post($id, $value){
-        $this->db->set('post_updated','now()', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
-        $this->db->set('post_expire','DATE_ADD(now(), INTERVAL 30 DAY)', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
+        $this->db->set('post_updated','now()', false); // set update ล่าสุด ใส่ false ให้มองเป็น code
+        if(isset($value['post_approve'])) {
+            if ($value['post_approve'] == 'Approve') {
+                $this->db->set('post_expire', 'DATE_ADD(now(), INTERVAL 30 DAY)', false);
+            }
+        }
+        //$this->db->set('post_expire','DATE_ADD(now(), INTERVAL 30 DAY)', false); // set update ล่าสุด ใส่ false ให้มองเป็น code sql
         $this->db->update($this->table, $value, ['post_id' => $id]); // update
         return $this->db->affected_rows();
     }

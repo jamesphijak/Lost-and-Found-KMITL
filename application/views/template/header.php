@@ -72,6 +72,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </li>
 
                     </ul>
+                        <!-- โดนแบน -->
+
                         <!-- ปุ่มก่อน Login -->
                         <?php if(!isset($_SESSION['user_logged'])){ ?>
                             <a href="<?= base_url('auth/login')?>" class="btn btn-outline-light"><i class="fas fa-key"></i> เข้าสู่ระบบ / สมัครสมาชิก</a>&nbsp;

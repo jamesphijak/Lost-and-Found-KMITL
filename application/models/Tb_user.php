@@ -45,13 +45,14 @@ class Tb_user extends CI_Model
     }
 
     // ใช้ set session
-    public function user_session_set($id,$email,$type,$mobile){
+    public function user_session_set($id,$email,$type,$mobile,$status){
         $data = array(
             'user_logged' => true,
             'user_id' => $id,
             'user_email' => $email,
             'user_type' => $type,
-            'user_mobile' => $mobile
+            'user_mobile' => $mobile,
+            'user_status' => $status
         );
         $this->session->set_userdata($data);
     }
@@ -60,7 +61,7 @@ class Tb_user extends CI_Model
     public function user_session_update($id){
         $user = $this->get_user_by_id($id);
         if($user){
-            $this->user_session_set($id,$user->user_email,$user->user_type,$user->user_mobile); // เมื่อพบ user อัพเดทข้อมูลใหม่
+            $this->user_session_set($id,$user->user_email,$user->user_type,$user->user_mobile,$user->user_status); // เมื่อพบ user อัพเดทข้อมูลใหม่
         }else{
             $this->user_session_destroy(); // กรณีไม่พบ user นี้แล้ว ถูกลบออกจากระบบ
         }
@@ -96,6 +97,32 @@ class Tb_user extends CI_Model
             return false;
         }else{
             return true;
+        }
+    }
+
+    public function check_password(){
+        if(isset($_SESSION['user_logged'])){
+            $user = $this->tb_user->get_user_by_id($_SESSION['user_id']);
+            if($user != null){
+                if($user->user_password == null){
+                    redirect(base_url('user/editPassword'));
+                }else{
+                    redirect(base_url('main'), 'refresh');
+                }
+            }
+        }
+    }
+
+    public function need_password(){
+        if(isset($_SESSION['user_logged'])){
+            $user = $this->tb_user->get_user_by_id($_SESSION['user_id']);
+            if($user != null){
+                if($user->user_password == null){
+                    $this->session->set_flashdata('password','คุณยังไม่ได้ตั้งค่ารหัสผ่าน กรุณาเข้าไปเปลี่ยนรหัสผ่าน <a href="'.base_url('user/editPassword').'">คลิกที่นี่</a>');
+                }else{
+                    unset($_SESSION['password']);
+                }
+            }
         }
     }
 
