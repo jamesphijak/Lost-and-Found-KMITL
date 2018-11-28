@@ -164,11 +164,12 @@ $config = array(
         array(
             'field' => 'name',
             'label' => 'ชื่อของ',
-            'rules' => 'required|trim|min_length[3]|max_length[50]',
+            'rules' => 'required|trim|min_length[3]|max_length[50]|regex_match[/^[a-zA-Z0-9ก-๛เ ]*$/]',
             'errors' => array(
                 'required' => $required,
                 'min_length' => $min_name,
-                'max_length' => $max_name
+                'max_length' => $max_name,
+                'regex_match' => '%sห้ามมีอักขระพิเศษ'
             )
         ),
         array(

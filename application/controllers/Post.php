@@ -526,23 +526,25 @@ class Post extends CI_Controller
                             'post_color_id' => $this->input->post('color')
                         );
 
-                        if($value['post_name'] != "" && $value['post_description'] != "") {
-                            if (ctype_space($value['post_name']) && ctype_space($value['post_description'])) {
-                                $this->session->set_flashdata('error','เพิ่มประกาศไม่สำเร็จ (ต้องใส่ข้อความเท่านั้น)');
-                            } else {
-                                $result = $this->tb_post->create_post($value);
-                                if ($result > 0) {
-                                    $this->session->set_flashdata('success', 'ลงประกาศสำเร็จ');
-//                                    var_dump($result);
-//                                    exit();
-                                    redirect(base_url('post/view/' . $result));
+
+                            if ($value['post_name'] != "" && $value['post_description'] != "") {
+                                if (ctype_space($value['post_name']) && ctype_space($value['post_description'])) {
+                                    $this->session->set_flashdata('error', 'เพิ่มประกาศไม่สำเร็จ (ต้องใส่ข้อความเท่านั้น)');
                                 } else {
-                                    $this->session->set_flashdata('error', 'ลงประกาศไม่สำเร็จ');
+                                    $result = $this->tb_post->create_post($value);
+                                    if ($result > 0) {
+                                        $this->session->set_flashdata('success', 'ลงประกาศสำเร็จ');
+                                        //                                    var_dump($result);
+                                        //                                    exit();
+                                        redirect(base_url('post/view/' . $result));
+                                    } else {
+                                        $this->session->set_flashdata('error', 'ลงประกาศไม่สำเร็จ');
+                                    }
                                 }
+                            } else {
+                                $this->session->set_flashdata('error', 'เพิ่มประกาศไม่สำเร็จ (ต้องใส่ข้อความเท่านั้น)');
                             }
-                        }else{
-                            $this->session->set_flashdata('error','เพิ่มประกาศไม่สำเร็จ (ต้องใส่ข้อความเท่านั้น)');
-                        }
+
                     } else {
                         $this->session->set_flashdata('error', 'ไม่สามารถลงประกาศได้ ไม่ได้เลิอกรูปภาพ');
                     }

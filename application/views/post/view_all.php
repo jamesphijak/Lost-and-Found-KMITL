@@ -22,7 +22,7 @@
                 </thead>
                 <tbody>
                 <?php foreach ($posts as $row) : ?>
-                    <tr class="text-center" onclick="window.location='<?= base_url('post/view/'.$row->post_id)?>';">
+                    <tr class="text-center" style="cursor:pointer;" onclick="window.location='<?= base_url('post/view/'.$row->post_id)?>';">
                         <td>
                             <img class="rounded" src=' <?= base_url("uploads/") . $row->post_imgurl1 ?>' data-holder-rendered='true' style='width: 50px; height: 50px;'>
                         </td>

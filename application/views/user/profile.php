@@ -131,7 +131,7 @@
 
                                     }else{
                                         ?>
-                                        <a href="<?= base_url("post/renew/{$row->post_id}")?>" class="btn btn-warning text-white btn-block btn-sm">ต่ออายุ 30 วัน</a>
+                                        <a href="<?= base_url("post/renew/non/{$row->post_id}")?>" class="btn btn-warning text-white btn-block btn-sm">ต่ออายุ 30 วัน</a>
 
                                     <?php
 

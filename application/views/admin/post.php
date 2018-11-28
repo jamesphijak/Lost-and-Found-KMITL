@@ -13,7 +13,7 @@
                 <tr>
                     <th>#</th>
                     <th>ชื่อ</th>
-                    <th>เมื่อ</th>
+                    <th>อัพเดท</th>
                     <th>โดย</th>
                     <th></th>
                 </tr>
@@ -23,7 +23,7 @@
                     <tr>
                         <td><?= $row->post_id ?></td>
                         <td><?= $row->post_name ?></td>
-                        <td><?= $this->template->thaiNormalDatetime($row->post_created) ?></td>
+                        <td><?= $this->template->thaiNormalDatetime($row->post_updated) ?></td>
                         <td><?= $row->user_email ?></td>
                         <td>
                             <a href="<?= base_url('admin/post/approve/' . $row->post_id) ?>"
@@ -55,7 +55,7 @@
                 <tr>
                     <th>#</th>
                     <th>ชื่อ</th>
-                    <th>เมื่อ</th>
+                    <th>อัพเดท</th>
                     <th>โดย</th>
                     <th></th>
                 </tr>
@@ -65,7 +65,7 @@
                     <tr >
                         <td><?= $row->post_id ?></td>
                         <td><?= $row->post_name ?></td>
-                        <td><?= $this->template->thaiNormalDatetime($row->post_created) ?></td>
+                        <td><?= $this->template->thaiNormalDatetime($row->post_updated) ?></td>
                         <td><?= $row->user_email ?></td>
                         <td>
                             <a href="<?= base_url('admin/post/unapprove/' . $row->post_id) ?>"

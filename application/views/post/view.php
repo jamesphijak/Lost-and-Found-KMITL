@@ -89,6 +89,7 @@
         <h5>หมวดหมู่ : <?= $post->category_name ?></h5>
         <h5>สี : <?= $post->color_name ?></h5>
         <h5>รายละเอียด :</h5>
+        <!-- htmlspecialchars( -->
         <h5><?= $post->post_description ?></h5>
 
 
@@ -149,19 +150,6 @@
             });
         }
 
-        load_comment();
-        function load_comment()
-        {
-            $.ajax({
-                url:"<?= base_url('post/fetch_comment/'.$page_post_id) ?>",
-                method:"POST",
-                success:function(data)
-                {
-                    $('#display_comment').html(data);
-                }
-            })
-        }
-
         <?php if($disableCount == false){ ?>
         var count_comment = 0;
         document.getElementById('comment_content').onkeyup = function () {
@@ -175,6 +163,18 @@
         <?php } ?>
 
         <?php if(isset($_SESSION['user_logged'])){ ?>
+        //load_comment();
+        function load_comment()
+        {
+            $.ajax({
+                url:"<?= base_url('post/fetch_comment/'.$page_post_id) ?>",
+                method:"POST",
+                success:function(data)
+                {
+                    $('#display_comment').html(data);
+                }
+            })
+        }
 
         $('#comment_form').on('submit', function(event){
             event.preventDefault();
