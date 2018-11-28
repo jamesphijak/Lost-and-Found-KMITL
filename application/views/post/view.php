@@ -129,15 +129,40 @@
             <?php } ?>
         <?php } ?>
 
+        <div class="my-3 p-3" id="display_comment"></div>
     </div>
-    <div class="col-md-12">
-    <div class="my-3 p-3 bg-white rounded shadow-sm" id="display_comment"></div>
-    </div>
+
+
+
 
 </div>
 
 <script>
-    <?php if($disableCount == false){ ?>
+
+
+    $(document).ready(function(){
+        startRefresh();
+        function startRefresh() {
+            setTimeout(startRefresh,3000);
+            $.get('<?= base_url('post/fetch_comment/'.$page_post_id) ?>', function(data) {
+                $('#display_comment').html(data);
+            });
+        }
+
+        load_comment();
+        function load_comment()
+        {
+            $.ajax({
+                url:"<?= base_url('post/fetch_comment/'.$page_post_id) ?>",
+                method:"POST",
+                success:function(data)
+                {
+                    $('#display_comment').html(data);
+                }
+            })
+        }
+
+        <?php if($disableCount == false){ ?>
         var count_comment = 0;
         document.getElementById('comment_content').onkeyup = function () {
             count_comment = 250 - this.value.length;
@@ -147,17 +172,9 @@
                 document.getElementById('count').innerHTML = "เหลือจำนวนตัวอักษรที่พิมพ์ได้: " + count_comment;
             }
         };
-    <?php } ?>
+        <?php } ?>
 
-    $(document).ready(function(){
-        startRefresh();
-
-        function startRefresh() {
-            setTimeout(startRefresh,3000);
-            $.get('<?= base_url('post/fetch_comment/'.$page_post_id) ?>', function(data) {
-                $('#display_comment').html(data);
-            });
-        }
+        <?php if(isset($_SESSION['user_logged'])){ ?>
 
         $('#comment_form').on('submit', function(event){
             event.preventDefault();
@@ -183,20 +200,6 @@
                 }
             })
         });
-
-          load_comment();
-
-        function load_comment()
-        {
-            $.ajax({
-                url:"<?= base_url('post/fetch_comment/'.$page_post_id) ?>",
-                method:"POST",
-                success:function(data)
-                {
-                    $('#display_comment').html(data);
-                }
-            })
-        }
 
         $(document).on('click', '.remove', function(){
             var comment_id = $(this).attr("id");
@@ -224,6 +227,7 @@
             //alert("ขณะนี้ท่านกำลังตอบกลับความคิดเห็น กรุณาพิมพ์ชื่อและรายละเอียดแล้วกด ' โพสต์ '"); // แจ้งเตือนว่ากำลังตอบกลับความคิดเห็น
             $('#comment_message').html('<div class="alert alert-warning">ขณะนี้ท่านกำลังตอบกลับความคิดเห็นของ '.concat(comment_to).concat('</div>'));
         });
+        <?php }?>
 
     });
 </script>

@@ -71,7 +71,7 @@ class Template extends CI_Model {
         $date2=date_create($strDate);
         $diff=date_diff($date1,$date2);
         //return $diff->format("%R%a วัน"); + -
-        return $diff->format("%a วัน");
+        return $diff->format("%a");
     }
 
     public function findDayLeft($strDate){
@@ -81,6 +81,7 @@ class Template extends CI_Model {
         //return $diff->format("%R%a วัน"); + -
         return $diff->format("%R");
     }
+
 
     public function thaiNormalDatetime($strDate)
     {

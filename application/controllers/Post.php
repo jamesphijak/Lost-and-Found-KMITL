@@ -90,10 +90,14 @@ class Post extends CI_Controller
                             <p class="card-header '.$admin.'">โดย <b>' . $name . '</b> 
                             เมื่อ <i>' . $this->template->thaiNormalDatetime($pc->comment_created) . '</i>';
 
-                $output .= ($_SESSION['user_id'] == $pc->comment_user_id || $_SESSION['user_type'] == "Admin" )? '<a style="margin-left:5px;" class="btn btn-small btn-danger text-white remove float-right" id="'.$pc->comment_id .'">
-                <i class="fas fa-times-circle"></i></a>':'';
+                // Only login can do this
+                if(isset($_SESSION['user_logged'])) {
+                    $output .= ($_SESSION['user_id'] == $pc->comment_user_id || $_SESSION['user_type'] == "Admin") ? '<a style="margin-left:5px;" class="btn btn-small btn-danger text-white remove float-right" id="' . $pc->comment_id . '">
+                <i class="fas fa-times-circle"></i></a>' : '';
 
-                $output .= '<a class="btn btn-small btn-info text-white reply float-right" id="'.$pc->comment_id.'" comment_to="'. $pc->user_email .'"><i class="fas fa-reply"></i> ตอบกลับ</a>';
+                 $output .= '<a class="btn btn-small btn-info text-white reply float-right" id="' . $pc->comment_id . '" comment_to="' . $pc->user_email . '"><i class="fas fa-reply"></i> ตอบกลับ</a>';
+                }
+
                 $output .=  '</p>
                             
                             <div class="card-body">
@@ -110,9 +114,11 @@ class Post extends CI_Controller
                                 <p class="card-header '.$admin.'">โดย <b>' . $name . '</b> 
                                 เมื่อ <i>' . $this->template->thaiNormalDatetime($sc->comment_created) . '</i>';
 
-                    $output .= ($_SESSION['user_id'] == $sc->comment_user_id || $_SESSION['user_type'] == "Admin" )? '<a class="btn btn-small btn-danger text-white remove float-right" id="'.$sc->comment_id .'">
-                    <i class="fas fa-times-circle"></i></a>':'';
-
+                    // Only login can do this
+                    if(isset($_SESSION['user_logged'])) {
+                        $output .= ($_SESSION['user_id'] == $sc->comment_user_id || $_SESSION['user_type'] == "Admin") ? '<a class="btn btn-small btn-danger text-white remove float-right" id="' . $sc->comment_id . '">
+                    <i class="fas fa-times-circle"></i></a>' : '';
+                    }
 
                     $output .=  '</p>
                                 

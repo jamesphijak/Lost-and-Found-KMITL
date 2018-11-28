@@ -100,7 +100,19 @@ class Tb_post extends CI_Model{
             // Loop to find expire
             if($this->template->findDayLeft($post->post_expire) == "-") {
                 //echo $post->post_id.' expire <br>';
-                $this->update_post($post->post_id,array('post_is_expire' => 1));
+                $count = (int)($this->template->dayLeft($post->post_expire));
+                $count = $count+1;
+                if($count > 10) { // 10 วัน remove
+                    // remove
+                    //echo $count." Remove ".$post->post_id."<br>";
+                    //exit();
+                    $this->tb_post->delete_post($post->post_id);
+                    $this->tb_comment->delete_comment_post($post->post_id);
+                }else{
+                    //echo $count." Non ".$post->post_id."<br>";
+                    //exit();
+                    $this->update_post($post->post_id, array('post_is_expire' => 1));
+                }
             }else{
                 $this->update_post($post->post_id,array('post_is_expire' => 0));
             }

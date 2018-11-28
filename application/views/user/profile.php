@@ -90,7 +90,7 @@
                                 <td><?= $row->post_name ?></td>
                                 <td><?= ($row->post_type == 'lost')? 'ของหาย':'พบของหาย'; ?></td>
                                 <td>
-                                    <?= ($this->template->findDayLeft($row->post_expire) != "-")? $this->template->thaiNormalDate($row->post_expire) .' (อีก '.$this->template->dayLeft($row->post_expire).')':$this->template->thaiNormalDate($row->post_expire) ?>
+                                    <?= ($this->template->findDayLeft($row->post_expire) != "-")? $this->template->thaiNormalDate($row->post_expire) .' (อีก '.$this->template->dayLeft($row->post_expire).' วัน)':$this->template->thaiNormalDate($row->post_expire) ?>
                                 </td>
 
                                 <td>
