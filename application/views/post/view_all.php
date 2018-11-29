@@ -8,7 +8,7 @@
 <div class="col-md-12">
         <h5 class="text-center"><?= $title ?></h5>
 
-            <table id="data" class="table table-striped table-bordered" >
+            <table id="data" class="table table-striped table-bordered table-hover" >
                 <thead>
                 <tr class="text-center">
                     <th>รูป</th>
@@ -58,6 +58,7 @@
                 zeroRecords: "ไม่พบข้อมูล",
             }
         });
+
 
     });
 

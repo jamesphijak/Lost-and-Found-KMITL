@@ -88,7 +88,27 @@ class Tb_post extends CI_Model{
     }
 
     public function get_post_like($like){
-        $this->db->like($like);
+        //$this->db->like($like);
+        if($like['post_color_id'] != '' && $like['post_category_id'] != ''){
+            $this->db->where_in('post_color_id',$like['post_color_id']);
+            $this->db->where_in('post_category_id',$like['post_category_id']);
+            //exit('ไมว่างทั้งสองตัว');
+        }else if($like['post_color_id'] != '' || $like['post_category_id'] != ''){
+            if($like['post_color_id'] != '' && $like['post_category_id'] == ''){
+                $this->db->where_in('post_color_id',$like['post_color_id']);
+            }
+            if($like['post_color_id'] == '' && $like['post_category_id'] != ''){
+                $this->db->where_in('post_category_id',$like['post_category_id']);
+            }
+            //exit('ไม่ว่างตัวใดตัวหนึ่ง');
+        }else{
+            $this->db->where_in('post_color_id',$like['post_color_id']);
+            $this->db->where_in('post_category_id',$like['post_category_id']);
+            //exit('ว่างหมดเลย');
+        }
+
+
+        //$this->db->or_where_in('post_category_id',$like['post_category_id']);
         $this->db->where('post_approve', 'Approve');
         $this->db->where('post_status', 'Wait'); // Need to find
         $this->db->where('post_is_expire', 0); // Non Expire

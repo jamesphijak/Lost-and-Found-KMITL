@@ -121,7 +121,6 @@
     </div>
 </div>
 
-
 <script>
 
     function find(str) {
@@ -141,6 +140,7 @@
     }
 
     $(document).ready(function () {
+
         var count_name = 0;
         var check =  /^[a-zA-Z0-9ก-๛เ ]*$/;
         document.getElementById('name').onkeyup = function () {
