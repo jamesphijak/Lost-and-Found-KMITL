@@ -596,7 +596,7 @@ class Post extends CI_Controller
                     echo "<h5 class='d-flex border-bottom border-gray pb-2 mb-0'>มีของที่$searh_title " . count($post_result) . " รายการ</h5>";
                     foreach ($post_result as $row) :
                         // :hover {background: #FFFFFF}
-                        echo "<a style='{color: inherit; text-decoration: none;} ' target='_blank' href='" . base_url('post/view/' . $row->post_id) . "'>";
+                        echo "<a style='color: inherit; text-decoration: none; ' target='_blank' href='" . base_url('post/view/' . $row->post_id) . "'>";
                         echo "<div class='media text-muted pt-3'>";
 
                         if ($row->post_imgurl1 == "") {
